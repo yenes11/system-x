@@ -2,9 +2,6 @@
 // https://next-auth.js.org/configuration/nextjs#middleware
 // https://nextjs.org/docs/app/building-your-application/routing/middleware
 
-import NextAuth from 'next-auth';
-import authConfig from './auth.config';
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 function middleware(request: NextRequest) {
