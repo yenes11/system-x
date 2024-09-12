@@ -1,0 +1,44 @@
+'use client';
+import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
+import { useTheme } from 'next-themes';
+
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { Languages } from 'lucide-react';
+import cookies from 'js-cookie';
+type CompProps = {};
+export default function LocaleDropdown({}: CompProps) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <Languages className="h-[1.2rem] w-[1.2rem]" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem
+          onClick={() => {
+            cookies.set('lang', 'tr-TR');
+            window.location.reload();
+          }}
+        >
+          🇹🇷 Türkçe
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            cookies.set('lang', 'en-US');
+            window.location.reload();
+          }}
+        >
+          🇬🇧 English
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

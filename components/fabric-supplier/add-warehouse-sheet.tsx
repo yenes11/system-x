@@ -1,0 +1,199 @@
+'use client';
+
+import api from '@/api';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusIcon } from '@radix-ui/react-icons';
+import { useMutation } from '@tanstack/react-query';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import validator from 'validator';
+import { z } from 'zod';
+import { Button } from '../ui/button';
+import { Textarea } from '../ui/textarea';
+import { useToast } from '../ui/use-toast';
+import { useTranslations } from 'next-intl';
+// import { useRouter } from 'next/router';
+
+const formSchema = z.object({
+  name: z.string().min(2).max(50),
+  supportFullName: z.string().min(2).max(50),
+  supportPhone: z.string().refine(validator.isMobilePhone),
+  address: z.string().min(1),
+  longitude: z.string(),
+  latitude: z.string()
+});
+
+function AddWarehouseSheet() {
+  const [open, setOpen] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
+  const params = useParams();
+  const path = usePathname();
+  const t = useTranslations();
+  const id = (params?.id as string) || '';
+
+  const columnName = path.startsWith('/customer/management')
+    ? 'customerId'
+    : 'fabricSupplierId';
+
+  const endpoint = path.startsWith('/customer/management')
+    ? '/Customers'
+    : '/FabricSupplierWarehouses';
+
+  const addFabric = useMutation({
+    mutationKey: ['add-warehouse'],
+    mutationFn: async (values: any) => {
+      const res = await api.post(endpoint, values);
+      return res;
+    },
+    onSuccess: (res) => {
+      router.refresh();
+      setOpen(false);
+      toast({
+        title: res.statusText,
+        description: new Date().toString()
+      });
+    }
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema)
+  });
+
+  const onSubmit = (
+    values: Partial<z.infer<typeof formSchema>> & {
+      fabricSupplierId?: string;
+      customerId?: string;
+    }
+  ) => {
+    values[columnName] = id;
+    addFabric.mutate(values);
+  };
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button className="rounded-full bg-nutural" variant="outline">
+          <PlusIcon className="mr-2" />
+          {t('add_warehouse')}
+        </Button>
+      </SheetTrigger>
+      <SheetContent>
+        {/* <SheetHeader>
+          <SheetTitle>Add new fabric</SheetTitle>
+
+          <SheetDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </SheetDescription>
+        </SheetHeader> */}
+
+        {/* {fabricTypes.isLoading || fabricUnits.isLoading ? null : ( */}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="John Fabric" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Enter address..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="longitude"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Longitude</FormLabel>
+                  <FormControl>
+                    <Input placeholder="40.52" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="latitude"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Latitude</FormLabel>
+                  <FormControl>
+                    <Input placeholder="40.52" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="supportFullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Suport Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Jane Doe" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="supportPhone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Support Phone</FormLabel>
+                  <FormControl>
+                    <Input placeholder="555 555 5555" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              loading={addFabric.isPending}
+              className="w-full"
+              type="submit"
+            >
+              Submit
+            </Button>
+          </form>
+        </Form>
+        {/* )} */}
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+export default AddWarehouseSheet;
