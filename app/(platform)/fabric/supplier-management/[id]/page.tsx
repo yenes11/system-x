@@ -26,7 +26,6 @@ import {
   QueryClient
 } from '@tanstack/react-query';
 import { getTranslations } from 'next-intl/server';
-import { ConfirmDeleteDialog } from '@/components/fabric-supplier/confirm-delete-dialog';
 import FabricCarousel from '@/components/fabric-supplier/fabric-carousel';
 import AssignFabricSheet from '@/components/fabric-supplier/assign-fabric-sheet';
 
