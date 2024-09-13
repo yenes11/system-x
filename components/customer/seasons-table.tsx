@@ -81,7 +81,7 @@ function SeasonsTable({ data }: { data: any }) {
         setState={setDeleteState}
         title={t('delete_season')}
       />
-      <Card className="flex-1 overflow-auto p-0">
+      <Card className="flex-1 overflow-auto bg-transparent p-0">
         <CardContent className="p-0">
           <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-2">
             <CardTitle className="font-semibold">{t('seasons')}</CardTitle>
@@ -89,7 +89,8 @@ function SeasonsTable({ data }: { data: any }) {
           </CardHeader>
 
           <DataTable
-            bordered={false}
+            // bordered={false}
+            transparent={true}
             searchKey=""
             data={data}
             columns={columns}

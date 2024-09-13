@@ -67,7 +67,7 @@ export function AddDepartmentSheet() {
 
   const editDepartment = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const res = await api.put('/CustomerDepartments', values);
+      const res = await api.post('/CustomerDepartments', values);
       return res.data;
     },
     onSuccess: () => {
