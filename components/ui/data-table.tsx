@@ -5,7 +5,8 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  useReactTable
+  useReactTable,
+  getPaginationRowModel
 } from '@tanstack/react-table';
 
 import {
@@ -34,6 +35,7 @@ interface DataTableProps<TData, TValue> {
   transparent?: boolean;
   inputClassName?: string;
   className?: string;
+  emptyDescription?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -44,6 +46,7 @@ export function DataTable<TData, TValue>({
   rounded = false,
   transparent = true,
   className,
+  emptyDescription,
   inputClassName
 }: DataTableProps<TData, TValue>) {
   const t = useTranslations();
@@ -51,8 +54,19 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel()
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel()
+    // onPaginationChange: setPagination,
+    // state: {
+    //   pagination: {
+    //     pageIndex
+    //   },
+    // },
   });
+
+  const previousPage = () => {
+    table.previousPage();
+  };
 
   return (
     <>
@@ -110,7 +124,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                <Empty />
+                <Empty description={emptyDescription} />
               </TableCell>
             </TableRow>
           )}

@@ -1,36 +1,42 @@
 import api from '@/api';
-import { Breadcrumbs } from '@/components/breadcrumbs';
 import AddFabricSheet from '@/components/fabric/add-fabric-sheet';
-import PageContainer from '@/components/layout/page-container';
 import FabricTable from '@/components/tables/fabric-tables/fabric-table';
 import { Heading } from '@/components/ui/heading';
 import { getFabricUrl } from '@/constants/api-constants';
+import { ApiError, Fabric, PaginatedData } from '@/lib/types';
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient
 } from '@tanstack/react-query';
-import { LibraryBig, Scissors } from 'lucide-react';
-import { Suspense } from 'react';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { Scissors } from 'lucide-react';
 
-const getFabrics = async () => {
+const getFabrics = async (): Promise<PaginatedData<Fabric> | ApiError> => {
   try {
-    const res = await api.get(getFabricUrl({ pageIndex: 0, pageSize: 20 }));
+    const res = await api.get(getFabricUrl({ pageIndex: 0, pageSize: 10 }));
     return res.data;
-  } catch (e: any) {
-    console.log(e?.response?.data, 'error');
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      return {
+        message: e.response?.data?.title || 'An error occurred',
+        statusCode: e.response?.status as number
+      };
+    } else {
+      return {
+        message: 'An unknown error occurred',
+        statusCode: 500
+      };
+    }
   }
 };
 
 export default async function FabricLibraryPage() {
-  // const fabrics = await getFabrics();
+  const fabrics = await getFabrics();
 
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: ['fabrics'],
-    queryFn: getFabrics
-  });
+  if ('message' in fabrics) {
+    return <div>{fabrics.message}</div>;
+  }
 
   return (
     <div className="space-y-2">
@@ -42,9 +48,7 @@ export default async function FabricLibraryPage() {
         />
         <AddFabricSheet />
       </div>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <FabricTable />
-      </HydrationBoundary>
+      <FabricTable data={fabrics.items} />
     </div>
   );
 }

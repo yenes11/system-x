@@ -25,6 +25,7 @@ import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { useToast } from '../ui/use-toast';
+import { useTranslations } from 'next-intl';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -36,6 +37,7 @@ const formSchema = z.object({
 
 function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
   const queryClient = useQueryClient();
+  const t = useTranslations();
   const { toast } = useToast();
 
   const editSupplier = useMutation({
@@ -87,12 +89,7 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
     >
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Add Supplier</SheetTitle>
-
-          {/* <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription> */}
+          <SheetTitle>{t('edit_supplier')}</SheetTitle>
         </SheetHeader>
 
         <Form {...form}>
@@ -102,7 +99,7 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('name')}</FormLabel>
                   <FormControl>
                     <Input placeholder="John Doe" {...field} />
                   </FormControl>
@@ -115,7 +112,7 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel>{t('phone')}</FormLabel>
                   <FormControl>
                     <Input placeholder="555 555 5555" {...field} />
                   </FormControl>
@@ -128,7 +125,7 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
               name="authorizedPersonFullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Authorized Person</FormLabel>
+                  <FormLabel>{t('authorized_person')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Jane Doe" {...field} />
                   </FormControl>
@@ -141,9 +138,12 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>{t('address')}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Address here..." {...field} />
+                    <Textarea
+                      placeholder={t('address_placeholder')}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -154,16 +154,23 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
               name="billingAddress"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>{t('billing_address')}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Address here..." {...field} />
+                    <Textarea
+                      placeholder={t('address_placeholder')}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
-              Submit
+            <Button
+              loading={editSupplier.isPending}
+              className="w-full"
+              type="submit"
+            >
+              {editSupplier.isPending ? t('submitting') : t('submit')}
             </Button>
           </form>
         </Form>

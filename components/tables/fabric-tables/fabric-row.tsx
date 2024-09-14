@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { useQuery } from '@tanstack/react-query';
 import { flexRender } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 interface Props {
@@ -24,8 +25,9 @@ function getRandomHexColor() {
 }
 
 function FabricRow({ row, expandedRows, setExpandedRows, toggleRow }: Props) {
+  const t = useTranslations();
   const colors = useQuery({
-    queryKey: ['colors', row.original.id],
+    queryKey: ['fabric-color', row.original.id],
     queryFn: async () => {
       const res = await api.get(`/Fabrics/${row.original.id}`);
       const colors = res.data.colors;
@@ -71,7 +73,12 @@ function FabricRow({ row, expandedRows, setExpandedRows, toggleRow }: Props) {
         (colors.isLoading ? (
           <TableCell colSpan={6}>Loading...</TableCell>
         ) : colors.data.length === 0 ? (
-          <TableCell colSpan={6}>Empty</TableCell>
+          <TableCell
+            className="py-8 text-center text-card-foreground/60"
+            colSpan={6}
+          >
+            {t('no_fabrics_found')}
+          </TableCell>
         ) : (
           <TableRow>
             <TableCell className="p-0" colSpan={6}>

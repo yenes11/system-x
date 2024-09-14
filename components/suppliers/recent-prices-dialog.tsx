@@ -19,25 +19,12 @@ const recentPricesTableColumns = [
     accessorKey: 'price',
     header: 'price'
   },
-  // {
-  //   accessorKey: 'manufacturerCode',
-  //   header: 'Manufacturer Code',
-  //   cell: ({ row }: { row: any }) => (
-  //     <Badge className="bg-muted text-black hover:bg-muted/80 dark:text-white">
-  //       {row.getValue('manufacturerCode')}
-  //     </Badge>
-  //   )
-  // },
   {
     accessorKey: 'createdDate',
     header: 'date',
     cell: ({ row }: { row: any }) => {
       return new Date(row.getValue('createdDate')).toLocaleDateString();
     }
-  },
-  {
-    accessorKey: 'price',
-    header: 'price'
   },
   {
     accessorKey: 'currency',
@@ -71,19 +58,15 @@ function RecentPricesDialog({ state, setState }: any) {
         setState((prev: any) => ({ ...prev, open: val }));
       }}
     >
-      <DialogContent className="">
-        <DialogHeader>asdasd</DialogHeader>
-        <DialogHeader>
-          {/* <DialogTitle className="text-start">{t('recent_prices')}</DialogTitle> */}
-          {recentPrices.data && (
-            <DataTable
-              bordered={false}
-              searchKey=""
-              columns={recentPricesTableColumns}
-              data={recentPrices.data}
-            />
-          )}
-        </DialogHeader>
+      <DialogContent className="text-start">
+        {recentPrices.data && (
+          <DataTable
+            bordered={false}
+            searchKey=""
+            columns={recentPricesTableColumns}
+            data={recentPrices.data}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

@@ -17,6 +17,7 @@ import { Employee } from '@/lib/types';
 import { EditEmployeeSheet } from './edit-employee-sheet';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import { Badge } from '../ui/badge';
+import ThemedTooltip from '../ThemedTooltip';
 
 type Fabric = {
   id: string;
@@ -68,32 +69,36 @@ const getColumns = (
       cell: ({ row }) => {
         return (
           <div className="float-end flex gap-2">
-            <Button
-              className="flex items-center justify-center rounded-full"
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                setEditState({
-                  data: row.original,
-                  open: true
-                });
-              }}
-            >
-              <Pencil size={16} />
-            </Button>
-            <Button
-              className="flex items-center justify-center rounded-full"
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                setEditState({
-                  id: row.original.id,
-                  open: true
-                });
-              }}
-            >
-              <Trash2 className="text-destructive" size={16} />
-            </Button>
+            <ThemedTooltip text={'edit_employee'}>
+              <Button
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+                onClick={(e) => {
+                  setEditState({
+                    data: row.original,
+                    open: true
+                  });
+                }}
+              >
+                <Pencil size={16} />
+              </Button>
+            </ThemedTooltip>
+            <ThemedTooltip text={'delete_employee'}>
+              <Button
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+                onClick={(e) => {
+                  setDeleteState({
+                    id: row.original.id,
+                    open: true
+                  });
+                }}
+              >
+                <Trash2 className="text-destructive" size={16} />
+              </Button>
+            </ThemedTooltip>
           </div>
         );
       }

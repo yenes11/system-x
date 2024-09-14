@@ -11,47 +11,56 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { signOut, useSession } from 'next-auth/react';
+import { useQuery } from '@tanstack/react-query';
+import { URL_USER_INFO } from '@/constants/api-constants';
+import api from '@/api';
+import { useTranslations } from 'next-intl';
+import cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+
 export function UserNav() {
-  // const { data: session } = useSession();
+  const t = useTranslations();
+  const { data: user } = useQuery({
+    queryKey: ['user-info'],
+    queryFn: () => api.get(URL_USER_INFO)
+  });
+  const router = useRouter();
+
+  const initials = user?.data?.fullName
+    ? user.data.fullName
+        .split(' ')
+        .map((name: string) => name[0])
+        .join('')
+    : '';
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative  h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarFallback>{'AK'}</AvatarFallback>
+            <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Anıl Keskin</p>
+            <p className="text-sm font-medium leading-none">
+              {user?.data?.fullName}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
-              anil.keskin@gmail.com
+              {user?.data?.email}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>
-          Log out
+        <DropdownMenuItem
+          onClick={() => {
+            cookies.remove('session');
+            router.push('/login');
+          }}
+        >
+          {t('logout')}
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

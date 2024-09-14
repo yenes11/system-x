@@ -14,7 +14,7 @@ import {
   QueryClient
 } from '@tanstack/react-query';
 import { InspectionPanel, Shell } from 'lucide-react';
-import { getMessages } from 'next-intl/server';
+import { getMessages, getTranslations } from 'next-intl/server';
 import { Suspense } from 'react';
 
 const getMaterials = async () => {
@@ -27,14 +27,14 @@ const getMaterials = async () => {
 };
 
 export default async function MaterialLibraryPage() {
-  const t = await getMessages();
+  const t = await getTranslations();
   const materials: PaginatedData<IMaterial> = await getMaterials();
 
   return (
     <div className="space-y-2">
       <div className="mb-4 flex justify-between">
         <Heading
-          title={t['material_library'] as string}
+          title={t('material_library')}
           icon={<Shell size={28} className="text-icon" />}
         />
         <AddMaterialSheet />

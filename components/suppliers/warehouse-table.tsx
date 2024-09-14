@@ -13,6 +13,7 @@ import { DeleteWarehouseDialog } from '../fabric-supplier/delete-warehouse-dialo
 import AddWarehouseSheet from '../fabric-supplier/add-warehouse-sheet';
 import EditWarehouseSheet from '../fabric-supplier/edit-warehouse-sheet';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import ThemedTooltip from '../ThemedTooltip';
 
 interface Props {
   data: Warehouse[];
@@ -66,33 +67,37 @@ const getColumns = (
       cell: ({ row }) => {
         return (
           <div className="float-end flex gap-2">
-            <Button
-              className="flex items-center justify-center rounded-full"
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                setEditState({
-                  data: row.original,
-                  open: true
-                });
-              }}
-            >
-              <Pencil size={16} />
-            </Button>
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                setDeleteState({
-                  id: row.original.id,
-                  open: true
-                });
-              }}
-              className="flex items-center justify-center rounded-full"
-              variant="ghost"
-              size="icon"
-            >
-              <Trash2 className="text-destructive" size={16} />
-            </Button>
+            <ThemedTooltip text={'edit_warehouse'}>
+              <Button
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+                onClick={(e) => {
+                  setEditState({
+                    data: row.original,
+                    open: true
+                  });
+                }}
+              >
+                <Pencil size={16} />
+              </Button>
+            </ThemedTooltip>
+            <ThemedTooltip text={'delete_warehouse'}>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeleteState({
+                    id: row.original.id,
+                    open: true
+                  });
+                }}
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+              >
+                <Trash2 className="text-destructive" size={16} />
+              </Button>
+            </ThemedTooltip>
           </div>
         );
       }
@@ -136,6 +141,7 @@ function WarehouseTable({ data }: Props) {
         </CardHeader>
         <CardContent className="p-0">
           <DataTable
+            emptyDescription={t('warehouse_table_empty_description')}
             bordered={false}
             searchKey=""
             data={data}

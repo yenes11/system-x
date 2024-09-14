@@ -57,6 +57,7 @@ function AddMaterialSheet() {
     onSuccess: (res) => {
       router.refresh();
       setOpen(false);
+      form.reset();
       toast({
         title: res.statusText,
         description: new Date().toString()
@@ -65,7 +66,11 @@ function AddMaterialSheet() {
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      unit: undefined
+    }
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {

@@ -14,6 +14,7 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
+  SheetTitle,
   SheetTrigger
 } from '@/components/ui/sheet';
 import { getFabrics } from '@/lib/api-calls';
@@ -21,7 +22,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -46,12 +47,16 @@ interface Props {
   fabricSupplierId: string;
 }
 
-function AssignFabricSheet({ fabricSupplierId }: Props) {
+function AssignFabricSheet() {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const t = useTranslations();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const params = useParams();
+  const fabricSupplierId = params.id as string;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
@@ -99,19 +104,14 @@ function AssignFabricSheet({ fabricSupplierId }: Props) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button className="mb-4">
+        <Button>
           <PlusIcon className="mr-2" />
           {t('add_fabric')}
         </Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          {/* <SheetTitle>Add new fabric</SheetTitle> */}
-
-          {/* <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription> */}
+          <SheetTitle>{t('add_fabric')}</SheetTitle>
         </SheetHeader>
 
         <Form {...form}>
@@ -160,7 +160,7 @@ function AssignFabricSheet({ fabricSupplierId }: Props) {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a fabric type" />
+                        <SelectValue placeholder={t('select_a_fabric_color')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

@@ -3,6 +3,14 @@ export interface Ingredient {
   percentage: number;
 }
 
+export type Fabric = {
+  id: string;
+  name: string;
+  grammage: number;
+  fabricUnitName: string;
+  fabricTypeName: string;
+};
+
 export interface Warehouse {
   id: string;
   name: string;
@@ -145,3 +153,8 @@ export interface MaterialColor {
   activeOrders: ActiveOrder[];
   suppliers: Supplier[];
 }
+
+export type ApiError = {
+  message: string;
+  statusCode: number;
+};

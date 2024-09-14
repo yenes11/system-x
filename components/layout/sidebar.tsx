@@ -42,8 +42,8 @@ export default function Sidebar({ className }: SidebarProps) {
     >
       <ArrowLeftToLine
         className={cn(
-          'absolute -right-14 top-4 z-50 cursor-pointer overflow-scroll rounded text-3xl text-foreground transition-transform duration-700',
-          isMinimized && 'rotate-180'
+          'absolute top-4 z-50 cursor-pointer overflow-scroll rounded text-3xl text-foreground transition-all duration-700',
+          isMinimized ? '-right-14 rotate-180' : 'right-4'
         )}
         onClick={handleToggle}
       />

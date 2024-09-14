@@ -8,6 +8,7 @@ import { flexRender } from '@tanstack/react-table';
 import React from 'react';
 import Empty from '../ui/empty';
 import MaterialColorCard from './material-color-card.';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   row: any;
@@ -34,6 +35,7 @@ function MaterialRow({
   toggleRow,
   colors
 }: Props) {
+  const t = useTranslations();
   return (
     <>
       <TableRow
@@ -62,7 +64,7 @@ function MaterialRow({
       {expandedRows.includes(row.original.id) &&
         (colors.length === 0 ? (
           <TableCell colSpan={6}>
-            <Empty />
+            <Empty description={t('material_table_empty_description')} />
           </TableCell>
         ) : (
           <TableRow>

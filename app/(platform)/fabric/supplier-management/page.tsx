@@ -11,6 +11,7 @@ import {
   QueryClient
 } from '@tanstack/react-query';
 import { Package2 } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 import React from 'react';
 
 const breadcrumbItems = [
@@ -20,6 +21,7 @@ const breadcrumbItems = [
 
 async function FabricSupplierManagementPage() {
   const queryClient = new QueryClient();
+  const t = await getTranslations();
 
   await queryClient.prefetchQuery({
     queryKey: ['fabric-suppliers'],
@@ -30,7 +32,7 @@ async function FabricSupplierManagementPage() {
       <div className="space-y-2">
         <div className="mb-4 flex justify-between">
           <Heading
-            title="Supplier Management"
+            title={t('supplier_management')}
             icon={<Package2 size={28} className="text-icon" />}
           />
           <AddSupplierSheet />

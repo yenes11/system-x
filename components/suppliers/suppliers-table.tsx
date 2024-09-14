@@ -11,6 +11,8 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { DataTable } from '../ui/data-table';
 import EditSupplierSheet from './edit-supplier-sheet';
+import { PaginatedData } from '@/lib/types';
+import ThemedTooltip from '../ThemedTooltip';
 
 type Fabric = {
   id: string;
@@ -52,20 +54,22 @@ const getColumns = (setSupplierSheetState: any): ColumnDef<Fabric>[] => {
       cell: ({ row }) => {
         return (
           <div className="float-end flex gap-2">
-            <Button
-              className="flex items-center justify-center rounded-full"
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                setSupplierSheetState({
-                  data: row.original,
-                  open: true
-                });
-              }}
-            >
-              <Pencil size={16} />
-            </Button>
+            <ThemedTooltip text={'edit_supplier'}>
+              <Button
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSupplierSheetState({
+                    data: row.original,
+                    open: true
+                  });
+                }}
+              >
+                <Pencil size={16} />
+              </Button>
+            </ThemedTooltip>
           </div>
         );
       }
@@ -73,18 +77,8 @@ const getColumns = (setSupplierSheetState: any): ColumnDef<Fabric>[] => {
   ] as ColumnDef<Fabric>[];
 };
 
-type Data = {
-  items: Fabric[];
-  index: number;
-  size: number;
-  count: number;
-  pages: number;
-  hasPrevious: boolean;
-  hasNext: boolean;
-};
-
 interface Props {
-  data: Data;
+  data: PaginatedData<Fabric>;
 }
 
 function SuppliersTable() {

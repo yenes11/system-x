@@ -13,6 +13,7 @@ import { login } from '@/lib/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { signIn } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -27,6 +28,7 @@ type UserFormValue = z.infer<typeof formSchema>;
 
 export default function UserAuthForm() {
   const searchParams = useSearchParams();
+  const t = useTranslations();
   const callbackUrl = searchParams.get('callbackUrl');
   const [loading, setLoading] = useState(false);
   const defaultValues = {
@@ -39,12 +41,9 @@ export default function UserAuthForm() {
   });
 
   const onSubmit = async (data: UserFormValue) => {
-    // signIn('credentials', {
-    //   email: data.email,
-    //   password: data.password,
-    //   callbackUrl: callbackUrl ?? '/dashboard'
-    // });
+    setLoading(true);
     const req = await login(data);
+    setLoading(false);
   };
 
   return (
@@ -64,11 +63,11 @@ export default function UserAuthForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t('email')}</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="Enter your email..."
+                    placeholder={t('email_placeholder')}
                     disabled={loading}
                     {...field}
                   />
@@ -82,7 +81,7 @@ export default function UserAuthForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t('password')}</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
@@ -97,11 +96,11 @@ export default function UserAuthForm() {
           />
 
           <Button
-            disabled={loading}
+            loading={loading}
             className="ml-auto mt-4 w-full"
             type="submit"
           >
-            Login
+            {t('login')}
           </Button>
         </form>
       </Form>

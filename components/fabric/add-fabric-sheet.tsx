@@ -38,6 +38,8 @@ import {
 import { useToast } from '../ui/use-toast';
 import { getTodos } from '@/app/actions';
 import { Origami } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -50,17 +52,9 @@ function AddFabricSheet() {
   const fabricTypes = useFabricTypesQuery();
   const fabricUnits = useFabricUnitsQuery();
   const [open, setOpen] = useState(false);
-
-  const queryClient = useQueryClient();
+  const t = useTranslations();
+  const router = useRouter();
   const { toast } = useToast();
-
-  const todos = useQuery({
-    queryKey: ['todos'],
-    queryFn: getTodos,
-    enabled: open
-  });
-
-  console.log(todos.data, 'todos');
 
   const addFabric = useMutation({
     mutationKey: ['add-fabric'],
@@ -69,19 +63,24 @@ function AddFabricSheet() {
       return res;
     },
     onSuccess: (res) => {
-      queryClient.invalidateQueries({
-        queryKey: ['fabrics']
-      });
+      router.refresh();
       setOpen(false);
       toast({
         title: res.statusText,
         description: new Date().toString()
       });
+      form.reset();
     }
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      grammage: 0,
+      fabricTypeId: '',
+      fabricUnitId: ''
+    }
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -93,13 +92,13 @@ function AddFabricSheet() {
       <SheetTrigger asChild>
         <Button>
           <PlusIcon className="mr-2" />
-          Add New Fabric
+          {t('add_new_fabric')}
         </Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
           <Origami size={18} className="mr-2 text-muted-foreground" />
-          <SheetTitle>Add new fabric</SheetTitle>
+          <SheetTitle>{t('add_new_fabric')}</SheetTitle>
         </SheetHeader>
 
         {/* {fabricTypes.isLoading || fabricUnits.isLoading ? null : ( */}
@@ -123,7 +122,7 @@ function AddFabricSheet() {
               name="grammage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Grammage</FormLabel>
+                  <FormLabel>{t('grammage')}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="250"
@@ -141,14 +140,14 @@ function AddFabricSheet() {
               name="fabricTypeId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Fabric Type</FormLabel>
+                  <FormLabel>{t('fabric_type')}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a fabric type" />
+                        <SelectValue placeholder={t('select_fabric_type')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -170,14 +169,14 @@ function AddFabricSheet() {
               name="fabricUnitId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Fabric Unit</FormLabel>
+                  <FormLabel>{t('fabric_unit')}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a fabric unit" />
+                        <SelectValue placeholder={t('select_fabric_unit')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -192,8 +191,12 @@ function AddFabricSheet() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
-              Submit
+            <Button
+              loading={addFabric.isPending}
+              className="w-full"
+              type="submit"
+            >
+              {addFabric.isPending ? t('submitting') : t('submit')}
             </Button>
           </form>
         </Form>

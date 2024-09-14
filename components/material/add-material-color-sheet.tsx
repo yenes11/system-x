@@ -82,6 +82,7 @@ function AddMaterialColorSheet({
     onSuccess: (response) => {
       router.refresh();
       setState({ open: false, id: '' });
+      form.reset();
       toast({
         title: response.statusText,
         description: new Date().toString()

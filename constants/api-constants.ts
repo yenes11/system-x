@@ -10,6 +10,7 @@ const URL_FABRIC = '/Fabrics';
 const URL_FABRIC_SUPPLIERS = '/FabricSuppliers';
 const URL_MATERIAL = '/Materials';
 export const URL_MATERIAL_COLOR = '/MaterialColors';
+export const URL_USER_INFO = '/Users/GetFromAuth';
 
 export const getFabricUrl = (params: QueryParams) =>
   `${URL_FABRIC}?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}`;

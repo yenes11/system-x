@@ -18,7 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from './ui/dropdown-menu';
-import { CheckIcon, ListFilter } from 'lucide-react';
+import { CheckIcon, Copy, ListFilter } from 'lucide-react';
 import { Button } from './ui/button';
 import { useTranslations } from 'next-intl';
 import {
@@ -40,6 +40,8 @@ import {
   CommandItem,
   CommandList
 } from './ui/command';
+import { SearchBar } from './searchbar';
+import { toast } from './ui/use-toast';
 
 const statusOptions = [
   { value: '0', label: 'all' },
@@ -52,7 +54,6 @@ function CollectionsCarousel({ data }: { data: ICollection[] }) {
   const t = useTranslations();
   const [open, setOpen] = useState(false);
   const [searchKey, setSearchKey] = useState('');
-  const [commandValue, setCommandValue] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<any>('0');
 
   const filteredData = useMemo(() => {
@@ -66,13 +67,11 @@ function CollectionsCarousel({ data }: { data: ICollection[] }) {
     );
   }, [data, searchKey, selectedStatus]);
 
-  console.log(selectedStatus, 'selectedStatus');
-
   return (
     <>
       <div className="mb-2 flex justify-between">
-        <Input
-          className="w-96"
+        <SearchBar
+          className="w-96 rounded-full bg-card"
           placeholder="Search collection..."
           value={searchKey}
           onChange={(e) => setSearchKey(e.target.value)}
@@ -159,9 +158,28 @@ function CollectionsCarousel({ data }: { data: ICollection[] }) {
                       <span className="text-xs text-muted-foreground">
                         {t('manufacturer_code')}
                       </span>
-                      <code className="mb-1 text-sm tracking-wide">
-                        {collection.manufacturerCode}
-                      </code>
+                      <div className="flex items-center gap-2">
+                        <code>{collection.manufacturerCode}</code>
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              collection.manufacturerCode
+                            );
+                            toast({
+                              title: t('copied_to_clipboard'),
+                              description: t(
+                                'collection_code_copied_to_clipboard'
+                              )
+                            });
+                          }}
+                          className="h-6 w-6"
+                        >
+                          <Copy className="h-3 w-3" />
+                          <span className="sr-only">Copy Order ID</span>
+                        </Button>
+                      </div>
                       <span className="text-xs text-muted-foreground">
                         {t('status')}
                       </span>

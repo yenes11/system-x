@@ -70,6 +70,10 @@ export function EditEmployeeSheet({ state, setState }: Props) {
 
   const _defaultValues = state.data || defaultValues;
 
+  const { editData } = useCustomerDepartmentsSlice();
+
+  console.log(_defaultValues, 'defaultss', editData);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: _defaultValues
@@ -108,6 +112,7 @@ export function EditEmployeeSheet({ state, setState }: Props) {
     },
     onSuccess: (res) => {
       router.refresh();
+      console.log(123);
       setState({ data: null, open: false });
       toast({
         title: t('success'),

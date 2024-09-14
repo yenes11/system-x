@@ -1,22 +1,9 @@
 'use client';
 
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
-} from '@/components/ui/sheet';
-import { Button } from '../ui/button';
-import { PlusIcon } from '@radix-ui/react-icons';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import api from '@/api';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,22 +11,23 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '../ui/select';
-import useFabricTypesQuery from '@/hooks/queries/useFabricTypesQuery';
-import useFabricUnitsQuery from '@/hooks/queries/useFabricUnitsQuery';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from '@/components/ui/sheet';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusIcon } from '@radix-ui/react-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '@/api';
-import { useToast } from '../ui/use-toast';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import validator from 'validator';
+import { z } from 'zod';
+import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
+import { useToast } from '../ui/use-toast';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -50,6 +38,7 @@ const formSchema = z.object({
 });
 
 function AddSupplierSheet() {
+  const t = useTranslations();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
@@ -65,6 +54,7 @@ function AddSupplierSheet() {
         queryKey: ['fabric-suppliers']
       });
       setOpen(false);
+      form.reset();
       toast({
         title: res.statusText,
         description: new Date().toString()
@@ -73,7 +63,14 @@ function AddSupplierSheet() {
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      address: '',
+      phone: '',
+      authorizedPersonFullName: '',
+      billingAddress: ''
+    }
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -85,20 +82,13 @@ function AddSupplierSheet() {
       <SheetTrigger asChild>
         <Button>
           <PlusIcon className="mr-2" />
-          Add Supplier
+          {t('add_supplier')}
         </Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Add Supplier</SheetTitle>
-
-          {/* <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription> */}
+          <SheetTitle>{t('add_supplier')}</SheetTitle>
         </SheetHeader>
-
-        {/* {fabricTypes.isLoading || fabricUnits.isLoading ? null : ( */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -106,7 +96,7 @@ function AddSupplierSheet() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('name')}</FormLabel>
                   <FormControl>
                     <Input placeholder="John Doe" {...field} />
                   </FormControl>
@@ -119,7 +109,7 @@ function AddSupplierSheet() {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel>{t('phone')}</FormLabel>
                   <FormControl>
                     <Input placeholder="555 555 5555" {...field} />
                   </FormControl>
@@ -132,7 +122,7 @@ function AddSupplierSheet() {
               name="authorizedPersonFullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Authorized Person</FormLabel>
+                  <FormLabel>{t('authorized_person')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Jane Doe" {...field} />
                   </FormControl>
@@ -145,9 +135,12 @@ function AddSupplierSheet() {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>{t('address')}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Address here..." {...field} />
+                    <Textarea
+                      placeholder={t('address_placeholder')}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -158,20 +151,26 @@ function AddSupplierSheet() {
               name="billingAddress"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>{t('billing_address')}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Address here..." {...field} />
+                    <Textarea
+                      placeholder={t('address_placeholder')}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
-              Submit
+            <Button
+              loading={addSupplier.isPending}
+              className="w-full"
+              type="submit"
+            >
+              {addSupplier.isPending ? t('submitting') : t('submit')}
             </Button>
           </form>
         </Form>
-        {/* )} */}
       </SheetContent>
     </Sheet>
   );

@@ -3,6 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { DataTable } from '../ui/data-table';
+import { useTranslations } from 'next-intl';
 
 type Fabric = {
   id: string;
@@ -29,11 +30,11 @@ interface Props {
 const suppliersTableColumns = [
   {
     accessorKey: 'name',
-    header: 'Name'
+    header: 'name'
   },
   {
     accessorKey: 'manufacturerCode',
-    header: 'Manufacturer code',
+    header: 'manufacturer_code',
     cell: ({ row }: { row: any }) => (
       <Badge className="bg-muted text-black hover:bg-muted/80 dark:text-white">
         {row.getValue('manufacturerCode')}
@@ -42,19 +43,20 @@ const suppliersTableColumns = [
   },
   {
     accessorKey: 'phone',
-    header: 'Phone'
+    header: 'phone'
   },
   {
     accessorKey: 'authorizedPersonFullName',
-    header: 'Authorized Person'
+    header: 'authorized_person'
   }
 ];
 
 function SuppliersTable({ data }: Props) {
+  const t = useTranslations();
   return (
     <Card className="overflow-hidden bg-nutural">
       <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-3">
-        <CardTitle>Suppliers</CardTitle>
+        <CardTitle>{t('suppliers')}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         <DataTable searchKey="" data={data} columns={suppliersTableColumns} />

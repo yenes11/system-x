@@ -58,6 +58,7 @@ export function AddSeasonSheet() {
     onSuccess: (res) => {
       router.refresh();
       setOpen(false);
+      form.reset();
       toast({
         title: t('success'),
         description: t('season_added_successfully')

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { DataTable } from '../ui/data-table';
 import { Badge } from '../ui/badge';
 import { Currency, currencyEnums, Status, statusEnums } from '@/types';
+import { useTranslations } from 'next-intl';
 
 const statusClasses = {
   1: 'bg-muted text-black hover:bg-muted/80',
@@ -15,7 +16,7 @@ const statusClasses = {
 const activeOrdersTableColumns = [
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: 'status',
     cell: ({ row }: { row: any }) => {
       const status = row.getValue('status') as Status;
       return (
@@ -27,11 +28,11 @@ const activeOrdersTableColumns = [
   },
   {
     accessorKey: 'futureOrdersStock',
-    header: 'Future Orders Stock'
+    header: 'future_orders_stock'
   },
   {
     accessorKey: 'estimatedArrivalDate',
-    header: 'Estimated Arrival Date',
+    header: 'estimated_arrival_date',
     cell: ({ row }: { row: any }) => {
       const date = new Date(row.getValue('estimatedArrivalDate'));
       return date.toLocaleDateString();
@@ -39,11 +40,11 @@ const activeOrdersTableColumns = [
   },
   {
     accessorKey: 'unitPrice',
-    header: 'Price'
+    header: 'price'
   },
   {
     accessorKey: 'currency',
-    header: 'Currency',
+    header: 'currency',
     cell: ({ row }: { row: any }) => (
       <Badge className="bg-emerald-600 px-4">
         {currencyEnums[row.getValue('currency') as Currency]}
@@ -53,10 +54,11 @@ const activeOrdersTableColumns = [
 ];
 
 function ActiveOrdersTable({ color }: { color: any }) {
+  const t = useTranslations();
   return (
     <Card className="overflow-auto bg-nutural">
       <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-3">
-        <CardTitle>Active Orders</CardTitle>
+        <CardTitle>{t('active_orders')}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         <DataTable

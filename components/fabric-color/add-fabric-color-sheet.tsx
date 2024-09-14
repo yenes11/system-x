@@ -64,7 +64,12 @@ function AddFabricColorSheet({ state, setState }: Props) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      image: null,
+      ingredients: []
+    }
   });
 
   const { fields, append } = useFieldArray({
@@ -93,6 +98,7 @@ function AddFabricColorSheet({ state, setState }: Props) {
         title: res.statusText,
         description: new Date().toString()
       });
+      form.reset();
     },
     onError: (e) => {}
   });
@@ -189,7 +195,7 @@ function AddFabricColorSheet({ state, setState }: Props) {
                             <SelectValue placeholder="Select an ingredient" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="max-h-48 overflow-y-auto">
+                        <SelectContent className="max-h-48 overflow-scroll">
                           <SelectGroup>
                             {ingredients.data?.map((ingredient) => (
                               <SelectItem

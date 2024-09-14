@@ -6,22 +6,17 @@ import {
   CustomerType,
   customerTypeEnums
 } from '@/types';
-import { Badge } from '../ui/badge';
-import { DataTable } from '../ui/data-table';
-import { Button } from '../ui/button';
-import { Info, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import CustomerInfoDialog from './customer-info-dialog';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '../ui/tooltip';
-import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import { Info, Pencil, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import EditCustomerSheet from './edit-customer-sheet';
 import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
+import { DataTable } from '../ui/data-table';
+import CustomerInfoDialog from './customer-info-dialog';
+import EditCustomerSheet from './edit-customer-sheet';
+import ThemedTooltip from '../ThemedTooltip';
 
 const getCustomersTableColumns = (
   setInfoState: any,
@@ -69,45 +64,51 @@ const getCustomersTableColumns = (
     cell: ({ row }: { row: any }) => {
       return (
         <div className="float-end flex gap-2">
-          <Button
-            className="flex items-center justify-center rounded-full"
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              setInfoState({
-                open: true,
-                data: row.original
-              });
-            }}
-          >
-            <Info size={16} />
-          </Button>
-          <Button
-            className="flex items-center justify-center rounded-full"
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              setEditState({
-                open: true,
-                data: row.original
-              });
-            }}
-          >
-            <Pencil size={16} />
-          </Button>
-          <Button
-            onClick={(e) => {
-              setDeleteState({
-                open: true,
-                id: row.original.id
-              });
-            }}
-            className="flex items-center justify-center rounded-full"
-            variant="ghost"
-            size="icon"
-          >
-            <Trash2 size={16} />
-          </Button>
+          <ThemedTooltip text={'customer_info'}>
+            <Button
+              className="flex items-center justify-center rounded-full"
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                setInfoState({
+                  open: true,
+                  data: row.original
+                });
+              }}
+            >
+              <Info size={16} />
+            </Button>
+          </ThemedTooltip>
+          <ThemedTooltip text={'edit_customer'}>
+            <Button
+              className="flex items-center justify-center rounded-full"
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                setEditState({
+                  open: true,
+                  data: row.original
+                });
+              }}
+            >
+              <Pencil size={16} />
+            </Button>
+          </ThemedTooltip>
+          <ThemedTooltip text={'delete_customer'}>
+            <Button
+              onClick={(e) => {
+                setDeleteState({
+                  open: true,
+                  id: row.original.id
+                });
+              }}
+              className="flex items-center justify-center rounded-full"
+              variant="ghost"
+              size="icon"
+            >
+              <Trash2 size={16} />
+            </Button>
+          </ThemedTooltip>
         </div>
       );
     }

@@ -17,6 +17,8 @@ import {
   Workflow
 } from 'lucide-react';
 import React, { useState } from 'react';
+import ThemedTooltip from './ThemedTooltip';
+import { useTranslations } from 'next-intl';
 
 interface TreeProps {
   data: Department[];
@@ -24,6 +26,7 @@ interface TreeProps {
 }
 
 function Tree({ data, depth = 0 }: TreeProps) {
+  const t = useTranslations();
   const [openDepartments, setOpenDepartments] = useState<{
     [key: string]: boolean;
   }>({});
@@ -76,34 +79,42 @@ function Tree({ data, depth = 0 }: TreeProps) {
             <div className="flex w-full items-center justify-between gap-6 text-nowrap">
               {department.name}
               <div className="flex items-center gap-2">
-                <Users
-                  onClick={() => {
-                    selectDepartment(department.employees, department.id);
-                  }}
-                  size={16}
-                  className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 duration-300 hover:bg-muted`}
-                />
-                <PencilLine
-                  onClick={() => {
-                    setEditSheet(department, true);
-                  }}
-                  size={16}
-                  className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 duration-300 hover:bg-muted`}
-                />
-                <Trash2
-                  // onClick={() => {
-                  //   setDeleteDialog({ id: department.id, open: true });
-                  // }}
-                  size={16}
-                  className={`-m-2 mr-1 box-content cursor-not-allowed rounded-full p-2 text-destructive/50 duration-300 hover:bg-muted`}
-                />
-                <Plus
-                  onClick={() => {
-                    setIsAddSheetOpen(true, department.id);
-                  }}
-                  className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 duration-300 hover:bg-muted`}
-                  size={16}
-                />
+                <ThemedTooltip text={t('display_employees')}>
+                  <Users
+                    onClick={() => {
+                      selectDepartment(department.employees, department.id);
+                    }}
+                    size={16}
+                    className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 duration-300 hover:bg-muted`}
+                  />
+                </ThemedTooltip>
+                <ThemedTooltip text={t('edit_department')}>
+                  <PencilLine
+                    onClick={() => {
+                      setEditSheet(department, true);
+                    }}
+                    size={16}
+                    className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 duration-300 hover:bg-muted`}
+                  />
+                </ThemedTooltip>
+                <ThemedTooltip text={t('delete_department')}>
+                  <Trash2
+                    // onClick={() => {
+                    //   setDeleteDialog({ id: department.id, open: true });
+                    // }}
+                    size={16}
+                    className={`-m-2 mr-1 box-content cursor-not-allowed rounded-full p-2 text-destructive/50 duration-300 hover:bg-muted`}
+                  />
+                </ThemedTooltip>
+                <ThemedTooltip text={t('add_sub_department')}>
+                  <Plus
+                    onClick={() => {
+                      setIsAddSheetOpen(true, department.id);
+                    }}
+                    className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 duration-300 hover:bg-muted`}
+                    size={16}
+                  />
+                </ThemedTooltip>
               </div>
             </div>
           </div>

@@ -30,7 +30,7 @@ export interface FooterItem {
 export const statusEnums = {
   1: 'Sipariş oluşturuldu',
   2: 'Devamı gelecek',
-  3: 'Tamamplandı'
+  3: 'Tamamlandı'
 } as const;
 
 export type Status = keyof typeof statusEnums;

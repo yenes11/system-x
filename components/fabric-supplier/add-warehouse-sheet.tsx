@@ -10,7 +10,13 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { useMutation } from '@tanstack/react-query';
@@ -51,7 +57,7 @@ function AddWarehouseSheet() {
     ? '/Customers'
     : '/FabricSupplierWarehouses';
 
-  const addFabric = useMutation({
+  const addWarehouse = useMutation({
     mutationKey: ['add-warehouse'],
     mutationFn: async (values: any) => {
       const res = await api.post(endpoint, values);
@@ -60,6 +66,7 @@ function AddWarehouseSheet() {
     onSuccess: (res) => {
       router.refresh();
       setOpen(false);
+      form.reset();
       toast({
         title: res.statusText,
         description: new Date().toString()
@@ -68,7 +75,15 @@ function AddWarehouseSheet() {
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      address: '',
+      longitude: '',
+      latitude: '',
+      supportFullName: '',
+      supportPhone: ''
+    }
   });
 
   const onSubmit = (
@@ -78,7 +93,7 @@ function AddWarehouseSheet() {
     }
   ) => {
     values[columnName] = id;
-    addFabric.mutate(values);
+    addWarehouse.mutate(values);
   };
 
   return (
@@ -90,16 +105,10 @@ function AddWarehouseSheet() {
         </Button>
       </SheetTrigger>
       <SheetContent>
-        {/* <SheetHeader>
-          <SheetTitle>Add new fabric</SheetTitle>
+        <SheetHeader>
+          <SheetTitle>{t('add_warehouse')}</SheetTitle>
+        </SheetHeader>
 
-          <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription>
-        </SheetHeader> */}
-
-        {/* {fabricTypes.isLoading || fabricUnits.isLoading ? null : ( */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -107,7 +116,7 @@ function AddWarehouseSheet() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('name')}</FormLabel>
                   <FormControl>
                     <Input placeholder="John Fabric" {...field} />
                   </FormControl>
@@ -120,9 +129,12 @@ function AddWarehouseSheet() {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>{t('address')}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Enter address..." {...field} />
+                    <Textarea
+                      placeholder={t('address_placeholder')}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -133,7 +145,7 @@ function AddWarehouseSheet() {
               name="longitude"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Longitude</FormLabel>
+                  <FormLabel>{t('longitude')}</FormLabel>
                   <FormControl>
                     <Input placeholder="40.52" {...field} />
                   </FormControl>
@@ -146,7 +158,7 @@ function AddWarehouseSheet() {
               name="latitude"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Latitude</FormLabel>
+                  <FormLabel>{t('latitude')}</FormLabel>
                   <FormControl>
                     <Input placeholder="40.52" {...field} />
                   </FormControl>
@@ -159,7 +171,7 @@ function AddWarehouseSheet() {
               name="supportFullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Suport Name</FormLabel>
+                  <FormLabel>{t('support_name')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Jane Doe" {...field} />
                   </FormControl>
@@ -172,7 +184,7 @@ function AddWarehouseSheet() {
               name="supportPhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Support Phone</FormLabel>
+                  <FormLabel>{t('support_phone')}</FormLabel>
                   <FormControl>
                     <Input placeholder="555 555 5555" {...field} />
                   </FormControl>
@@ -182,11 +194,11 @@ function AddWarehouseSheet() {
             />
 
             <Button
-              loading={addFabric.isPending}
+              loading={addWarehouse.isPending}
               className="w-full"
               type="submit"
             >
-              Submit
+              {addWarehouse.isPending ? t('submitting') : t('submit')}
             </Button>
           </form>
         </Form>

@@ -16,17 +16,16 @@ import {
 } from '@tanstack/react-table';
 import { PencilLine, Plus } from 'lucide-react';
 
-import AddFabricColorSheet from '@/components/fabric-color/add-fabric-color-sheet';
-import EditFabricSheet from '@/components/fabric/edit-fabric-sheet';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Empty from '@/components/ui/empty';
 import { IMaterial, MaterialUnit } from '@/lib/types';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
-import MaterialRow from './material-row';
-import EditMaterialSheet from './edit-material-sheet';
 import AddMaterialColorSheet from './add-material-color-sheet';
+import EditMaterialSheet from './edit-material-sheet';
+import MaterialRow from './material-row';
+import ThemedTooltip from '../ThemedTooltip';
 
 type Fabric = {
   id: string;
@@ -43,7 +42,7 @@ const getColumns = (
   return [
     {
       accessorKey: 'name',
-      header: 'Name'
+      header: 'name'
     },
     {
       accessorKey: 'unit',
@@ -59,34 +58,38 @@ const getColumns = (
       cell: ({ row }) => {
         return (
           <div className="float-end flex gap-2">
-            <Button
-              className="flex items-center justify-center rounded-full"
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                setEditFabricState({
-                  data: row.original,
-                  open: true
-                });
-              }}
-            >
-              <PencilLine size={16} />
-            </Button>
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                setColorState({
-                  id: row.original.id,
-                  open: true
-                });
-              }}
-              className="flex items-center justify-center rounded-full"
-              variant="ghost"
-              size="icon"
-            >
-              <Plus size={16} />
-            </Button>
+            <ThemedTooltip text={'edit_material'}>
+              <Button
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditFabricState({
+                    data: row.original,
+                    open: true
+                  });
+                }}
+              >
+                <PencilLine size={16} />
+              </Button>
+            </ThemedTooltip>
+            <ThemedTooltip text={'add_color_to_material'}>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setColorState({
+                    id: row.original.id,
+                    open: true
+                  });
+                }}
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+              >
+                <Plus size={16} />
+              </Button>
+            </ThemedTooltip>
           </div>
         );
       }

@@ -7,15 +7,16 @@ import { Badge } from '../ui/badge';
 import { Currency, currencyEnums, Status, statusEnums } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import api from '@/api';
+import { useTranslations } from 'next-intl';
 
 const recentPricesTableColumns = [
   {
     accessorKey: 'fabricSupplierName',
-    header: 'Supplier Name'
+    header: 'supplier_name'
   },
   {
     accessorKey: 'manufacturerCode',
-    header: 'Manufacturer Code',
+    header: 'manufacturer_code',
     cell: ({ row }: { row: any }) => (
       <Badge className="bg-muted text-black hover:bg-muted/80 dark:text-white">
         {row.getValue('manufacturerCode')}
@@ -24,18 +25,18 @@ const recentPricesTableColumns = [
   },
   {
     accessorKey: 'createdDate',
-    header: 'Date',
+    header: 'date',
     cell: ({ row }: { row: any }) => {
       return new Date(row.getValue('createdDate')).toLocaleDateString();
     }
   },
   {
     accessorKey: 'price',
-    header: 'Price'
+    header: 'price'
   },
   {
     accessorKey: 'currency',
-    header: 'Currency',
+    header: 'currency',
     cell: ({ row }: { row: any }) => (
       <Badge className="bg-emerald-600 hover:bg-emerald-600">
         {currencyEnums[row.getValue('currency') as Currency]}
@@ -45,6 +46,7 @@ const recentPricesTableColumns = [
 ];
 
 function RecentPricesTable({ id }: { id: string }) {
+  const t = useTranslations();
   const { data } = useQuery({
     queryKey: ['recent-prices', id],
     queryFn: async () => {
@@ -56,7 +58,7 @@ function RecentPricesTable({ id }: { id: string }) {
   return (
     <Card className="overflow-hidden bg-nutural">
       <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-3">
-        <CardTitle>Recent Prices</CardTitle>
+        <CardTitle>{t('recent_prices')}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         <DataTable

@@ -35,16 +35,21 @@ import {
 import {
   Blocks,
   ConciergeBell,
+  Copy,
   CopyIcon,
   Info,
   Layers,
+  PaintBucket,
   ScrollText
 } from 'lucide-react';
+import { getMessages, getTranslations } from 'next-intl/server';
+import ImageViewer from '@/components/image-viewer';
+import FabricColorCollectionCarousel from '@/components/fabric-color/fabric-color-collection-caraousel';
 // import CollectionCarousel from '@/components/fabric-color/collection-carousel';
 
 async function ColorDetailsPage({ params }: { params: { id: string } }) {
+  const t = await getTranslations();
   const queryClient = new QueryClient();
-
   const color = await queryClient.fetchQuery({
     queryKey: ['fabric-color', params.id],
     queryFn: async () => {
@@ -52,6 +57,8 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
       return res.data;
     }
   });
+
+  console.log(color.collectionColors);
 
   const stockInHandCount = color.stocks.reduce(
     (sum: number, item: any) => sum + item.remainingAmount,
@@ -69,56 +76,56 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
       <div className="mb-4 flex justify-between">
         <Heading
           title="Color"
-          description="Manage users (Client side table functionalities.)"
+          icon={<PaintBucket size={24} className="text-icon" />}
         />
       </div>
       <Card className="mb-4 flex overflow-hidden md:flex-col lg:flex-row">
         <CardHeader className="flex flex-row items-start bg-muted/50">
           <div className="flex h-full flex-col">
-            <CardTitle className="group mb-4 flex items-center gap-2 text-lg">
-              Fabric Color Details
-              <Button
-                size="icon"
-                variant="outline"
-                className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
-              >
-                <CopyIcon className="h-3 w-3" />
-                <span className="sr-only">Copy Order ID</span>
-              </Button>
-            </CardTitle>
-            <CardDescription className="flex h-full w-full items-center justify-center">
-              <img
+            <div className="flex h-full w-full items-center justify-center p-0">
+              {/* <Image
+                width={208}
+                height={208}
                 src={color.fabricColorImage}
-                className="h-52 w-52 object-cover"
-              />
-            </CardDescription>
+                className="rounded object-cover"
+              /> */}
+              <ImageViewer src={color.fabricColorImage} alt="color" />
+              {/* <img
+                src={color.fabricColorImage}
+                className="h-52 w-52 rounded object-cover"
+              /> */}
+            </div>
           </div>
         </CardHeader>
         <CardContent className="flex-1 p-6 text-sm">
           <div className="grid gap-3">
-            <div className="font-semibold">Fabric Color Details</div>
+            <div className="text-lg font-semibold">
+              {t('fabric_color_details')}
+            </div>
             <ul className="grid gap-3">
               <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">Fabric Name</span>
+                <span className="text-muted-foreground">
+                  {t('fabric_name')}
+                </span>
                 <span>{color.fabricName}</span>
               </li>
               <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">Fabric Color Name</span>
+                <span className="text-muted-foreground">{t('name')}</span>
                 <span>{color.fabricColorName}</span>
               </li>
             </ul>
             <Separator className="my-2" />
             <ul className="grid gap-3">
               <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">Fabric Grammage</span>
+                <span className="text-muted-foreground">{t('grammage')}</span>
                 <span>{color.fabricGrammage}</span>
               </li>
               <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">Fabric Unit Name</span>
+                <span className="text-muted-foreground">{t('unit')}</span>
                 <span>{color.fabricUnitName}</span>
               </li>
               <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">Fabric Type Name</span>
+                <span className="text-muted-foreground">{t('type')}</span>
                 <span>{color.fabricTypeName}</span>
               </li>
             </ul>
@@ -131,7 +138,9 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
       <div className="mb-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Stock In Hand</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {t('stock_in_hand')}
+            </CardTitle>
             <Layers />
           </CardHeader>
           <CardContent>
@@ -141,7 +150,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Upcoming Orders
+              {t('upcoming_orders')}
             </CardTitle>
             <Blocks />
           </CardHeader>
@@ -152,7 +161,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Reserved Stock
+              {t('reserved_stock')}
             </CardTitle>
             <ConciergeBell />
           </CardHeader>
@@ -165,17 +174,17 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              Summary
+              {t('summary')}
               <Popover>
                 <PopoverTrigger asChild>
                   <Info size={14} />
                 </PopoverTrigger>
                 <PopoverContent className="w-80">
                   <p className="text-sm text-muted-foreground">
-                    Stock in hand ({stockInHandCount}) + Incoming stock quantity
-                    ({activeOrderCount}) - Reserved stock (
-                    {color.fabricColorReservedAmount}) = {summary}{' '}
-                    {color.fabricUnitName}
+                    {t('stock_in_hand')} ({stockInHandCount}) +{' '}
+                    {t('incoming_stock')} ({activeOrderCount}) -{' '}
+                    {t('reserved_stock')} ({color.fabricColorReservedAmount}) ={' '}
+                    {summary} {color.fabricUnitName}
                   </p>
                 </PopoverContent>
               </Popover>
@@ -187,7 +196,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
           </CardContent>
         </Card>
       </div>
-      <Carousel
+      {/* <Carousel
         opts={{
           align: 'start'
         }}
@@ -208,10 +217,23 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
                     />
                   </CardContent>
                   <CardFooter className="flex flex-col items-start p-2">
-                    <span className="text-xs text-muted-foreground">Code</span>
-                    <span>AM-YA02</span>
                     <span className="text-xs text-muted-foreground">
-                      Percent
+                      {t('code')}
+                    </span>
+                    <div
+                      className="flex items-center gap-2"
+                      // onClick={() => {
+                      //   navigator.clipboard.writeText('AM-YA02');
+                      // }}
+                    >
+                      <span>AM-YA02</span>
+                      <Button size="icon" variant="outline" className="h-6 w-6">
+                        <Copy className="h-3 w-3" />
+                        <span className="sr-only">Copy Order ID</span>
+                      </Button>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {t('percentage')}
                     </span>
                     <span>82%</span>
                   </CardFooter>
@@ -222,7 +244,8 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
-      </Carousel>
+      </Carousel> */}
+      <FabricColorCollectionCarousel data={color.collectionColors} />
       <div className="mb-4 grid gap-4 md:grid-cols-1 lg:grid-cols-2">
         <SuppliersTable data={color.suppliers} />
         <RecentPricesTable id={params.id} />
@@ -234,19 +257,6 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
         />
         <ActiveOrdersTable color={color} />
       </div>
-      {/* <div className="mb-4 grid gap-4 md:grid-cols-1 lg:grid-cols-1">
-        <Card className="bg-nutural">
-          <CardHeader className="px-7">
-            <CardTitle>Summary</CardTitle>
-          </CardHeader>
-          <CardContent className="italic">
-            Stock in hand ({stockInHandCount}) + Incoming stock quantity (
-            {activeOrderCount}) - Reserved stock (
-            {color.fabricColorReservedAmount}) = {summary}{' '}
-            {color.fabricUnitName}
-          </CardContent>
-        </Card>
-      </div> */}
     </HydrationBoundary>
   );
 }

@@ -9,6 +9,7 @@ import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { AddSeasonSheet } from './add-season-sheet';
 import { EditSeasonSheet } from './edit-season-sheet';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import ThemedTooltip from '../ThemedTooltip';
 
 const getSeasonsTableColumns = (setEditState: any, setDeleteState: any) => [
   {
@@ -21,32 +22,36 @@ const getSeasonsTableColumns = (setEditState: any, setDeleteState: any) => [
     cell: ({ row }: { row: any }) => {
       return (
         <div className="float-end flex gap-2">
-          <Button
-            className="flex items-center justify-center rounded-full"
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              setEditState({
-                open: true,
-                data: row.original
-              });
-            }}
-          >
-            <Pencil size={16} />
-          </Button>
-          <Button
-            onClick={(e) => {
-              setDeleteState({
-                open: true,
-                id: row.original.id
-              });
-            }}
-            className="flex items-center justify-center rounded-full"
-            variant="ghost"
-            size="icon"
-          >
-            <Trash2 className="text-destructive" size={16} />
-          </Button>
+          <ThemedTooltip text={'edit_season'}>
+            <Button
+              className="flex items-center justify-center rounded-full"
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                setEditState({
+                  open: true,
+                  data: row.original
+                });
+              }}
+            >
+              <Pencil size={16} />
+            </Button>
+          </ThemedTooltip>
+          <ThemedTooltip text={'delete_season'}>
+            <Button
+              onClick={(e) => {
+                setDeleteState({
+                  open: true,
+                  id: row.original.id
+                });
+              }}
+              className="flex items-center justify-center rounded-full"
+              variant="ghost"
+              size="icon"
+            >
+              <Trash2 className="text-destructive" size={16} />
+            </Button>
+          </ThemedTooltip>
         </div>
       );
     }

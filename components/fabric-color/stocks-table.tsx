@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { DataTable } from '../ui/data-table';
 
@@ -9,14 +10,15 @@ interface Props {
 }
 
 function StocksTable({ data, fabricUnitName }: Props) {
+  const t = useTranslations();
   const stocksTableColumns = [
     {
       accessorKey: 'barcode',
-      header: 'Barcode'
+      header: 'barcode'
     },
     {
       accessorKey: 'remainingAmount',
-      header: 'Remaining Amount',
+      header: 'remaining_amount',
       cell: ({ row }: { row: any }) => {
         return `${row.getValue('remainingAmount')} ${fabricUnitName}`;
       }
@@ -26,7 +28,7 @@ function StocksTable({ data, fabricUnitName }: Props) {
   return (
     <Card className="overflow-hidden bg-nutural">
       <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-3">
-        <CardTitle>Stocks</CardTitle>
+        <CardTitle>{t('stocks')}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         <DataTable

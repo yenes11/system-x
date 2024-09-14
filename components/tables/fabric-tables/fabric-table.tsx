@@ -24,14 +24,9 @@ import { getFabrics } from '@/lib/api-calls';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import FabricRow from './fabric-row';
-
-type Fabric = {
-  id: string;
-  name: string;
-  grammage: number;
-  fabricUnitName: string;
-  fabricTypeName: string;
-};
+import { Fabric } from '@/lib/types';
+import ThemedTooltip from '@/components/ThemedTooltip';
+import { useTranslations } from 'next-intl';
 
 const getColumns = (
   setColorState: any,
@@ -40,55 +35,64 @@ const getColumns = (
   return [
     {
       accessorKey: 'name',
-      header: 'Name'
+      header: 'name'
     },
     {
       accessorKey: 'grammage',
-      header: 'Grammage'
+      header: 'grammage'
     },
     {
       accessorKey: 'fabricUnitName',
-      header: 'Unit'
+      header: 'unit'
     },
     {
       accessorKey: 'fabricTypeName',
-      header: 'Fabric Type'
+      header: 'fabric_type'
     },
     {
       id: 'actions',
       enableHiding: false,
-      // header: () => <div className="text-right">Actions</div>,
+      header: 'actions',
+      meta: {
+        style: {
+          textAlign: 'end'
+        }
+      },
       cell: ({ row }) => {
         return (
           <div className="float-end flex gap-2">
-            <Button
-              className="flex items-center justify-center rounded-full"
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                setEditFabricState({
-                  data: row.original,
-                  open: true
-                });
-              }}
-            >
-              <PencilLine size={16} />
-            </Button>
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                setColorState({
-                  id: row.original.id,
-                  open: true
-                });
-              }}
-              className="flex items-center justify-center rounded-full"
-              variant="ghost"
-              size="icon"
-            >
-              <Plus size={16} />
-            </Button>
+            <ThemedTooltip text="edit_fabric">
+              <Button
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditFabricState({
+                    data: row.original,
+                    open: true
+                  });
+                }}
+              >
+                <PencilLine size={16} />
+              </Button>
+            </ThemedTooltip>
+            <ThemedTooltip text="add_color_to_fabric">
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setColorState({
+                    id: row.original.id,
+                    open: true
+                  });
+                }}
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+              >
+                <Plus size={16} />
+              </Button>
+            </ThemedTooltip>
           </div>
         );
       }
@@ -107,10 +111,11 @@ type Data = {
 };
 
 interface Props {
-  data: Data;
+  data: Fabric[];
 }
 
-function FabricTable() {
+function FabricTable({ data }: Props) {
+  const t = useTranslations();
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [fabricColorState, setFabricColorState] = useState({
     id: '',
@@ -121,17 +126,17 @@ function FabricTable() {
     open: false
   });
 
-  const fabrics = useQuery({
-    queryKey: ['fabrics'],
-    queryFn: getFabrics
-  });
+  // const data = useQuery({
+  //   queryKey: ['fabrics'],
+  //   queryFn: getFabrics
+  // });
 
   const columns = useMemo(() => {
     return getColumns(setFabricColorState, setEditFabricState);
   }, []);
 
   const table = useReactTable({
-    data: fabrics?.data?.items || [],
+    data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel()
   });
@@ -152,12 +157,18 @@ function FabricTable() {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead className="font-semibold" key={header.id}>
+                  <TableHead
+                    style={header.column.columnDef.meta?.style}
+                    className="font-semibold"
+                    key={header.id}
+                  >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
+                      : t(
+                          flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )
                         )}
                   </TableHead>
                 );
