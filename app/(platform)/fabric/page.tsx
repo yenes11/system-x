@@ -44,9 +44,6 @@ export default async function FabricLibraryPage() {
           />
           <AddFabricSheet />
         </div>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <FabricTable />
-        </HydrationBoundary>
       </div>
     </PageContainer>
   );
