@@ -151,5 +151,6 @@
   "collection_code_copied_to_clipboard": "Collection code copied to clipboard",
   "display_employees": "Display Employees",
   "add_sub_department": "Add Sub Department",
-  "edit_warehouse": "Edit Warehouse"
+  "edit_warehouse": "Edit Warehouse",
+  "fabric_color": "Fabric Color"
 }

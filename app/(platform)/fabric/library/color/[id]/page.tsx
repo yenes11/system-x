@@ -75,7 +75,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="mb-4 flex justify-between">
         <Heading
-          title="Color"
+          title={t('fabric_color')}
           icon={<PaintBucket size={24} className="text-icon" />}
         />
       </div>
