@@ -150,5 +150,12 @@
   "display_employees": "Çalışanları görüntüle",
   "add_sub_department": "Alt Departman Ekle",
   "edit_warehouse": "Depoyu Düzenle",
-  "fabric_color": "Kumaş Rengi"
+  "fabric_color": "Kumaş Rengi",
+  "material_color_details": "Malzeme Rengi Detayları",
+  "select_supplier": "Tedarikçi seçiniz",
+  "select_currency": "Para birimi seçiniz",
+  "add_price": "Fiyat Ekle",
+  "select_department_first": "Çalışanları görüntülemek için lütfen önce bir departman seçiniz.",
+  "no_employees_in_department": "Bu departmanda henüz bir çalışan yok.",
+  "fabric_supplier": "Kumaş Tedarikçisi"
 }

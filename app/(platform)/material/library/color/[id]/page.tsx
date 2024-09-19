@@ -4,6 +4,7 @@ import RecentPricesTable from '@/components/fabric-color/recent-prices-table';
 import StocksTable from '@/components/fabric-color/stocks-table';
 import SuppliersTable from '@/components/fabric-color/suppliers-table';
 import MaterialCollectionsCarousel from '@/components/material/material-collections-caraousel';
+import ThemedZoom from '@/components/themed-zoom';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -65,9 +66,9 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
       <Card className="mb-4 flex overflow-hidden md:flex-col lg:flex-row">
         <CardHeader className="flex flex-row items-start bg-muted/50">
           <div className="flex h-full flex-col">
-            <CardDescription className="flex h-full w-full items-center justify-center">
+            <ThemedZoom>
               <img src={color.image} className="h-52 w-52 object-cover" />
-            </CardDescription>
+            </ThemedZoom>
           </div>
         </CardHeader>
         <CardContent className="flex-1 p-6 text-sm">

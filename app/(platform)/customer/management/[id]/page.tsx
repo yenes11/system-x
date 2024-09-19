@@ -4,19 +4,8 @@ import DepartmentEmployeesTable from '@/components/customer/department-employees
 import DepartmentTree from '@/components/customer/department-tree';
 import SeasonsTable from '@/components/customer/seasons-table';
 import WarehouseTable from '@/components/suppliers/warehouse-table';
-import Tree from '@/components/tree';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { getCustomerDetails } from '@/lib/api-calls';
-import {
-  Currency,
-  currencyEnums,
-  CustomerType,
-  customerTypeEnums
-} from '@/types';
 import { getTranslations } from 'next-intl/server';
-import React from 'react';
 
 async function CustomerPage({ params }: any) {
   const details = await getCustomerDetails(params.id);

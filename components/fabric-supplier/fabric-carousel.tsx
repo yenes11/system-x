@@ -28,6 +28,7 @@ import { Input } from '../ui/input';
 import { Fabric } from '@/lib/types';
 import { SearchBar } from '../searchbar';
 import AssignFabricSheet from './assign-fabric-sheet';
+import ThemedZoom from '../themed-zoom';
 
 interface SupplierFabric {
   fabricSupplierFabricColorId: string;
@@ -125,10 +126,12 @@ function FabricCarousel({ data }: Props) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                    <img
-                      src={fabric.image}
-                      className="aspect-square w-full origin-top-left object-cover object-top"
-                    />
+                    <ThemedZoom>
+                      <img
+                        src={fabric.image}
+                        className="aspect-square w-full origin-top-left object-cover object-top"
+                      />
+                    </ThemedZoom>
                   </CardContent>
                   <CardFooter className="flex flex-col items-center justify-center gap-2 p-2 px-0 pb-0">
                     {/* <span className="text-xs text-muted-foreground">Code</span> */}

@@ -42,6 +42,7 @@ import {
 } from './ui/command';
 import { SearchBar } from './searchbar';
 import { toast } from './ui/use-toast';
+import ThemedZoom from './themed-zoom';
 
 const statusOptions = [
   { value: '0', label: 'all' },
@@ -149,10 +150,12 @@ function CollectionsCarousel({ data }: { data: ICollection[] }) {
                 <div className="p-1">
                   <Card className="overflow-hidden bg-cover bg-center p-0">
                     <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                      <img
-                        src={collection.image}
-                        className="positio aspect-square w-full origin-top-left object-cover object-top"
-                      />
+                      <ThemedZoom>
+                        <img
+                          src={collection.image}
+                          className="aspect-square w-full origin-top-left object-cover object-top"
+                        />
+                      </ThemedZoom>
                     </CardContent>
                     <CardFooter className="flex flex-col items-start p-2">
                       <span className="text-xs text-muted-foreground">

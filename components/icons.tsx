@@ -38,6 +38,7 @@ import {
   User,
   User2Icon,
   Users,
+  UsersRound,
   UserX2Icon,
   X
 } from 'lucide-react';
@@ -57,7 +58,7 @@ export const _Icons = {
   collection_library: LibraryBig,
   collection_color_list: List,
   collection_orders: ShoppingCart,
-  customer_management: Users
+  customer_management: UsersRound
 };
 
 export const Icons = {

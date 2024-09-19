@@ -29,6 +29,7 @@ import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { useToast } from '../ui/use-toast';
 import { useTranslations } from 'next-intl';
+import { Warehouse } from 'lucide-react';
 // import { useRouter } from 'next/router';
 
 const formSchema = z.object({
@@ -54,12 +55,13 @@ function AddWarehouseSheet() {
     : 'fabricSupplierId';
 
   const endpoint = path.startsWith('/customer/management')
-    ? '/Customers'
+    ? '/CustomerWarehouses'
     : '/FabricSupplierWarehouses';
 
   const addWarehouse = useMutation({
     mutationKey: ['add-warehouse'],
     mutationFn: async (values: any) => {
+      console.log(endpoint, 'endp');
       const res = await api.post(endpoint, values);
       return res;
     },
@@ -106,6 +108,7 @@ function AddWarehouseSheet() {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
+          <Warehouse className="text-icon mr-2" size={20} />
           <SheetTitle>{t('add_warehouse')}</SheetTitle>
         </SheetHeader>
 

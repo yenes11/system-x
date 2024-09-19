@@ -11,13 +11,18 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Languages } from 'lucide-react';
 import cookies from 'js-cookie';
+import Icon from '../ui/icon';
 type CompProps = {};
 export default function LocaleDropdown({}: CompProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
-          <Languages className="h-[1.2rem] w-[1.2rem]" />
+          <Icon
+            currentColor
+            icon="messages"
+            className="h-[1.2rem] w-[1.2rem]"
+          />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

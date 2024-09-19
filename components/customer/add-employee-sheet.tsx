@@ -121,9 +121,19 @@ export function AddEmployeeSheet() {
     },
     onSuccess: (res) => {
       router.refresh();
+      const employeeType = employeeTypes.data?.find(
+        (employeeType: EmployeeType) =>
+          employeeType.id === res.customerEmployeeTypeId
+      );
       useCustomerDepartmentsSlice.setState((prev) => ({
         ...prev,
-        selectedEmployees: [...prev.selectedEmployees, res]
+        selectedEmployees: [
+          ...prev.selectedEmployees,
+          {
+            ...res,
+            type: employeeType?.name
+          }
+        ]
       }));
       setOpen(false);
       toast({
@@ -155,7 +165,7 @@ export function AddEmployeeSheet() {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <UserPlus size={20} className="mr-2 text-muted-foreground" />
+          <UserRoundPlus size={20} className="mr-2 text-muted-foreground" />
           <SheetTitle>{t('add_employee')}</SheetTitle>
         </SheetHeader>
         <Form {...form}>

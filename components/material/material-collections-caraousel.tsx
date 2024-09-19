@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -8,39 +8,11 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { CheckIcon, ListFilter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { MaterialCollection } from '@/lib/types';
 import { useTranslations } from 'next-intl';
-import {
-  CollectionStatus,
-  CollectionStatusColor,
-  ICollection,
-  ICollectionStatus,
-  MaterialCollection
-} from '@/lib/types';
-import { Badge } from '../ui/badge';
+import { useState } from 'react';
 import Empty from '../ui/empty';
-import { PopoverTrigger, Popover, PopoverContent } from '../ui/popover';
-import { CaretSortIcon } from '@radix-ui/react-icons';
-import { cn } from '@/lib/utils';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from '../ui/command';
+import ThemedZoom from '../themed-zoom';
 
 const statusOptions = [
   { value: '0', label: 'all' },
@@ -150,10 +122,12 @@ function MaterialCollectionsCarousel({ data }: { data: MaterialCollection[] }) {
                 <div className="p-1">
                   <Card className="overflow-hidden bg-cover bg-center p-0">
                     <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                      <img
-                        src={collection.collectionImage}
-                        className="positio aspect-square w-full origin-top-left object-cover object-top"
-                      />
+                      <ThemedZoom>
+                        <img
+                          src={collection.collectionImage}
+                          className="aspect-square w-full origin-top-left object-cover object-top"
+                        />
+                      </ThemedZoom>
                     </CardContent>
                     <CardFooter className="flex flex-col items-start p-2">
                       <span className="text-xs text-muted-foreground">

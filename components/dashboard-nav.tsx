@@ -2,15 +2,27 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-import { _Icons } from '@/components/icons';
 import { _navItems } from '@/constants/data';
 import { useSidebar } from '@/hooks/useSidebar';
 import { cn } from '@/lib/utils';
 import { NavItem } from '@/types';
-import { useLocale, useTranslations } from 'next-intl';
-import React, { Dispatch, SetStateAction } from 'react';
+import { useTranslations } from 'next-intl';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger
+} from './ui/collapsible';
+import Icon from './ui/icon';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from './ui/dropdown-menu';
 
 interface DashboardNavProps {
   items: NavItem[];
@@ -18,76 +30,202 @@ interface DashboardNavProps {
   isMobileNav?: boolean;
 }
 
+interface ExtendedNavItem extends NavItem {
+  key: string;
+  children?: ExtendedNavItem[];
+}
+
+interface NavSectionProps {
+  section: ExtendedNavItem;
+  isMinimized: boolean;
+  t: (key: string) => string;
+  path: string;
+  toggleCollapse: (key: string) => void;
+  collapsedRows: string[];
+}
+
+const NavLink: React.FC<{
+  item: ExtendedNavItem;
+  isMinimized: boolean;
+  t: (key: string) => string;
+  path: string;
+}> = ({ item, isMinimized, t, path }) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <Link
+        href={item.href || ''}
+        className={cn(
+          'relative ml-9 flex flex-shrink-0 select-none items-center gap-2 border-l border-primary/50 px-6 py-2 text-sm font-medium hover:bg-primary/10'
+        )}
+      >
+        {path.includes(item.href || '') && (
+          <span className="absolute -left-[4.5px] h-2 w-2 rounded-full bg-primary" />
+        )}
+        {!isMinimized && (
+          <span
+            className={`mr-2 truncate text-[13px] font-normal ${
+              path.includes(item.href || '') && 'text-primary'
+            }`}
+          >
+            {t(item.title)}
+          </span>
+        )}
+      </Link>
+    </TooltipTrigger>
+    <TooltipContent
+      align="center"
+      side="right"
+      sideOffset={8}
+      className={!isMinimized ? 'hidden' : 'inline-block'}
+    >
+      {t(item.title)}
+    </TooltipContent>
+  </Tooltip>
+);
+
+const NavSection: React.FC<NavSectionProps> = ({
+  section,
+  isMinimized,
+  t,
+  path,
+  toggleCollapse,
+  collapsedRows
+}) => {
+  const isCollapsed = !collapsedRows.includes(section.key);
+
+  if (section.href && !section.children?.length) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Link
+            href={section.href}
+            className={cn(
+              'mx-3 flex flex-shrink-0 cursor-pointer select-none items-center gap-3 overflow-hidden rounded-md px-[13px] py-2 text-sm font-medium hover:bg-primary/10',
+              path.includes(section.href) && 'bg-primary/40'
+            )}
+          >
+            <Icon icon={section.icon || ''} size={20} />
+            {!isMinimized && t(section.title)}
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent
+          align="center"
+          side="right"
+          sideOffset={8}
+          className={!isMinimized ? 'hidden' : 'inline-block'}
+        >
+          {t(section.title)}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  if (isMinimized) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <div className="mx-3 flex flex-shrink-0 cursor-pointer select-none items-center gap-3 overflow-hidden rounded-md px-[13px] py-2 text-sm font-medium hover:bg-primary/10">
+            <Icon icon={section.icon || ''} size={20} />
+            {!isMinimized && t(section.title)}
+            {!isMinimized && (
+              <Icon
+                className={`ml-auto transition-transform ${
+                  isCollapsed ? 'rotate-180' : ''
+                }`}
+                icon="down"
+                size={16}
+              />
+            )}
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="min-w-40"
+          sideOffset={16}
+          align="start"
+          side="right"
+        >
+          <DropdownMenuLabel>{t(section.title)}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {section.children?.map((item) => (
+            <DropdownMenuItem key={item.key}>
+              <Link href={item.href || ''}>{t(item.title)}</Link>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  return (
+    <Collapsible
+      open={!isCollapsed}
+      onOpenChange={() => toggleCollapse(section.key)}
+    >
+      <CollapsibleTrigger asChild>
+        <div className="mx-3 flex flex-shrink-0 cursor-pointer select-none items-center gap-3 overflow-hidden rounded-md px-[13px] py-2 text-sm font-medium hover:bg-primary/10">
+          <Icon icon={section.icon || ''} size={20} />
+          {!isMinimized && t(section.title)}
+          {!isMinimized && (
+            <Icon
+              className={`ml-auto transition-transform ${
+                !isCollapsed ? 'rotate-180' : ''
+              }`}
+              icon="down"
+              size={16}
+            />
+          )}
+        </div>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="collapsibleDropdown">
+        <div className="overflow-hidden">
+          {section.children?.map((item) => (
+            <NavLink
+              key={item.key}
+              item={item}
+              isMinimized={isMinimized}
+              t={t}
+              path={path}
+            />
+          ))}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+};
+
 export function DashboardNav({
   items,
   setOpen,
   isMobileNav = false
 }: DashboardNavProps) {
+  const [collapsedRows, setCollapsedRows] = useState<string[]>([]);
   const path = usePathname();
   const { isMinimized } = useSidebar();
   const t = useTranslations();
-  const locale = useLocale();
+  const _isMinimized = isMobileNav ? false : isMinimized;
   if (!items?.length) {
     return null;
   }
 
+  const toggleCollapse = (key: string) => {
+    setCollapsedRows((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
+
   return (
     <nav className="no-scrollbar flex flex-1 flex-col gap-2 overflow-auto py-4">
-      {_navItems.map((section, index) => {
-        return (
-          <React.Fragment key={section.key}>
-            <span
-              className={`inline-block flex-shrink-0 origin-left overflow-hidden text-gray-600 transition-all duration-500 ${
-                isMinimized
-                  ? 'ml-[50%] w-max translate-x-[-50%] text-xs delay-200'
-                  : 'ml-6 translate-x-0 text-sm delay-0'
-              }`}
-            >
-              {t(section.title)}
-            </span>
-            {section.children.map((item) => {
-              const Icon = _Icons[item.key as keyof typeof _Icons];
-              return (
-                <Tooltip key={item.key}>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        'mx-3 flex flex-shrink-0 items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-primary/10',
-                        path.includes(item.href)
-                          ? 'bg-primary/40 text-emerald-700 hover:bg-primary/90 hover:text-emerald-100 dark:text-emerald-200'
-                          : 'transparent'
-                      )}
-                      onClick={() => {
-                        if (setOpen) setOpen(false);
-                      }}
-                    >
-                      <Icon className={`ml-3 size-5 flex-none`} />
-
-                      {isMobileNav || (!isMinimized && !isMobileNav) ? (
-                        <span className="mr-2 truncate text-[13px] font-normal">
-                          {t(item.title)}
-                        </span>
-                      ) : (
-                        ''
-                      )}
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    align="center"
-                    side="right"
-                    sideOffset={8}
-                    className={!isMinimized ? 'hidden' : 'inline-block'}
-                  >
-                    {t(item.title)}
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
-            <div className="my-1 w-full"></div>
-          </React.Fragment>
-        );
-      })}
+      {_navItems.map((section) => (
+        <NavSection
+          key={section.key}
+          section={section as ExtendedNavItem}
+          isMinimized={_isMinimized}
+          t={t}
+          path={path}
+          toggleCollapse={toggleCollapse}
+          collapsedRows={collapsedRows}
+        />
+      ))}
     </nav>
   );
 }

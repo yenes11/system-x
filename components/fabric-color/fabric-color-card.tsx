@@ -30,7 +30,10 @@ function FabricColorCard({ id, name, img, ingredients }: Props) {
           </span>
           <div className="flex gap-2">
             {ingredients.map((ingredient, index) => (
-              <Badge key={index}>
+              <Badge
+                className="border border-primary bg-primary/30 text-primary-foreground"
+                key={index}
+              >
                 {ingredient.percentage}% {ingredient.name}
               </Badge>
             ))}

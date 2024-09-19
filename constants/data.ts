@@ -93,19 +93,16 @@ export const users: User[] = [
 
 export const _navItems = [
   {
-    key: 'home',
-    title: 'home',
-    children: [
-      {
-        key: 'dashboard',
-        title: 'dashboard',
-        href: '/dashboard'
-      }
-    ]
+    key: 'dashboard',
+    title: 'dashboard',
+    icon: 'chart-line',
+    href: '/dashboard',
+    children: []
   },
   {
     key: 'fabric',
     title: 'fabric',
+    icon: 'color-swatch',
     children: [
       {
         key: 'fabric_library',
@@ -132,6 +129,7 @@ export const _navItems = [
   {
     key: 'material',
     title: 'material',
+    icon: 'disk',
     children: [
       {
         key: 'material_library',
@@ -158,6 +156,7 @@ export const _navItems = [
   {
     key: 'collection',
     title: 'collection',
+    icon: 'abstract-26',
     children: [
       {
         key: 'collection_library',
@@ -179,14 +178,22 @@ export const _navItems = [
   {
     key: 'customer',
     title: 'customer',
-    children: [
-      {
-        key: 'customer_management',
-        title: 'customer_management',
-        href: '/customer/management'
-      }
-    ]
+    icon: 'users',
+    href: '/customer/management',
+    children: []
   }
+  // {
+  //   key: 'customer',
+  //   title: 'customer',
+  //   icon: 'people',
+  //   children: [
+  //     {
+  //       key: 'customer_management',
+  //       title: 'customer_management',
+  //       href: '/customer/management'
+  //     }
+  //   ]
+  // }
 ];
 
 export const navItems: NavItem[] = [

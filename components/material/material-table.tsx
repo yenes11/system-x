@@ -26,6 +26,7 @@ import AddMaterialColorSheet from './add-material-color-sheet';
 import EditMaterialSheet from './edit-material-sheet';
 import MaterialRow from './material-row';
 import ThemedTooltip from '../ThemedTooltip';
+import Icon from '../ui/icon';
 
 type Fabric = {
   id: string;
@@ -71,7 +72,7 @@ const getColumns = (
                   });
                 }}
               >
-                <PencilLine size={16} />
+                <Icon currentColor icon="feather" size={16} />
               </Button>
             </ThemedTooltip>
             <ThemedTooltip text={'add_color_to_material'}>
@@ -87,7 +88,7 @@ const getColumns = (
                 variant="ghost"
                 size="icon"
               >
-                <Plus size={16} />
+                <Icon currentColor icon="plus" size={16} />
               </Button>
             </ThemedTooltip>
           </div>

@@ -2,6 +2,7 @@ import api from '@/api';
 import AddFabricSheet from '@/components/fabric/add-fabric-sheet';
 import FabricTable from '@/components/tables/fabric-tables/fabric-table';
 import { Heading } from '@/components/ui/heading';
+import Icon from '@/components/ui/icon';
 import { getFabricUrl } from '@/constants/api-constants';
 import { ApiError, Fabric, PaginatedData } from '@/lib/types';
 import {
@@ -42,7 +43,14 @@ export default async function FabricLibraryPage() {
     <div className="space-y-2">
       <div className="mb-4 flex justify-between">
         <Heading
-          icon={<Scissors size={24} className="text-icon" />}
+          icon={
+            <Icon
+              currentColor
+              icon="some-files"
+              size={24}
+              className="text-icon"
+            />
+          }
           title="Fabric Library"
           description=""
         />

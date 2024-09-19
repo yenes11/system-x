@@ -36,6 +36,7 @@ import api from '@/api';
 import { MaterialUnit } from '@/lib/types';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import Icon from '../ui/icon';
 
 const formSchema = z.object({
   name: z.string().min(1, 'İsim gereklidir'),
@@ -81,7 +82,7 @@ function AddMaterialSheet() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button>
-          <PlusIcon className="mr-2" />
+          <Icon currentColor icon="plus" className="mr-2" />
           {t('add_material')}
         </Button>
       </SheetTrigger>

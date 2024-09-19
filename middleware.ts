@@ -10,8 +10,10 @@ function middleware(request: NextRequest) {
   // Get the user token from cookies (assuming you store user authentication in cookies)
   const token = request.cookies.get('session')?.value;
 
+  const isPublicRoute = pathname.startsWith('/login') || pathname === '/';
+
   // If the user is trying to access the /auth page and is authenticated, redirect them to the home page
-  if (pathname.startsWith('/login') && token) {
+  if (isPublicRoute && token) {
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
     return NextResponse.redirect(url);
@@ -23,7 +25,6 @@ function middleware(request: NextRequest) {
     url.pathname = '/login';
     return NextResponse.redirect(url);
   }
-
   // Allow the request to proceed if the user is authenticated or is accessing /auth
   return NextResponse.next();
 }

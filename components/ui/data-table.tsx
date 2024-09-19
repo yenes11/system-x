@@ -25,6 +25,7 @@ import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { HTMLAttributes } from 'react';
 import { ClassValue } from 'class-variance-authority/types';
+import { SearchBar } from '../searchbar';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -71,13 +72,13 @@ export function DataTable<TData, TValue>({
   return (
     <>
       {searchKey && (
-        <Input
+        <SearchBar
           placeholder={`Search...`}
           value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn(searchKey)?.setFilterValue(event.target.value)
           }
-          className={cn('mb-2 w-full md:max-w-sm', inputClassName)}
+          className={cn('mb-2 w-full rounded-full md:max-w-sm', inputClassName)}
         />
       )}
 

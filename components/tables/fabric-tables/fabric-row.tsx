@@ -1,6 +1,7 @@
 import api from '@/api';
 import FabricColorCard from '@/components/fabric-color/fabric-color-card';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { useQuery } from '@tanstack/react-query';
 import { flexRender } from '@tanstack/react-table';
@@ -71,7 +72,24 @@ function FabricRow({ row, expandedRows, setExpandedRows, toggleRow }: Props) {
       </TableRow>
       {expandedRows.includes(row.original.id) &&
         (colors.isLoading ? (
-          <TableCell colSpan={6}>Loading...</TableCell>
+          <TableCell colSpan={6}>
+            <div className="grid grid-cols-2 gap-4 py-2">
+              <div className="flex gap-4 space-y-3">
+                <Skeleton className="h-24 w-24 rounded bg-gray-600/20" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px] bg-gray-600/20" />
+                  <Skeleton className="h-4 w-[200px] bg-gray-600/20" />
+                </div>
+              </div>
+              <div className="flex gap-4 space-y-3">
+                <Skeleton className="h-24 w-24 rounded bg-gray-600/20" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px] bg-gray-600/20" />
+                  <Skeleton className="h-4 w-[200px] bg-gray-600/20" />
+                </div>
+              </div>
+            </div>
+          </TableCell>
         ) : colors.data.length === 0 ? (
           <TableCell
             className="py-8 text-center text-card-foreground/60"

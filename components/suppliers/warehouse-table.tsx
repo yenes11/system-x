@@ -14,6 +14,7 @@ import AddWarehouseSheet from '../fabric-supplier/add-warehouse-sheet';
 import EditWarehouseSheet from '../fabric-supplier/edit-warehouse-sheet';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import ThemedTooltip from '../ThemedTooltip';
+import { usePathname } from 'next/navigation';
 
 interface Props {
   data: Warehouse[];
@@ -107,6 +108,7 @@ const getColumns = (
 
 function WarehouseTable({ data }: Props) {
   const t = useTranslations();
+  const path = usePathname();
   const [warehouseState, setWarehouseState] = useState({
     id: undefined,
     open: false
@@ -124,6 +126,10 @@ function WarehouseTable({ data }: Props) {
     return getColumns(setDeleteState, setEditState);
   }, [data]);
 
+  const endpoint = path.startsWith('/customer/management')
+    ? '/CustomerWarehouses'
+    : '/FabricSupplierWarehouses';
+
   return (
     <>
       <EditWarehouseSheet state={editState} setState={setEditState} />
@@ -132,7 +138,7 @@ function WarehouseTable({ data }: Props) {
         title={t('delete_warehouse')}
         state={deleteState}
         setState={setDeleteState}
-        endpoint="/FabricSupplierWarehouses"
+        endpoint={endpoint}
       />
       <Card className="flex-[2] overflow-auto bg-nutural">
         <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-2">

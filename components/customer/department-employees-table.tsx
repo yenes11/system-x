@@ -108,7 +108,8 @@ const getColumns = (
 
 function DepartmentEmployeesTable() {
   const t = useTranslations();
-  const { selectedEmployees } = useCustomerDepartmentsSlice();
+  const { selectedEmployees, selectedDepartmentId } =
+    useCustomerDepartmentsSlice();
   const [supplierSheetState, setSupplierSheetState] = useState({
     id: '',
     open: false
@@ -150,6 +151,11 @@ function DepartmentEmployeesTable() {
           <DataTable
             bordered={false}
             columns={columns}
+            emptyDescription={
+              selectedDepartmentId
+                ? t('no_employees_in_department')
+                : t('select_department_first')
+            }
             data={selectedEmployees || []}
             searchKey="fullName"
             inputClassName="m-2"

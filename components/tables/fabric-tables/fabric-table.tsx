@@ -27,6 +27,7 @@ import FabricRow from './fabric-row';
 import { Fabric } from '@/lib/types';
 import ThemedTooltip from '@/components/ThemedTooltip';
 import { useTranslations } from 'next-intl';
+import Icon from '@/components/ui/icon';
 
 const getColumns = (
   setColorState: any,
@@ -74,7 +75,7 @@ const getColumns = (
                   });
                 }}
               >
-                <PencilLine size={16} />
+                <Icon currentColor icon="feather" size={16} />
               </Button>
             </ThemedTooltip>
             <ThemedTooltip text="add_color_to_fabric">
@@ -90,7 +91,7 @@ const getColumns = (
                 variant="ghost"
                 size="icon"
               >
-                <Plus size={16} />
+                <Icon currentColor icon="plus" size={16} />
               </Button>
             </ThemedTooltip>
           </div>

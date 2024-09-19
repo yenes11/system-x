@@ -36,10 +36,11 @@ import {
   SelectValue
 } from '../ui/select';
 import { useToast } from '../ui/use-toast';
-import { getTodos } from '@/app/actions';
+import { addFabricFn } from '@/app/actions';
 import { Origami } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import Icon from '../ui/icon';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -58,10 +59,7 @@ function AddFabricSheet() {
 
   const addFabric = useMutation({
     mutationKey: ['add-fabric'],
-    mutationFn: async (values: any) => {
-      const res = await api.post('/Fabrics', values);
-      return res;
-    },
+    mutationFn: addFabricFn,
     onSuccess: (res) => {
       router.refresh();
       setOpen(false);
@@ -91,7 +89,8 @@ function AddFabricSheet() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button>
-          <PlusIcon className="mr-2" />
+          <Icon className="mr-2" currentColor size={16} icon="plus" />
+          {/* <PlusIcon className="mr-2" /> */}
           {t('add_new_fabric')}
         </Button>
       </SheetTrigger>

@@ -29,11 +29,11 @@ function DepartmentTree({ data }: { data: Department[] }) {
     (state) => state.selectDepartment
   );
 
-  useEffect(() => {
-    if (data) {
-      selectDepartment(data?.[0].employees, data?.[0].id);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (data) {
+  //     selectDepartment(data?.[0]?.employees, data?.[0]?.id);
+  //   }
+  // }, []);
 
   return (
     <>

@@ -9,6 +9,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 // import localFont from '@next/font/local';
 import localFont from 'next/font/local';
+import '@/public/icon-style.css';
 
 // const inter = Inter({ subsets: ['latin'] });
 

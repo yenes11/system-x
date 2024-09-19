@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { usePathname, useRouter } from 'next/navigation';
-import { PlusIcon } from 'lucide-react';
+import { Leaf, PlusIcon, SunSnow } from 'lucide-react';
 
 import api from '@/api';
 import { Button } from '@/components/ui/button';
@@ -89,6 +89,8 @@ export function AddSeasonSheet() {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
+          <SunSnow className="text-icon mr-2" size={20} />
+
           <SheetTitle>{t('add_season')}</SheetTitle>
         </SheetHeader>
         <Form {...form}>

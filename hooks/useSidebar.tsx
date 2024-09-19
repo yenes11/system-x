@@ -7,7 +7,7 @@ interface SidebarStore {
 }
 
 // const _window = window;
-const isSmallWindow = true; //_window.innerWidth < 950;
+const isSmallWindow = false; //_window.innerWidth < 950;
 
 export const useSidebar = create<SidebarStore>((set) => ({
   isMinimized: isSmallWindow,

@@ -152,5 +152,12 @@
   "display_employees": "Display Employees",
   "add_sub_department": "Add Sub Department",
   "edit_warehouse": "Edit Warehouse",
-  "fabric_color": "Fabric Color"
+  "fabric_color": "Fabric Color",
+  "material_color_details": "Material Color Details",
+  "select_supplier": "Select supplier",
+  "select_currency": "Select currency",
+  "add_price": "Add Price",
+  "select_department_first": "To view employees, please select a department first.",
+  "no_employees_in_department": "No employees in this department.",
+  "fabric_supplier": "Fabric Supplier"
 }

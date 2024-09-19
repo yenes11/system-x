@@ -1,26 +1,20 @@
 import api from '@/api';
 import ActiveOrdersTable from '@/components/fabric-color/active-orders-table';
+import FabricColorCollectionCarousel from '@/components/fabric-color/fabric-color-collection-caraousel';
 import IngredientsChart from '@/components/fabric-color/ingredients-chart';
 import RecentPricesTable from '@/components/fabric-color/recent-prices-table';
 import StocksTable from '@/components/fabric-color/stocks-table';
 import SuppliersTable from '@/components/fabric-color/suppliers-table';
-import { Button } from '@/components/ui/button';
+import ThemedZoom from '@/components/themed-zoom';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from '@/components/ui/carousel';
 import { Heading } from '@/components/ui/heading';
+import Icon from '@/components/ui/icon';
 import {
   Popover,
   PopoverContent,
@@ -35,16 +29,12 @@ import {
 import {
   Blocks,
   ConciergeBell,
-  Copy,
-  CopyIcon,
   Info,
   Layers,
   PaintBucket,
   ScrollText
 } from 'lucide-react';
-import { getMessages, getTranslations } from 'next-intl/server';
-import ImageViewer from '@/components/image-viewer';
-import FabricColorCollectionCarousel from '@/components/fabric-color/fabric-color-collection-caraousel';
+import { getTranslations } from 'next-intl/server';
 // import CollectionCarousel from '@/components/fabric-color/collection-carousel';
 
 async function ColorDetailsPage({ params }: { params: { id: string } }) {
@@ -76,24 +66,19 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
       <div className="mb-4 flex justify-between">
         <Heading
           title={t('fabric_color')}
-          icon={<PaintBucket size={24} className="text-icon" />}
+          icon={<Icon icon="colors-square" currentColor size={32} />}
         />
       </div>
       <Card className="mb-4 flex overflow-hidden md:flex-col lg:flex-row">
         <CardHeader className="flex flex-row items-start bg-muted/50">
           <div className="flex h-full flex-col">
             <div className="flex h-full w-full items-center justify-center p-0">
-              {/* <Image
-                width={208}
-                height={208}
-                src={color.fabricColorImage}
-                className="rounded object-cover"
-              /> */}
-              <ImageViewer src={color.fabricColorImage} alt="color" />
-              {/* <img
-                src={color.fabricColorImage}
-                className="h-52 w-52 rounded object-cover"
-              /> */}
+              <ThemedZoom>
+                <img
+                  src={color.fabricColorImage}
+                  className="h-52 w-52 rounded object-cover"
+                />
+              </ThemedZoom>
             </div>
           </div>
         </CardHeader>
@@ -141,7 +126,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
             <CardTitle className="text-sm font-medium">
               {t('stock_in_hand')}
             </CardTitle>
-            <Layers />
+            <Icon icon="archive" size={22} />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stockInHandCount}</div>
@@ -152,7 +137,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
             <CardTitle className="text-sm font-medium">
               {t('upcoming_orders')}
             </CardTitle>
-            <Blocks />
+            <Icon icon="basket" size={22} />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{activeOrderCount}</div>
@@ -163,7 +148,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
             <CardTitle className="text-sm font-medium">
               {t('reserved_stock')}
             </CardTitle>
-            <ConciergeBell />
+            <Icon icon="notification" size={22} />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -176,8 +161,8 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
             <CardTitle className="flex items-center gap-2 text-sm font-medium">
               {t('summary')}
               <Popover>
-                <PopoverTrigger asChild>
-                  <Info size={14} />
+                <PopoverTrigger className="h4 flex w-4 items-center">
+                  <Icon icon="information-2" size={14} />
                 </PopoverTrigger>
                 <PopoverContent className="w-80">
                   <p className="text-sm text-muted-foreground">
@@ -189,62 +174,13 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
                 </PopoverContent>
               </Popover>
             </CardTitle>
-            <ScrollText />
+            <Icon icon="scroll" size={22} />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{summary}</div>
           </CardContent>
         </Card>
       </div>
-      {/* <Carousel
-        opts={{
-          align: 'start'
-        }}
-        className="m-auto mb-4 min-w-0 max-w-full"
-      >
-        <CarouselContent>
-          {Array.from({ length: 50 }).map((_, index) => (
-            <CarouselItem
-              key={index}
-              className="shrink-0 grow-0 basis-full md:basis-1/2 lg:basis-1/5"
-            >
-              <div className="p-1">
-                <Card className="overflow-hidden bg-cover bg-center p-0">
-                  <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                    <img
-                      src="https://cdn.dsmcdn.com/mnresize/1200/1800/ty1398/product/media/images/prod/PIM/20240703/14/da7794de-1bb2-41f9-b649-925e6ebc4df2/1_org_zoom.jpg"
-                      className="positio aspect-square w-full origin-top-left object-cover object-top"
-                    />
-                  </CardContent>
-                  <CardFooter className="flex flex-col items-start p-2">
-                    <span className="text-xs text-muted-foreground">
-                      {t('code')}
-                    </span>
-                    <div
-                      className="flex items-center gap-2"
-                      // onClick={() => {
-                      //   navigator.clipboard.writeText('AM-YA02');
-                      // }}
-                    >
-                      <span>AM-YA02</span>
-                      <Button size="icon" variant="outline" className="h-6 w-6">
-                        <Copy className="h-3 w-3" />
-                        <span className="sr-only">Copy Order ID</span>
-                      </Button>
-                    </div>
-                    <span className="text-xs text-muted-foreground">
-                      {t('percentage')}
-                    </span>
-                    <span>82%</span>
-                  </CardFooter>
-                </Card>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel> */}
       <FabricColorCollectionCarousel data={color.collectionColors} />
       <div className="mb-4 grid gap-4 md:grid-cols-1 lg:grid-cols-2">
         <SuppliersTable data={color.suppliers} />

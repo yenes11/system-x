@@ -8,6 +8,7 @@ import { Currency, currencyEnums, Status, statusEnums } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import api from '@/api';
 import { useTranslations } from 'next-intl';
+import AddPriceSheet from './add-price-sheet';
 
 const recentPricesTableColumns = [
   {
@@ -59,6 +60,7 @@ function RecentPricesTable({ id }: { id: string }) {
     <Card className="overflow-hidden bg-nutural">
       <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-3">
         <CardTitle>{t('recent_prices')}</CardTitle>
+        <AddPriceSheet />
       </CardHeader>
       <CardContent className="p-0">
         <DataTable

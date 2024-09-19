@@ -161,7 +161,7 @@ function AddFabricColorSheet({ state, setState }: Props) {
                   <FormLabel>Image</FormLabel>
                   <FormControl>
                     <Input
-                      className="py-[7px]"
+                      className=""
                       type="file"
                       {...fieldProps}
                       accept="image/*, application/pdf"
