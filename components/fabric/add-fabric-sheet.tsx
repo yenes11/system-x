@@ -59,7 +59,10 @@ function AddFabricSheet() {
 
   const addFabric = useMutation({
     mutationKey: ['add-fabric'],
-    mutationFn: addFabricFn,
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const res = await api.post('/Fabrics', values);
+      return res;
+    },
     onSuccess: (res) => {
       router.refresh();
       setOpen(false);
