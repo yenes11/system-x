@@ -8,6 +8,7 @@ export const URL_LOGIN = '/Auth/Login';
 
 const URL_FABRIC = '/Fabrics';
 const URL_FABRIC_SUPPLIERS = '/FabricSuppliers';
+const URL_MATERIAL_SUPPLIERS = '/MaterialSuppliers';
 const URL_MATERIAL = '/Materials';
 export const URL_MATERIAL_COLOR = '/MaterialColors';
 export const URL_USER_INFO = '/Users/GetFromAuth';
@@ -20,5 +21,8 @@ export const getMaterialUrl = (params: QueryParams) =>
 
 export const getFabricSuppliersUrl = (params: QueryParams) =>
   `${URL_FABRIC_SUPPLIERS}?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}`;
+
+export const getMaterialSuppliersUrl = (params: QueryParams) =>
+  `${URL_MATERIAL_SUPPLIERS}?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}`;
 
 export const URL_USER = `/Users/GetFromAuth`;

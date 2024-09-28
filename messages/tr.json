@@ -157,5 +157,9 @@
   "add_price": "Fiyat Ekle",
   "select_department_first": "Çalışanları görüntülemek için lütfen önce bir departman seçiniz.",
   "no_employees_in_department": "Bu departmanda henüz bir çalışan yok.",
-  "fabric_supplier": "Kumaş Tedarikçisi"
+  "fabric_supplier": "Kumaş Tedarikçisi",
+  "piece": "Adet",
+  "Centimeter": "Santimetre",
+  "Meter": "Metre",
+  "material_management": "Malzeme Yönetimi"
 }

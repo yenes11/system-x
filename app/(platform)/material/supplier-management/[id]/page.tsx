@@ -10,24 +10,25 @@ import {
 } from '@tanstack/react-query';
 import { getTranslations } from 'next-intl/server';
 
-async function FabricSupplierDetailsPage({
+async function getMaterialSupplierDetails(id: string) {
+  try {
+    const res = await api.get(`/MaterialSuppliers/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function MaterialSupplierDetailsPage({
   params
 }: {
   params: { id: string };
 }) {
-  const queryClient = new QueryClient();
   const t = await getTranslations();
-
-  const supplier = await queryClient.fetchQuery({
-    queryKey: ['supplier', params.id],
-    queryFn: async () => {
-      const res = await api.get(`/FabricSuppliers/${params.id}`);
-      return res.data;
-    }
-  });
+  const supplier = await getMaterialSupplierDetails(params.id);
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <>
       <Card className="mb-4 flex flex-col overflow-hidden">
         <CardHeader className="flex flex-row items-start bg-muted px-6 py-2">
           <div className="flex h-full flex-col">
@@ -70,10 +71,10 @@ async function FabricSupplierDetailsPage({
         </CardContent>
       </Card>
 
-      <FabricCarousel data={supplier.fabrics} />
+      {/* <FabricCarousel data={supplier.material} /> */}
       <WarehouseTable data={supplier.warehouses} />
-    </HydrationBoundary>
+    </>
   );
 }
 
-export default FabricSupplierDetailsPage;
+export default MaterialSupplierDetailsPage;

@@ -1,21 +1,12 @@
 import api from '@/api';
-import { Breadcrumbs } from '@/components/breadcrumbs';
-import AddFabricSheet from '@/components/fabric/add-fabric-sheet';
-import PageContainer from '@/components/layout/page-container';
 import AddMaterialSheet from '@/components/material/add-material-sheet';
 import MaterialTable from '@/components/material/material-table';
-import FabricTable from '@/components/tables/fabric-tables/fabric-table';
 import { Heading } from '@/components/ui/heading';
-import { getFabricUrl, getMaterialUrl } from '@/constants/api-constants';
+import Icon from '@/components/ui/icon';
+import { getMaterialUrl } from '@/constants/api-constants';
 import { IMaterial, PaginatedData } from '@/lib/types';
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient
-} from '@tanstack/react-query';
-import { InspectionPanel, Shell } from 'lucide-react';
-import { getMessages, getTranslations } from 'next-intl/server';
-import { Suspense } from 'react';
+import { Shell } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 const getMaterials = async () => {
   try {
@@ -35,7 +26,7 @@ export default async function MaterialLibraryPage() {
       <div className="mb-4 flex justify-between">
         <Heading
           title={t('material_library')}
-          icon={<Shell size={28} className="text-icon" />}
+          icon={<Icon icon="disk" size={28} currentColor />}
         />
         <AddMaterialSheet />
       </div>

@@ -13,10 +13,11 @@ async function getFabricUnits(): Promise<FabricUnit[]> {
   return response.data;
 }
 
-function useFabricUnitsQuery() {
+function useFabricUnitsQuery({ enabled = false } = {}) {
   return useQuery({
     queryKey: ['fabric-units'],
-    queryFn: getFabricUnits
+    queryFn: getFabricUnits,
+    enabled
   });
 }
 

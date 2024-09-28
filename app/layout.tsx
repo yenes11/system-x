@@ -7,11 +7,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-// import localFont from '@next/font/local';
 import localFont from 'next/font/local';
 import '@/public/icon-style.css';
-
-// const inter = Inter({ subsets: ['latin'] });
 
 const inter = localFont({
   src: '../public/fonts/InterVariable.ttf',

@@ -50,9 +50,10 @@ const formSchema = z.object({
 });
 
 function AddFabricSheet() {
-  const fabricTypes = useFabricTypesQuery();
-  const fabricUnits = useFabricUnitsQuery();
   const [open, setOpen] = useState(false);
+
+  const fabricTypes = useFabricTypesQuery({ enabled: open });
+  const fabricUnits = useFabricUnitsQuery({ enabled: open });
   const t = useTranslations();
   const router = useRouter();
   const { toast } = useToast();
@@ -93,7 +94,6 @@ function AddFabricSheet() {
       <SheetTrigger asChild>
         <Button>
           <Icon className="mr-2" currentColor size={16} icon="plus" />
-          {/* <PlusIcon className="mr-2" /> */}
           {t('add_new_fabric')}
         </Button>
       </SheetTrigger>
@@ -102,8 +102,6 @@ function AddFabricSheet() {
           <Origami size={18} className="mr-2 text-muted-foreground" />
           <SheetTitle>{t('add_new_fabric')}</SheetTitle>
         </SheetHeader>
-
-        {/* {fabricTypes.isLoading || fabricUnits.isLoading ? null : ( */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField

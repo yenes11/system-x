@@ -131,11 +131,19 @@ interface ActiveOrder {
   currency: number;
 }
 
-interface Supplier {
+interface MaterialSupplier {
   materialSupplierId: string;
   materialSupplierMaterialColorId: string;
   manufacturerCode: string;
   name: string;
+  phone: string;
+  authorizedPersonFullName: string;
+}
+
+export interface Supplier {
+  id: string;
+  name: string;
+  address: string;
   phone: string;
   authorizedPersonFullName: string;
 }
@@ -151,7 +159,7 @@ export interface MaterialColor {
   collectionColors: CollectionColor[];
   stocks: Stock[];
   activeOrders: ActiveOrder[];
-  suppliers: Supplier[];
+  suppliers: MaterialSupplier[];
 }
 
 export type ApiError = {

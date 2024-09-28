@@ -34,6 +34,7 @@ import api from '@/api';
 import { IMaterial, MaterialUnit } from '@/lib/types';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { editMaterialFn } from '@/app/actions';
 
 const formSchema = z.object({
   name: z.string().min(1, 'İsim gereklidir'),
@@ -55,13 +56,14 @@ function EditMaterialSheet({ state, setState }: EditMaterialSheetProps) {
 
   const editMaterial = useMutation({
     mutationKey: ['edit-material'],
-    mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const res = await api.put(`/Materials`, {
-        ...values,
-        id: state.data?.id
-      });
-      return res;
-    },
+    // mutationFn: async (values: z.infer<typeof formSchema>) => {
+    //   const res = await api.put(`/Materials`, {
+    //     ...values,
+    //     id: state.data?.id
+    //   });
+    //   return res;
+    // },
+    mutationFn: editMaterialFn,
     onSuccess: (res) => {
       router.refresh();
       setState({ open: false, data: null });
@@ -90,7 +92,10 @@ function EditMaterialSheet({ state, setState }: EditMaterialSheetProps) {
   }, [state.data, form]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    editMaterial.mutate(values);
+    editMaterial.mutate({
+      ...values,
+      id: state.data?.id
+    });
   };
 
   return (

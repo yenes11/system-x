@@ -1,5 +1,10 @@
 import api from '@/api';
-import { getFabricSuppliersUrl, getFabricUrl } from '@/constants/api-constants';
+import {
+  getFabricSuppliersUrl,
+  getFabricUrl,
+  getMaterialSuppliersUrl
+} from '@/constants/api-constants';
+import { PaginatedData, Supplier } from './types';
 
 interface Params {
   pageIndex: number;
@@ -17,6 +22,18 @@ export const getFabricSuppliers = async (params: Params) => {
     return res.data;
   } catch (e: any) {
     console.log(e?.response?.data, 'error');
+  }
+};
+
+export const getMaterialSuppliers = async (
+  params: Params
+): Promise<PaginatedData<Supplier>> => {
+  try {
+    const res = await api.get(getMaterialSuppliersUrl(params));
+    return res.data;
+  } catch (e: any) {
+    console.log(e?.response?.data, 'error');
+    throw e;
   }
 };
 

@@ -11,8 +11,9 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { DataTable } from '../ui/data-table';
 import EditSupplierSheet from './edit-supplier-sheet';
-import { PaginatedData } from '@/lib/types';
+import { PaginatedData, Supplier } from '@/lib/types';
 import ThemedTooltip from '../ThemedTooltip';
+import { usePathname } from 'next/navigation';
 
 type Fabric = {
   id: string;
@@ -22,14 +23,17 @@ type Fabric = {
   fabricTypeName: string;
 };
 
-const getColumns = (setSupplierSheetState: any): ColumnDef<Fabric>[] => {
+const getColumns = (
+  setSupplierSheetState: any,
+  pathname: string
+): ColumnDef<Supplier>[] => {
   return [
     {
       accessorKey: 'name',
       header: 'name',
       cell: ({ row }) => {
         return (
-          <Link href={`/fabric/supplier-management/${row.original.id}`}>
+          <Link href={`${pathname}/${row.original.id}`}>
             {row.getValue('name')}
           </Link>
         );
@@ -74,28 +78,24 @@ const getColumns = (setSupplierSheetState: any): ColumnDef<Fabric>[] => {
         );
       }
     }
-  ] as ColumnDef<Fabric>[];
+  ] as ColumnDef<Supplier>[];
 };
 
 interface Props {
-  data: PaginatedData<Fabric>;
+  data: PaginatedData<Supplier>;
 }
 
-function SuppliersTable() {
+function SuppliersTable({ data }: Props) {
   const t = useTranslations();
+  const pathname = usePathname();
   const [supplierSheetState, setSupplierSheetState] = useState({
     id: '',
     open: false
   });
 
-  const fabricSuppliers = useQuery({
-    queryKey: ['fabric-suppliers'],
-    queryFn: () => getFabricSuppliers({ pageIndex: 0, pageSize: 10 })
-  });
-
   const columns = useMemo(() => {
-    return getColumns(setSupplierSheetState);
-  }, []);
+    return getColumns(setSupplierSheetState, pathname);
+  }, [pathname]);
 
   return (
     <>
@@ -104,7 +104,7 @@ function SuppliersTable() {
         rounded
         transparent={false}
         columns={columns}
-        data={fabricSuppliers.data?.items || []}
+        data={data.items || []}
         searchKey=""
       />
       <EditSupplierSheet

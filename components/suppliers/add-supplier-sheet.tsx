@@ -28,6 +28,7 @@ import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { useToast } from '../ui/use-toast';
+import { usePathname, useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -42,17 +43,22 @@ function AddSupplierSheet() {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const endpoint =
+    pathname === '/fabric/supplier-management'
+      ? '/FabricSuppliers'
+      : '/MaterialSuppliers';
 
   const addSupplier = useMutation({
     mutationKey: ['add-supplier'],
     mutationFn: async (values: any) => {
-      const res = await api.post('/FabricSuppliers', values);
+      const res = await api.post(endpoint, values);
       return res;
     },
     onSuccess: (res) => {
-      queryClient.invalidateQueries({
-        queryKey: ['fabric-suppliers']
-      });
+      router.refresh();
       setOpen(false);
       form.reset();
       toast({

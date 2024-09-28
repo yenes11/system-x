@@ -26,30 +26,35 @@ import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { useToast } from '../ui/use-toast';
 import { useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   address: z.string().min(1).max(255),
   phone: z.string().refine(validator.isMobilePhone),
   authorizedPersonFullName: z.string().min(2).max(50),
-  billingAddress: z.string().min(1).max(255)
+  billingAddress: z.string().optional()
 });
 
 function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
-  const queryClient = useQueryClient();
   const t = useTranslations();
   const { toast } = useToast();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const endpoint =
+    pathname === '/fabric/supplier-management'
+      ? '/FabricSuppliers'
+      : '/MaterialSuppliers';
 
   const editSupplier = useMutation({
     mutationKey: ['edit-supplier'],
     mutationFn: async (values: any) => {
-      const res = await api.put('/FabricSuppliers', values);
+      const res = await api.put(endpoint, values);
       return res;
     },
     onSuccess: (res) => {
-      queryClient.invalidateQueries({
-        queryKey: ['fabric-suppliers']
-      });
+      router.refresh();
       setState({
         data: undefined,
         open: false

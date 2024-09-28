@@ -37,6 +37,7 @@ import { MaterialUnit } from '@/lib/types';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import Icon from '../ui/icon';
+import { addMaterialFn } from '@/app/actions';
 
 const formSchema = z.object({
   name: z.string().min(1, 'İsim gereklidir'),
@@ -55,6 +56,7 @@ function AddMaterialSheet() {
       const res = await api.post('/Materials', values);
       return res;
     },
+    // mutationFn: addMaterialFn,
     onSuccess: (res) => {
       router.refresh();
       setOpen(false);
