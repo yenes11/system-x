@@ -51,8 +51,7 @@ export default function ConfirmDeleteDialog({
         title: res.statusText,
         description: new Date().toString()
       });
-    },
-    onError: (e) => {}
+    }
   });
 
   return (

@@ -11,7 +11,7 @@ async function FabricSupplierManagementPage({
 }: {
   searchParams: { size: string; index: string };
 }) {
-  const size = Number(searchParams?.size) || 5;
+  const size = Number(searchParams?.size) || 10;
   const index = Number(searchParams?.index) || 0;
   const t = await getTranslations();
   const fabricSuppliers = await getFabricSuppliers({

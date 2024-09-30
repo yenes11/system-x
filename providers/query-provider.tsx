@@ -9,14 +9,30 @@ import {
   QueryClientProvider,
   isServer
 } from '@tanstack/react-query';
+import { toast } from '@/components/ui/use-toast';
+import { useTranslations } from 'next-intl';
+import { AxiosError } from 'axios';
 
 function makeQueryClient() {
+  const t = useTranslations();
   return new QueryClient({
     defaultOptions: {
       queries: {
         // With SSR, we usually want to set some default staleTime
         // above 0 to avoid refetching immediately on the client
         staleTime: 60 * 1000
+      },
+      mutations: {
+        onError: (error: Error) => {
+          const axiosError = error as AxiosError;
+          const responseData = axiosError.response?.data as { Title: string };
+          const errorMessage = responseData.Title || t('unknown_error');
+          toast({
+            title: t('error'),
+            description: errorMessage,
+            variant: 'destructive'
+          });
+        }
       }
     }
   });

@@ -21,7 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import validator from 'validator';
 import { z } from 'zod';
@@ -39,11 +39,11 @@ import {
 import { currencyEnums } from '@/types';
 // import { useRouter } from 'next/router';
 
-// const formSchema = z.object({
-//   fabricSupplierFabricColorId: z.string().uuid(),
-//   currency: z.number().min(1),
-//   price: z.number().min(1)
-// });
+const formSchema = z.object({
+  materialSupplierMaterialColorId: z.string().uuid(),
+  currency: z.number().min(1),
+  price: z.number().min(1)
+});
 
 function AddPriceSheet() {
   const [open, setOpen] = useState(false);
@@ -54,31 +54,15 @@ function AddPriceSheet() {
   const t = useTranslations();
   const id = (params?.id as string) || '';
 
-  const isMaterial = path.startsWith('/material');
+  const nameProperty = 'materialSupplierName';
 
-  const nameProperty = isMaterial
-    ? 'materialSupplierName'
-    : 'fabricSupplierName';
-  const idProperty = isMaterial
-    ? 'materialSupplierMaterialColorId'
-    : 'fabricSupplierFabricColorId';
-
-  const supplierColorsEndpoint = isMaterial
-    ? '/MaterialSuppliers/GetSuppliersForMaterialColor?MaterialColorId='
-    : '/FabricSuppliers/GetSuppliersForFabricColor?FabricColorId=';
-
-  const addPriceEndpoint = isMaterial
-    ? '/MaterialColorPrices'
-    : '/FabricColorPrices';
-
-  const formSchema = z.object({
-    [idProperty]: z.string().uuid(),
-    currency: z.number().min(1),
-    price: z.number().min(1)
-  });
+  const idProperty = 'materialSupplierMaterialColorId';
+  const supplierColorsEndpoint =
+    '/MaterialSuppliers/GetSuppliersForMaterialColor?MaterialColorId=';
+  const addPriceEndpoint = '/MaterialColorPrices';
 
   const supplierColors = useQuery({
-    queryKey: ['fabric-supplier-colors', id],
+    queryKey: ['material-supplier-colors'],
     queryFn: async () => {
       const res = await api.get(`${supplierColorsEndpoint}${id}`);
       return res.data;
@@ -86,8 +70,10 @@ function AddPriceSheet() {
     enabled: open
   });
 
+  console.log(supplierColors.data, 'suppliers');
+
   const addPrice = useMutation({
-    mutationKey: ['add-fabric-price'],
+    mutationKey: ['add-material-price'],
     mutationFn: async (values: any) => {
       const res = await api.post(addPriceEndpoint, values);
       return res;
@@ -106,7 +92,7 @@ function AddPriceSheet() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      [idProperty]: '',
+      materialSupplierMaterialColorId: '',
       currency: 0,
       price: 0
     }
@@ -119,7 +105,7 @@ function AddPriceSheet() {
     }
   ) => {
     console.log(values, 'values');
-    // addPrice.mutate(values);
+    addPrice.mutate(values);
   };
 
   return (
@@ -163,7 +149,7 @@ function AddPriceSheet() {
             />
             <FormField
               control={form.control}
-              name={idProperty}
+              name="materialSupplierMaterialColorId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('fabric_supplier')}</FormLabel>
@@ -216,7 +202,6 @@ function AddPriceSheet() {
             </Button>
           </form>
         </Form>
-        {/* )} */}
       </SheetContent>
     </Sheet>
   );
