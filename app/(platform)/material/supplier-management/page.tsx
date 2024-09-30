@@ -6,11 +6,17 @@ import { getMaterialSuppliers } from '@/lib/api-calls';
 import { getTranslations } from 'next-intl/server';
 import { Mate } from 'next/font/google';
 
-async function MaterialSupplierManagement() {
+async function MaterialSupplierManagement({
+  searchParams
+}: {
+  searchParams: { size: string; index: string };
+}) {
   const t = await getTranslations();
+  const size = Number(searchParams?.size) || 10;
+  const index = Number(searchParams?.index) || 0;
   const materialSuppliers = await getMaterialSuppliers({
-    pageIndex: 0,
-    pageSize: 9999
+    pageIndex: index,
+    pageSize: size
   });
 
   return (

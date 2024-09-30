@@ -8,18 +8,33 @@ import { IMaterial, PaginatedData } from '@/lib/types';
 import { Shell } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-const getMaterials = async () => {
+const getMaterials = async ({
+  pageIndex,
+  pageSize
+}: {
+  pageIndex: number;
+  pageSize: number;
+}) => {
   try {
-    const res = await api.get(getMaterialUrl({ pageIndex: 0, pageSize: 9999 }));
+    const res = await api.get(getMaterialUrl({ pageIndex, pageSize }));
     return res.data;
   } catch (e: any) {
     console.log(e?.response?.data, 'error');
   }
 };
 
-export default async function MaterialLibraryPage() {
+export default async function MaterialLibraryPage({
+  searchParams
+}: {
+  searchParams: { size: string; index: string };
+}) {
   const t = await getTranslations();
-  const materials: PaginatedData<IMaterial> = await getMaterials();
+  const size = Number(searchParams?.size) || 10;
+  const index = Number(searchParams?.index) || 0;
+  const materials: PaginatedData<IMaterial> = await getMaterials({
+    pageIndex: index,
+    pageSize: size
+  });
 
   return (
     <div className="space-y-2">
@@ -30,7 +45,7 @@ export default async function MaterialLibraryPage() {
         />
         <AddMaterialSheet />
       </div>
-      <MaterialTable data={materials.items} />
+      <MaterialTable data={materials} />
     </div>
   );
 }

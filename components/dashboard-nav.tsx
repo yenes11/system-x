@@ -198,8 +198,17 @@ export function DashboardNav({
   setOpen,
   isMobileNav = false
 }: DashboardNavProps) {
-  const [collapsedRows, setCollapsedRows] = useState<string[]>([]);
   const path = usePathname();
+  const [collapsedRows, setCollapsedRows] = useState<string[]>(() => {
+    const currentSection = _navItems.find((item) =>
+      path.startsWith(`/${item.key}`)
+    );
+    if (currentSection?.children) {
+      return [currentSection.key];
+    }
+    return [];
+  });
+
   const { isMinimized } = useSidebar();
   const t = useTranslations();
   const _isMinimized = isMobileNav ? false : isMinimized;

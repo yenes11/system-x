@@ -14,12 +14,12 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import { PencilLine, Plus } from 'lucide-react';
+import { PencilLine, Plus, Server } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Empty from '@/components/ui/empty';
-import { IMaterial, MaterialUnit } from '@/lib/types';
+import { IMaterial, MaterialUnit, PaginatedData } from '@/lib/types';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import AddMaterialColorSheet from './add-material-color-sheet';
@@ -27,6 +27,7 @@ import EditMaterialSheet from './edit-material-sheet';
 import MaterialRow from './material-row';
 import ThemedTooltip from '../ThemedTooltip';
 import Icon from '../ui/icon';
+import ServerPagination from '../server-pagination';
 
 type Fabric = {
   id: string;
@@ -99,7 +100,7 @@ const getColumns = (
 };
 
 interface Props {
-  data: IMaterial[];
+  data: PaginatedData<IMaterial>;
 }
 
 interface MaterialState {
@@ -128,7 +129,7 @@ function MaterialTable({ data }: Props) {
   }, []);
 
   const table = useReactTable({
-    data: data || [],
+    data: data.items || [],
     columns,
     getCoreRowModel: getCoreRowModel()
   });
@@ -187,6 +188,14 @@ function MaterialTable({ data }: Props) {
           )}
         </TableBody>
       </Table>
+      <ServerPagination
+        data={{
+          pages: data.pages,
+          hasNext: data.hasNext,
+          hasPrevious: data.hasPrevious,
+          count: data.count
+        }}
+      />
       <AddMaterialColorSheet
         state={materialColorState}
         setState={setMaterialColorState}

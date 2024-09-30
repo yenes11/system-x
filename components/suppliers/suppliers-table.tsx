@@ -4,16 +4,14 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Pencil } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { getFabricSuppliers } from '@/lib/api-calls';
-import { useQuery } from '@tanstack/react-query';
+import { PaginatedData, Supplier } from '@/lib/types';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useMemo, useState } from 'react';
+import ThemedTooltip from '../ThemedTooltip';
 import { DataTable } from '../ui/data-table';
 import EditSupplierSheet from './edit-supplier-sheet';
-import { PaginatedData, Supplier } from '@/lib/types';
-import ThemedTooltip from '../ThemedTooltip';
-import { usePathname } from 'next/navigation';
 
 type Fabric = {
   id: string;
@@ -104,9 +102,10 @@ function SuppliersTable({ data }: Props) {
         rounded
         transparent={false}
         columns={columns}
-        data={data.items || []}
+        data={data}
         searchKey=""
       />
+
       <EditSupplierSheet
         setState={setSupplierSheetState}
         state={supplierSheetState}

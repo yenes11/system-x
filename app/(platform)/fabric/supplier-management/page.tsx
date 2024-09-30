@@ -3,25 +3,22 @@ import SuppliersTable from '@/components/suppliers/suppliers-table';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
 import { getFabricSuppliers } from '@/lib/api-calls';
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient
-} from '@tanstack/react-query';
 import { getTranslations } from 'next-intl/server';
+import { Suspense } from 'react';
 
-async function FabricSupplierManagementPage() {
-  const queryClient = new QueryClient();
+async function FabricSupplierManagementPage({
+  searchParams
+}: {
+  searchParams: { size: string; index: string };
+}) {
+  const size = Number(searchParams?.size) || 5;
+  const index = Number(searchParams?.index) || 0;
   const t = await getTranslations();
   const fabricSuppliers = await getFabricSuppliers({
-    pageIndex: 0,
-    pageSize: 99999
+    pageIndex: index,
+    pageSize: size
   });
 
-  // await queryClient.prefetchQuery({
-  //   queryKey: ['fabric-suppliers'],
-  //   queryFn: () => getFabricSuppliers({ pageIndex: 0, pageSize: 10 })
-  // });
   return (
     <div>
       <div className="space-y-2">
@@ -32,9 +29,7 @@ async function FabricSupplierManagementPage() {
           />
           <AddSupplierSheet />
         </div>
-        {/* <HydrationBoundary state={dehydrate(queryClient)}> */}
         <SuppliersTable data={fabricSuppliers} />
-        {/* </HydrationBoundary> */}
       </div>
     </div>
   );

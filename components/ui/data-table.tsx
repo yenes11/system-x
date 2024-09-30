@@ -26,10 +26,29 @@ import { cn } from '@/lib/utils';
 import { HTMLAttributes } from 'react';
 import { ClassValue } from 'class-variance-authority/types';
 import { SearchBar } from '../searchbar';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious
+} from './pagination';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { PaginatedData } from '@/lib/types';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  SelectTrigger
+} from './select';
+import ServerPagination from '../server-pagination';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: TData[] | PaginatedData<TData>;
   searchKey: string;
   bordered?: boolean;
   rounded?: boolean;
@@ -37,6 +56,7 @@ interface DataTableProps<TData, TValue> {
   inputClassName?: string;
   className?: string;
   emptyDescription?: string;
+  serverPagination?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -48,11 +68,21 @@ export function DataTable<TData, TValue>({
   transparent = true,
   className,
   emptyDescription,
-  inputClassName
+  inputClassName,
+  serverPagination = false
 }: DataTableProps<TData, TValue>) {
   const t = useTranslations();
+  const router = useRouter();
+  const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const size = Number(searchParams.get('size')) || 5;
+  const index = Number(searchParams.get('index')) || 0;
+
+  const isUsingServerPagination = !Array.isArray(data);
+  const tableData = isUsingServerPagination ? data['items'] : data;
+
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -138,30 +168,16 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
 
-      {/* <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div> */}
+      {isUsingServerPagination && (
+        <ServerPagination
+          data={{
+            pages: data['pages'],
+            hasNext: data['hasNext'],
+            hasPrevious: data['hasPrevious'],
+            count: data['count']
+          }}
+        />
+      )}
     </>
   );
 }

@@ -13,9 +13,15 @@ import {
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Scissors } from 'lucide-react';
 
-const getFabrics = async (): Promise<PaginatedData<Fabric> | ApiError> => {
+const getFabrics = async ({
+  pageIndex,
+  pageSize
+}: {
+  pageIndex: number;
+  pageSize: number;
+}): Promise<PaginatedData<Fabric> | ApiError> => {
   try {
-    const res = await api.get(getFabricUrl({ pageIndex: 0, pageSize: 99999 }));
+    const res = await api.get(getFabricUrl({ pageIndex, pageSize }));
     return res.data;
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -32,8 +38,14 @@ const getFabrics = async (): Promise<PaginatedData<Fabric> | ApiError> => {
   }
 };
 
-export default async function FabricLibraryPage() {
-  const fabrics = await getFabrics();
+export default async function FabricLibraryPage({
+  searchParams
+}: {
+  searchParams: { size: string; index: string };
+}) {
+  const size = Number(searchParams?.size) || 10;
+  const index = Number(searchParams?.index) || 0;
+  const fabrics = await getFabrics({ pageIndex: index, pageSize: size });
 
   if ('message' in fabrics) {
     return <div>{fabrics.message}</div>;
@@ -56,7 +68,7 @@ export default async function FabricLibraryPage() {
         />
         <AddFabricSheet />
       </div>
-      <FabricTable data={fabrics.items} />
+      <FabricTable data={fabrics} />
     </div>
   );
 }

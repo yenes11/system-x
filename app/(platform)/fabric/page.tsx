@@ -4,6 +4,7 @@ import AddFabricSheet from '@/components/fabric/add-fabric-sheet';
 import PageContainer from '@/components/layout/page-container';
 import FabricTable from '@/components/tables/fabric-tables/fabric-table';
 import { Heading } from '@/components/ui/heading';
+import { Pagination } from '@/components/ui/pagination';
 import { getFabricUrl } from '@/constants/api-constants';
 import {
   dehydrate,

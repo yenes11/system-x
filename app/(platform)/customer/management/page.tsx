@@ -11,17 +11,31 @@ import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import React from 'react';
 
-const getCustomers = async () => {
+const getCustomers = async ({
+  pageIndex,
+  pageSize
+}: {
+  pageIndex: number;
+  pageSize: number;
+}) => {
   try {
-    const res = await api.get('/Customers?PageIndex=0&PageSize=9999');
+    const res = await api.get(
+      `/Customers?PageIndex=${pageIndex}&PageSize=${pageSize}`
+    );
     return res.data;
   } catch (e) {
     console.log(e);
   }
 };
 
-async function CustomerManagementPage() {
-  const customers = await getCustomers();
+async function CustomerManagementPage({
+  searchParams
+}: {
+  searchParams: { size: string; index: string };
+}) {
+  const size = Number(searchParams?.size) || 10;
+  const index = Number(searchParams?.index) || 0;
+  const customers = await getCustomers({ pageIndex: index, pageSize: size });
   const t = await getTranslations();
 
   return (
@@ -34,7 +48,7 @@ async function CustomerManagementPage() {
         />
         <AddCustomerSheet />
       </div>
-      <CustomerTable data={customers.items} />
+      <CustomerTable data={customers} />
     </div>
   );
 }

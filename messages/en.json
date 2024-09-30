@@ -160,5 +160,6 @@
   "select_department_first": "To view employees, please select a department first.",
   "no_employees_in_department": "No employees in this department.",
   "fabric_supplier": "Fabric Supplier",
-  "material_management": "Material Management"
+  "material_management": "Material Management",
+  "rows": "Rows"
 }

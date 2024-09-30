@@ -14,7 +14,7 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import { PencilLine, Plus } from 'lucide-react';
+import { PencilLine, Plus, Server } from 'lucide-react';
 
 import AddFabricColorSheet from '@/components/fabric-color/add-fabric-color-sheet';
 import EditFabricSheet from '@/components/fabric/edit-fabric-sheet';
@@ -24,10 +24,11 @@ import { getFabrics } from '@/lib/api-calls';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import FabricRow from './fabric-row';
-import { Fabric } from '@/lib/types';
+import { Fabric, PaginatedData } from '@/lib/types';
 import ThemedTooltip from '@/components/ThemedTooltip';
 import { useTranslations } from 'next-intl';
 import Icon from '@/components/ui/icon';
+import ServerPagination from '@/components/server-pagination';
 
 const getColumns = (
   setColorState: any,
@@ -112,7 +113,7 @@ type Data = {
 };
 
 interface Props {
-  data: Fabric[];
+  data: PaginatedData<Fabric>;
 }
 
 function FabricTable({ data }: Props) {
@@ -137,7 +138,7 @@ function FabricTable({ data }: Props) {
   }, []);
 
   const table = useReactTable({
-    data: data || [],
+    data: data.items || [],
     columns,
     getCoreRowModel: getCoreRowModel()
   });
@@ -199,6 +200,14 @@ function FabricTable({ data }: Props) {
           )}
         </TableBody>
       </Table>
+      <ServerPagination
+        data={{
+          count: data.count,
+          hasNext: data.hasNext,
+          hasPrevious: data.hasPrevious,
+          pages: data.pages
+        }}
+      />
       <AddFabricColorSheet
         state={fabricColorState}
         setState={setFabricColorState}
