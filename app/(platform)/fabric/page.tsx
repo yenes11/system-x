@@ -15,7 +15,7 @@ const breadcrumbItems = [{ title: 'fabric', link: '/fabric' }];
 
 const getFabrics = async () => {
   try {
-    const res = await api.get(getFabricUrl({ pageIndex: 0, pageSize: 20 }));
+    const res = await api.get(getFabricUrl({ pageIndex: 0, pageSize: 9999 }));
     return res.data;
   } catch (e: any) {
     console.log(e?.response?.data, 'error');

@@ -15,7 +15,7 @@ import { Scissors } from 'lucide-react';
 
 const getFabrics = async (): Promise<PaginatedData<Fabric> | ApiError> => {
   try {
-    const res = await api.get(getFabricUrl({ pageIndex: 0, pageSize: 10 }));
+    const res = await api.get(getFabricUrl({ pageIndex: 0, pageSize: 99999 }));
     return res.data;
   } catch (e) {
     if (e instanceof AxiosError) {

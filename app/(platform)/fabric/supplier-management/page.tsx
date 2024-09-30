@@ -15,7 +15,7 @@ async function FabricSupplierManagementPage() {
   const t = await getTranslations();
   const fabricSuppliers = await getFabricSuppliers({
     pageIndex: 0,
-    pageSize: 10
+    pageSize: 99999
   });
 
   // await queryClient.prefetchQuery({

@@ -13,7 +13,7 @@ import React from 'react';
 
 const getCustomers = async () => {
   try {
-    const res = await api.get('/Customers?PageIndex=0&PageSize=10');
+    const res = await api.get('/Customers?PageIndex=0&PageSize=9999');
     return res.data;
   } catch (e) {
     console.log(e);

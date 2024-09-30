@@ -10,7 +10,7 @@ async function MaterialSupplierManagement() {
   const t = await getTranslations();
   const materialSuppliers = await getMaterialSuppliers({
     pageIndex: 0,
-    pageSize: 10
+    pageSize: 9999
   });
 
   return (

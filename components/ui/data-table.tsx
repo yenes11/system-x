@@ -56,7 +56,13 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
+    getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      pagination: {
+        pageSize: 9999,
+        pageIndex: 0
+      }
+    }
     // onPaginationChange: setPagination,
     // state: {
     //   pagination: {

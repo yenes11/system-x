@@ -10,7 +10,7 @@ import { getTranslations } from 'next-intl/server';
 
 const getMaterials = async () => {
   try {
-    const res = await api.get(getMaterialUrl({ pageIndex: 0, pageSize: 20 }));
+    const res = await api.get(getMaterialUrl({ pageIndex: 0, pageSize: 9999 }));
     return res.data;
   } catch (e: any) {
     console.log(e?.response?.data, 'error');
