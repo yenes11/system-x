@@ -168,5 +168,10 @@
   "select_a_material_color": "Select a material color",
   "Piece": "Piece",
   "Meter": "Meter",
-  "Centimeter": "Centimeter"
+  "Centimeter": "Centimeter",
+  "collections": "Collections",
+  "add_collection": "Add Collection",
+  "manage_collection": "Manage Collection",
+  "manage_draft": "Manage Draft",
+  "customer_code": "Customer Code"
 }

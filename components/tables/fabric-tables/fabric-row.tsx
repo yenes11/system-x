@@ -58,7 +58,7 @@ function FabricRow({ row, expandedRows, setExpandedRows, toggleRow }: Props) {
           if (cell.column.id === 'fabricTypeName')
             return (
               <TableCell key={cell.id}>
-                <Badge className="bg-blue-500/30 text-blue-500 shadow-none dark:text-blue-300">
+                <Badge className="border border-blue-300 bg-blue-500/30 text-blue-500 shadow-none dark:border-blue-400 dark:text-blue-300">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </Badge>
               </TableCell>

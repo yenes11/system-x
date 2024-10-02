@@ -56,6 +56,12 @@ export const CollectionStatusColor = {
   3: 'bg-red-500'
 };
 
+export const CollectionPingColor = {
+  1: 'bg-slate-500',
+  2: 'bg-green-500',
+  3: 'bg-destructive'
+};
+
 export type ICollectionStatus = keyof typeof CollectionStatus;
 
 export interface ICollection {

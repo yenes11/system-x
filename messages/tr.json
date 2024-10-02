@@ -168,5 +168,10 @@
   "rows": "Satır",
   "select_a_material": "Bir malzeme seçiniz",
   "select_a_material_color": "Bir malzeme rengi seçiniz",
-  "Piece": "Adet"
+  "Piece": "Adet",
+  "collections": "Koleksiyonlar",
+  "add_collection": "Koleksiyon Ekle",
+  "manage_collection": "Koleksiyonu Yönet",
+  "manage_draft": "Taslağı Yönet",
+  "customer_code": "Müşteri Kodu"
 }

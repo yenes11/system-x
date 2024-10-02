@@ -59,7 +59,7 @@ function AddFabricSheet({ state, setState }: Props) {
   const { toast } = useToast();
 
   const editFabric = useMutation({
-    mutationKey: ['add-fabric'],
+    mutationKey: ['edit-fabric'],
     mutationFn: async (values: any) => {
       const res = await api.put('/Fabrics', values);
       return res;

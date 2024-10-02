@@ -1,10 +1,11 @@
 import api from '@/api';
 import {
+  getCollectionsUrl,
   getFabricSuppliersUrl,
   getFabricUrl,
   getMaterialSuppliersUrl
 } from '@/constants/api-constants';
-import { PaginatedData, Supplier } from './types';
+import { ICollectionStatus, PaginatedData, Supplier } from './types';
 
 interface Params {
   pageIndex: number;
@@ -19,6 +20,22 @@ export async function getFabrics() {
 export const getFabricSuppliers = async (params: Params) => {
   try {
     const res = await api.get(getFabricSuppliersUrl(params));
+    return res.data;
+  } catch (e: any) {
+    console.log(e?.response?.data, 'error');
+  }
+};
+
+export const getCollections = async (
+  params: Params & {
+    customerId?: string;
+    categoryId?: string;
+    customerCode?: string;
+    status?: ICollectionStatus;
+  }
+) => {
+  try {
+    const res = await api.get(getCollectionsUrl(params));
     return res.data;
   } catch (e: any) {
     console.log(e?.response?.data, 'error');
