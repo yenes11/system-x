@@ -138,9 +138,12 @@
   "address_placeholder": "Adres giriniz...",
   "edit_supplier": "Tedarikçiyi Düzenle",
   "fabric_carousel_empty_description": "Bu tedarikçinin kartelasında henüz kumaş yok. Tedarikçinin kartelasına kumaş eklemek için Kumaş Ekle buttonunu kullanabilirsiniz.",
+  "material_carousel_empty_description": "Bu tedarikçinin kartelasında henüz malzeme yok. Tedarikçinin kartelasına kumaş eklemek için Malzeme Ekle buttonunu kullanabilirsiniz.",
+
   "warehouse_table_empty_description": "Tedarikçinin henüz bir deposu yok. Eklemek için Depo Ekle butonunu kullanabilirsiniz.",
   "material_table_empty_description": "Bu malzeme için henüz bir renk yok. Malzeme rengi eklemek için satırın sonundaki + butonuna tıklayınız.",
   "search_fabric_color_code": "Kumaş, renk, kod ara",
+  "search_material_color_code": "Malzeme, renk, kod ara",
   "select_a_fabric_color": "Bir kumaş rengi seçiniz",
   "material_color": "Malzeme Rengi",
   "customer_info": "Müşteri Bilgileri",
@@ -162,5 +165,8 @@
   "Centimeter": "Santimetre",
   "Meter": "Metre",
   "material_management": "Malzeme Yönetimi",
-  "rows": "Satır"
+  "rows": "Satır",
+  "select_a_material": "Bir malzeme seçiniz",
+  "select_a_material_color": "Bir malzeme rengi seçiniz",
+  "Piece": "Adet"
 }

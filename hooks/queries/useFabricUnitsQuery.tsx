@@ -13,7 +13,7 @@ async function getFabricUnits(): Promise<FabricUnit[]> {
   return response.data;
 }
 
-function useFabricUnitsQuery({ enabled = false } = {}) {
+function useFabricUnitsQuery({ enabled = true } = {}) {
   return useQuery({
     queryKey: ['fabric-units'],
     queryFn: getFabricUnits,

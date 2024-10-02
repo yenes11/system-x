@@ -139,10 +139,12 @@
   "add_supplier": "Add Supplier",
   "address_placeholder": "Address here...",
   "edit_supplier": "Edit Supplier",
-  "fabric_carousel_empty_description": "This supplier's chart is empty. You can use the Add Fabric button at the end of the row to add a fabric to this supplier's chart.",
+  "fabric_carousel_empty_description": "This supplier's chart is empty. You can use the Add Fabric button to add a fabric to this supplier's chart.",
+  "material_carousel_empty_description": "This supplier's chart is empty. You can use the Add Material button to add a fabric to this supplier's chart.",
   "warehouse_table_empty_description": "This supplier has no warehouse. You can use the Add Warehouse button to add a warehouse to this supplier.",
   "material_table_empty_description": "This material has no color. You can use the + button at the end of the row to add a color to this material.",
   "search_fabric_color_code": "Search fabric, color, code",
+  "search_material_color_code": "Search material, color, code",
   "select_a_fabric_color": "Select a fabric color",
   "material_color": "Material Color",
   "customer_info": "Customer Info",
@@ -161,5 +163,10 @@
   "no_employees_in_department": "No employees in this department.",
   "fabric_supplier": "Fabric Supplier",
   "material_management": "Material Management",
-  "rows": "Rows"
+  "rows": "Rows",
+  "select_a_material": "Select a material",
+  "select_a_material_color": "Select a material color",
+  "Piece": "Piece",
+  "Meter": "Meter",
+  "Centimeter": "Centimeter"
 }

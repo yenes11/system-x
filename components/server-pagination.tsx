@@ -70,6 +70,7 @@ function ServerPagination({
           )}
           {data.pages > 6 ? (
             <>
+              {/* İlk sayfalar: 1, 2, 3 */}
               {index > 1 && (
                 <>
                   <PaginationItem>
@@ -93,10 +94,9 @@ function ServerPagination({
                   )}
                 </>
               )}
-              {Array.from({
-                length: 3
-              }).map((_, i) => {
-                const pageIndex = index - 1 + i;
+              {Array.from({ length: 3 }).map((_, i) => {
+                const pageIndex =
+                  Math.max(0, Math.min(data.pages - 3, index - 1)) + i;
                 if (pageIndex >= 0 && pageIndex < data.pages) {
                   return (
                     <PaginationItem key={pageIndex}>
@@ -119,6 +119,7 @@ function ServerPagination({
                 }
                 return null;
               })}
+              {/* Son sayfalar: (n-2), (n-1), n */}
               {index < data.pages - 2 && (
                 <>
                   {index < data.pages - 3 && (
@@ -176,6 +177,7 @@ function ServerPagination({
           )}
         </PaginationContent>
       </Pagination>
+
       <Select
         value={index.toString()}
         onValueChange={(value) =>

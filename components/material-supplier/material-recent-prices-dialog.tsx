@@ -37,18 +37,18 @@ const recentPricesTableColumns = [
   }
 ];
 
-function RecentPricesDialog({ state, setState }: any) {
+function MaterialRecentPricesDialog({ state, setState }: any) {
   const t = useTranslations();
 
   const recentPrices = useQuery({
-    queryKey: ['recent-prices', state.fabricColorId],
+    queryKey: ['material-recent-prices', state.materialColorId],
     queryFn: async () => {
       const res = await api.get(
-        `/FabricColorPrices/GetFabricPriceForSupplier?Size=20&FabricSupplierFabricColorId=${state.fabricColorId}`
+        `/MaterialColorPrices/GetMaterialPriceForSupplier?Size=20&MaterialSupplierMaterialColorId=${state.materialColorId}`
       );
       return res.data;
     },
-    enabled: !!state.fabricColorId
+    enabled: !!state.materialColorId
   });
 
   return (
@@ -72,4 +72,4 @@ function RecentPricesDialog({ state, setState }: any) {
   );
 }
 
-export default RecentPricesDialog;
+export default MaterialRecentPricesDialog;

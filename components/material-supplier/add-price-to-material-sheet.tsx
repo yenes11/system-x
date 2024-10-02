@@ -14,9 +14,11 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTitle
+  SheetTitle,
+  SheetTrigger
 } from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusIcon } from '@radix-ui/react-icons';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -25,15 +27,24 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectItem
+} from '@/components/ui/select';
 
 const formSchema = z.object({
-  manufacturerCode: z.string()
+  // fabricSupplierFabricColorId: z.string(),
+  currency: z.number(),
+  price: z.number()
 });
 
 interface EditState {
   open: boolean;
-  fabricColorId: string;
-  manufacturerCode: string;
+  materialColorId: string;
 }
 
 interface Props {
@@ -41,7 +52,7 @@ interface Props {
   setState: Dispatch<SetStateAction<EditState>>;
 }
 
-function EditFabricSheet({ state, setState }: Props) {
+function AddPriceToMaterialSheet({ state, setState }: Props) {
   const { toast } = useToast();
   const t = useTranslations();
   const router = useRouter();
@@ -50,18 +61,21 @@ function EditFabricSheet({ state, setState }: Props) {
     resolver: zodResolver(formSchema)
   });
 
-  const editFabric = useMutation({
-    mutationKey: ['edit-fabric'],
+  const addPrice = useMutation({
+    mutationKey: ['edit-price-to-material'],
     mutationFn: async (values: any) => {
-      const res = await api.put('/FabricSupplierFabricColors', values);
+      const res = await api.post('/MaterialColorPrices', values);
       return res;
     },
     onSuccess: async (res) => {
       router.refresh();
+      form.reset({
+        currency: null as any,
+        price: null as any
+      });
       setState({
         open: false,
-        fabricColorId: '',
-        manufacturerCode: ''
+        materialColorId: ''
       });
       toast({
         title: res.statusText,
@@ -70,18 +84,13 @@ function EditFabricSheet({ state, setState }: Props) {
     }
   });
 
-  useEffect(() => {
-    form.reset({ manufacturerCode: state.manufacturerCode });
-  }, [state.fabricColorId]);
-
   const onSubmit = (
     values: Partial<z.infer<typeof formSchema>> & {
-      id?: string;
+      materialSupplierMaterialColorId?: string;
     }
   ) => {
-    values.id = state.fabricColorId;
-    // values.fabricSupplierId = state.fabricSupplierId;
-    editFabric.mutate(values);
+    values.materialSupplierMaterialColorId = state.materialColorId;
+    addPrice.mutate(values);
   };
 
   return (
@@ -96,25 +105,47 @@ function EditFabricSheet({ state, setState }: Props) {
     >
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>{t('edit')}</SheetTitle>
-
-          {/* <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription> */}
+          <SheetTitle>{t('add_price')}</SheetTitle>
         </SheetHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="manufacturerCode"
-              defaultValue={state.manufacturerCode}
+              name="currency"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('manifacturer_code')}</FormLabel>
+                  <FormLabel>Currency</FormLabel>
+                  <Select onValueChange={(val) => field.onChange(Number(val))}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a currency type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value={'1'}>TRY</SelectItem>
+                        <SelectItem value={'2'}>USD</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input placeholder="AS-YA01" {...field} />
+                    <Input
+                      placeholder="250"
+                      type="number"
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -130,4 +161,4 @@ function EditFabricSheet({ state, setState }: Props) {
   );
 }
 
-export default EditFabricSheet;
+export default AddPriceToMaterialSheet;

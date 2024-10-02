@@ -13,7 +13,7 @@ async function getFabricTypes(): Promise<FabricType[]> {
   return response.data;
 }
 
-function useFabricTypesQuery({ enabled = false } = {}) {
+function useFabricTypesQuery({ enabled = true } = {}) {
   return useQuery({
     queryKey: ['fabric-types'],
     queryFn: getFabricTypes,

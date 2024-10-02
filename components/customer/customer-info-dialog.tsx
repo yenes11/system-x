@@ -61,14 +61,16 @@ function CustomerInfoDialog({ state, setState }: Props) {
           <div className="grid gap-3">
             <div className="font-semibold">{t('customer_details')}</div>
             <ul className="grid gap-3">
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">
+              <li className="flex flex-col items-start justify-between">
+                <span className="text-xs text-muted-foreground">
                   {t('appellation')}
                 </span>
                 <span>{state.data?.appellation}</span>
               </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('address')}</span>
+              <li className="flex flex-col items-start justify-between">
+                <span className="text-xs text-muted-foreground">
+                  {t('address')}
+                </span>
                 <span>{state.data?.address}</span>
               </li>
             </ul>

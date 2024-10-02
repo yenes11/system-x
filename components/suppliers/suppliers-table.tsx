@@ -31,15 +31,28 @@ const getColumns = (
       header: 'name',
       cell: ({ row }) => {
         return (
-          <Link href={`${pathname}/${row.original.id}`}>
+          <Link
+            title={row.original.name}
+            href={`${pathname}/${row.original.id}`}
+          >
             {row.getValue('name')}
           </Link>
         );
+      },
+      meta: {
+        // headerClassName: 'w-48',
+        // cellClassName: 'max-w-44 overflow-hidden text-ellipsis text-nowrap'
       }
     },
     {
       accessorKey: 'address',
-      header: 'address'
+      header: 'address',
+      meta: {
+        // cellClassName: 'max-w-56 overflow-hidden text-ellipsis text-nowrap'
+      },
+      cell: ({ row }) => {
+        return <span title={row.original.address}>{row.original.address}</span>;
+      }
     },
     {
       accessorKey: 'phone',

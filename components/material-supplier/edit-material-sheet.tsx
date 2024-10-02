@@ -32,7 +32,7 @@ const formSchema = z.object({
 
 interface EditState {
   open: boolean;
-  fabricColorId: string;
+  materialColorId: string;
   manufacturerCode: string;
 }
 
@@ -41,7 +41,7 @@ interface Props {
   setState: Dispatch<SetStateAction<EditState>>;
 }
 
-function EditFabricSheet({ state, setState }: Props) {
+function EditMaterialSheet({ state, setState }: Props) {
   const { toast } = useToast();
   const t = useTranslations();
   const router = useRouter();
@@ -50,17 +50,17 @@ function EditFabricSheet({ state, setState }: Props) {
     resolver: zodResolver(formSchema)
   });
 
-  const editFabric = useMutation({
-    mutationKey: ['edit-fabric'],
+  const editMaterial = useMutation({
+    mutationKey: ['edit-material'],
     mutationFn: async (values: any) => {
-      const res = await api.put('/FabricSupplierFabricColors', values);
+      const res = await api.put('/materialSupplierMaterialColors', values);
       return res;
     },
     onSuccess: async (res) => {
       router.refresh();
       setState({
         open: false,
-        fabricColorId: '',
+        materialColorId: '',
         manufacturerCode: ''
       });
       toast({
@@ -72,16 +72,15 @@ function EditFabricSheet({ state, setState }: Props) {
 
   useEffect(() => {
     form.reset({ manufacturerCode: state.manufacturerCode });
-  }, [state.fabricColorId]);
+  }, [state.materialColorId]);
 
   const onSubmit = (
     values: Partial<z.infer<typeof formSchema>> & {
       id?: string;
     }
   ) => {
-    values.id = state.fabricColorId;
-    // values.fabricSupplierId = state.fabricSupplierId;
-    editFabric.mutate(values);
+    values.id = state.materialColorId;
+    editMaterial.mutate(values);
   };
 
   return (
@@ -97,11 +96,6 @@ function EditFabricSheet({ state, setState }: Props) {
       <SheetContent>
         <SheetHeader>
           <SheetTitle>{t('edit')}</SheetTitle>
-
-          {/* <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription> */}
         </SheetHeader>
 
         <Form {...form}>
@@ -120,7 +114,11 @@ function EditFabricSheet({ state, setState }: Props) {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
+            <Button
+              loading={editMaterial.isPending}
+              className="w-full"
+              type="submit"
+            >
               {t('submit')}
             </Button>
           </form>
@@ -130,4 +128,4 @@ function EditFabricSheet({ state, setState }: Props) {
   );
 }
 
-export default EditFabricSheet;
+export default EditMaterialSheet;

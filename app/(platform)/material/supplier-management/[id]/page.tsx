@@ -1,6 +1,7 @@
 import api from '@/api';
 import AssignFabricSheet from '@/components/fabric-supplier/assign-fabric-sheet';
 import FabricCarousel from '@/components/fabric-supplier/fabric-carousel';
+import MaterialCarousel from '@/components/material-supplier/material-carousel';
 import WarehouseTable from '@/components/suppliers/warehouse-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -72,6 +73,7 @@ async function MaterialSupplierDetailsPage({
       </Card>
 
       {/* <FabricCarousel data={supplier.material} /> */}
+      <MaterialCarousel data={supplier.materials} />
       <WarehouseTable data={supplier.warehouses} />
     </>
   );

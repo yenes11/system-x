@@ -27,7 +27,10 @@ const getCustomersTableColumns = (
     accessorKey: 'name',
     header: 'name',
     cell: ({ row }: { row: any }) => (
-      <Link href={`/customer/management/${row.original.id}`}>
+      <Link
+        href={`/customer/management/${row.original.id}`}
+        className="underline"
+      >
         {row.original.name}
       </Link>
     )

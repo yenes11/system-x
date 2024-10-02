@@ -36,6 +36,7 @@ import {
   SelectValue
 } from '../ui/select';
 import { useToast } from '../ui/use-toast';
+import { useTranslations } from 'next-intl';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -50,9 +51,10 @@ interface Props {
 }
 
 function AddFabricSheet({ state, setState }: Props) {
-  const fabricTypes = useFabricTypesQuery();
-  const fabricUnits = useFabricUnitsQuery();
+  const fabricTypes = useFabricTypesQuery({ enabled: true });
+  const fabricUnits = useFabricUnitsQuery({ enabled: true });
   const queryClient = useQueryClient();
+  const t = useTranslations();
   // const [open, setOpen] = useState(false);
   const { toast } = useToast();
 
@@ -91,7 +93,7 @@ function AddFabricSheet({ state, setState }: Props) {
       fabricTypeId: type?.id,
       fabricUnitId: unit?.id
     });
-  }, [state.data, fabricTypes.isLoading, fabricUnits.isLoading]);
+  }, [state.data, fabricTypes.data, fabricUnits.data]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
@@ -116,7 +118,7 @@ function AddFabricSheet({ state, setState }: Props) {
     >
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Add new fabric</SheetTitle>
+          <SheetTitle>{t('edit_fabric')}</SheetTitle>
         </SheetHeader>
 
         {/* {fabricTypes.isLoading || fabricUnits.isLoading ? null : ( */}
