@@ -99,6 +99,8 @@ function AssignFabricSheet() {
     }
   });
 
+  console.log('fabric');
+
   const onSubmit = (
     values: Partial<z.infer<typeof formSchema>> & { fabricSupplierId?: string }
   ) => {
@@ -131,6 +133,7 @@ function AssignFabricSheet() {
                   <Select
                     onValueChange={(val) => {
                       field.onChange(val);
+                      form.setValue('fabricColorId', '');
                     }}
                     defaultValue={field.value}
                   >
@@ -160,6 +163,7 @@ function AssignFabricSheet() {
                 <FormItem>
                   <FormLabel>{t('color')}</FormLabel>
                   <Select
+                    key={form.watch('fabric')}
                     disabled={!isFabricSelected}
                     onValueChange={field.onChange}
                     defaultValue={field.value}

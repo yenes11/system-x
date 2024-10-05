@@ -64,6 +64,20 @@ export const CollectionPingColor = {
 
 export type ICollectionStatus = keyof typeof CollectionStatus;
 
+export interface Category {
+  id: string;
+  name: string;
+  parentCategoryId: string | null;
+  shortName: string;
+  description: string;
+  subCategories: Category[];
+}
+
+export interface SubcategoryInfo {
+  id: string;
+  name: string;
+}
+
 export interface ICollection {
   id: string;
   name: string;

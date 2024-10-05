@@ -42,6 +42,32 @@ export const getCollections = async (
   }
 };
 
+export const getCategories = async () => {
+  try {
+    const res = await api.get('/Categories');
+    return res.data;
+  } catch (e: any) {
+    console.log(e?.response?.data, 'error');
+  }
+};
+
+export const getCustomers = async ({
+  pageIndex,
+  pageSize
+}: {
+  pageIndex: number;
+  pageSize: number;
+}) => {
+  try {
+    const res = await api.get(
+      `/Customers?PageIndex=${pageIndex}&PageSize=${pageSize}`
+    );
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getMaterialSuppliers = async (
   params: Params
 ): Promise<PaginatedData<Supplier>> => {

@@ -1,8 +1,13 @@
 'use client';
 
 import * as React from 'react';
-import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
+import {
+  CaretSortIcon,
+  CheckIcon,
+  CrossCircledIcon
+} from '@radix-ui/react-icons';
 import * as SelectPrimitive from '@radix-ui/react-select';
+import { type SelectProps } from '@radix-ui/react-select';
 
 import { cn } from '@/lib/utils';
 
@@ -14,8 +19,10 @@ const SelectValue = SelectPrimitive.Value;
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+    onClear?: () => void;
+  }
+>(({ className, onClear, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
@@ -26,6 +33,18 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
+      {/* {props.value && onClear ? (
+        <CrossCircledIcon
+        className="z-50 h-4 w-4 opacity-50 hover:opacity-100"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log(123);
+          onClear();
+        }}
+        />
+      ) : (
+      )} */}
       <CaretSortIcon className="h-4 w-4 opacity-50" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>

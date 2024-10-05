@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { Active, DataRef, Over } from '@dnd-kit/core';
 import { ColumnDragData } from '@/components/kanban/board-column';
 import { TaskDragData } from '@/components/kanban/task-card';
+import { Category, SubcategoryInfo } from './types';
 
 type DraggableData = ColumnDragData | TaskDragData;
 
@@ -62,4 +63,20 @@ export function decodeJWT(token: string) {
   }
   const payload = parts[1];
   return JSON.parse(base64UrlDecode(payload));
+}
+
+export function getAllSubcategories(categories: Category[]): SubcategoryInfo[] {
+  let result: SubcategoryInfo[] = [];
+
+  categories.forEach((category) => {
+    // Add the current category to the result
+    result.push({ id: category.id, name: category.name });
+
+    // Recursively process the subcategories
+    if (category.subCategories && category.subCategories.length > 0) {
+      result = result.concat(getAllSubcategories(category.subCategories));
+    }
+  });
+
+  return result;
 }

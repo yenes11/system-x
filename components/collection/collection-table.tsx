@@ -19,7 +19,7 @@ import AddFabricColorSheet from '@/components/fabric-color/add-fabric-color-shee
 import EditFabricSheet from '@/components/fabric/edit-fabric-sheet';
 import { Button } from '@/components/ui/button';
 import Empty from '@/components/ui/empty';
-import { getFabrics } from '@/lib/api-calls';
+import { getCategories, getCustomers, getFabrics } from '@/lib/api-calls';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import {
@@ -34,6 +34,21 @@ import Icon from '@/components/ui/icon';
 import ServerPagination from '@/components/server-pagination';
 import ThemedZoom from '../themed-zoom';
 import { Badge } from '../ui/badge';
+import {
+  Select,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectContent
+} from '../ui/select';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Input } from '../ui/input';
+import { SearchBar } from '../searchbar';
+import { useDebouncedCallback } from 'use-debounce';
+import ThemedSelect from '../themed-select';
+import { CrossCircledIcon } from '@radix-ui/react-icons';
+import { getAllSubcategories } from '@/lib/utils';
 
 const getColumns = (
   setColorState: any,
@@ -132,14 +147,96 @@ function CollectionTable({ data }: Props) {
     open: false
   });
 
-  // const data = useQuery({
-  //   queryKey: ['fabrics'],
-  //   queryFn: getFabrics
-  // });
+  const [params, setParams] = useState({
+    customer: '',
+    category: '',
+    status: ''
+  });
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const customers = useQuery({
+    queryKey: ['customers'],
+    queryFn: () => getCustomers({ pageIndex: 0, pageSize: 99999 })
+  });
+
+  const categories = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+    select: getAllSubcategories
+  });
+
+  console.log(categories.data, 'categories');
 
   const columns = useMemo(() => {
     return getColumns(setFabricColorState, setEditFabricState);
   }, []);
+
+  const selectedCategory = categories.data?.find(
+    (c: any) => searchParams.get('categoryId') === c.id
+  );
+
+  const selectedCustomer = customers.data?.items.find(
+    (c: any) => searchParams.get('customerId') === c.id
+  );
+  const selectedStatus =
+    CollectionStatus[
+      searchParams.get('status') as unknown as keyof typeof CollectionStatus
+    ];
+
+  const handleSearch = useDebouncedCallback((customerCode) => {
+    console.log(`Searching... ${customerCode}`);
+    const newSearchParams = getNewSearchParams('customerCode', customerCode);
+    router.replace(newSearchParams);
+  }, 300);
+
+  const clearSearchParam = (key: string) => {
+    let clearedSearchParams = searchParams.toString();
+    const value = searchParams.get(key);
+    if (value) {
+      clearedSearchParams = clearedSearchParams.replace(`&${key}=${value}`, '');
+      clearedSearchParams = clearedSearchParams.replace(`${key}=${value}`, '');
+    }
+    router.replace(`${pathname}?${clearedSearchParams}`);
+  };
+
+  const handleSearchParams = (key: string, value: string) => {
+    router.replace(getNewSearchParams(key, value));
+  };
+
+  const getNewSearchParams = (key: string, value: string) => {
+    let filteredUrl = `${pathname}?${key}=${value}`;
+    const customerId = searchParams.get('customerId');
+    const categoryId = searchParams.get('categoryId');
+    const status = searchParams.get('status');
+    const customerCode = searchParams.get('customerCode');
+
+    if (customerId && key !== 'customerId') {
+      filteredUrl += `&customerId=${customerId}`;
+    }
+    if (categoryId && key !== 'categoryId') {
+      filteredUrl += `&categoryId=${categoryId}`;
+    }
+    if (status && key !== 'status') {
+      filteredUrl += `&status=${status}`;
+    }
+    if (customerCode && key !== 'customerCode') {
+      filteredUrl += `&customerCode=${customerCode}`;
+    }
+
+    return filteredUrl;
+  };
+
+  const collectionOptions = Object.entries(CollectionStatus).map(
+    ([key, value]) => ({
+      id: key,
+      name: t(value)
+    })
+  );
+
+  console.log(categories.data, 'categories');
 
   const table = useReactTable({
     data: data.items || [],
@@ -149,41 +246,71 @@ function CollectionTable({ data }: Props) {
 
   return (
     <>
+      <div className="flex gap-4">
+        <SearchBar
+          onChange={(e) => handleSearch(e.target.value)}
+          className="w-64"
+          placeholder={t('enter_a_customer_code')}
+        />
+
+        <ThemedSelect
+          onClear={() => clearSearchParam('customerId')}
+          value={searchParams.get('customerId') || ''}
+          options={customers.data?.items}
+          onValueChange={(value) => handleSearchParams('customerId', value)}
+          placeholder={t('select_a_customer')}
+        />
+
+        <ThemedSelect
+          onClear={() => clearSearchParam('categoryId')}
+          options={categories.data || []}
+          value={searchParams.get('categoryId') || ''}
+          onValueChange={(value) => handleSearchParams('categoryId', value)}
+          placeholder={t('select_a_category')}
+        />
+        <ThemedSelect
+          onClear={() => clearSearchParam('status')}
+          value={searchParams.get('status') || ''}
+          onValueChange={(value) => handleSearchParams('status', value)}
+          options={collectionOptions}
+          placeholder={t('select_a_status')}
+        />
+        <div className="flex gap-2">
+          {selectedCategory && (
+            <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">
+              {selectedCategory?.name}
+              <CrossCircledIcon
+                onClick={() => clearSearchParam('categoryId')}
+              />
+            </Badge>
+          )}
+          {selectedCustomer && (
+            <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">
+              {selectedCustomer?.name}
+              <CrossCircledIcon
+                onClick={() => clearSearchParam('customerId')}
+              />
+            </Badge>
+          )}
+          {selectedStatus && (
+            <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">
+              {t(selectedStatus)}
+              <CrossCircledIcon onClick={() => clearSearchParam('status')} />
+            </Badge>
+          )}
+        </div>
+      </div>
       <Table transparent={false} rounded>
-        {/* <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead
-                    style={header.column.columnDef.meta?.style}
-                    className="font-semibold"
-                    key={header.id}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : t(
-                          flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader> */}
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 <TableCell className="px-4 py-4" colSpan={columns.length}>
                   <div className="mb-4 flex">
-                    <div className="flex-1">
+                    <div className="flex-1 pr-2">
                       <ThemedZoom>
                         <img
-                          className="aspect-square w-32 origin-top-left rounded object-cover object-top"
+                          className="mr-2 aspect-square w-32 min-w-32 origin-top-left rounded object-cover object-top"
                           src={row.original.image}
                           alt={row.original.name}
                         />
@@ -203,14 +330,14 @@ function CollectionTable({ data }: Props) {
                       </span>
                       <span>{row.original.manufacturerCode}</span>
                     </div>
-                    <div className="flex flex-[2] items-start gap-2">
-                      <Badge className="border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">
+                    <div className="px-4">
+                      <Badge className="mb-2 mr-2 border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">
                         {row.original.categoryName}
                       </Badge>
-                      <Badge className="border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">
+                      <Badge className="mb-2 mr-2 border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">
                         {row.original.customerDepartment}
                       </Badge>
-                      <Badge className="border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">
+                      <Badge className="mb-2 mr-2 border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">
                         {row.original.customerSeasonName}
                       </Badge>
                       <Badge className="border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">

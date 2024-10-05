@@ -173,5 +173,9 @@
   "add_collection": "Koleksiyon Ekle",
   "manage_collection": "Koleksiyonu Yönet",
   "manage_draft": "Taslağı Yönet",
-  "customer_code": "Müşteri Kodu"
+  "customer_code": "Müşteri Kodu",
+  "enter_a_customer_code": "Müşteri kodu giriniz",
+  "select_a_customer": "Bir müşteri seçiniz",
+  "select_a_category": "Bir kategori seçiniz",
+  "select_a_status": "Bir durum seçiniz"
 }

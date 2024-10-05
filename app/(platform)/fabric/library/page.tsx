@@ -5,13 +5,7 @@ import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
 import { getFabricUrl } from '@/constants/api-constants';
 import { ApiError, Fabric, PaginatedData } from '@/lib/types';
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient
-} from '@tanstack/react-query';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { Scissors } from 'lucide-react';
+import { AxiosError } from 'axios';
 
 const getFabrics = async ({
   pageIndex,

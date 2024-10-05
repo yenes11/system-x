@@ -5,28 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/ui/data-table';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
+import { getCustomers } from '@/lib/api-calls';
 import { Currency, currencyEnums } from '@/types';
 import { UserRound, UsersRound } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import React from 'react';
-
-const getCustomers = async ({
-  pageIndex,
-  pageSize
-}: {
-  pageIndex: number;
-  pageSize: number;
-}) => {
-  try {
-    const res = await api.get(
-      `/Customers?PageIndex=${pageIndex}&PageSize=${pageSize}`
-    );
-    return res.data;
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 async function CustomerManagementPage({
   searchParams

@@ -173,5 +173,9 @@
   "add_collection": "Add Collection",
   "manage_collection": "Manage Collection",
   "manage_draft": "Manage Draft",
-  "customer_code": "Customer Code"
+  "customer_code": "Customer Code",
+  "enter_a_customer_code": "Enter a customer code",
+  "select_a_customer": "Select a customer",
+  "select_a_category": "Select a category",
+  "select_a_status": "Select a status"
 }

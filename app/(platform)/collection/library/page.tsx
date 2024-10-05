@@ -17,7 +17,7 @@ async function CollectionLibraryPage({
     index: string;
     customerId: string;
     customerCode: string;
-    catergoryId: string;
+    categoryId: string;
     status: string;
   };
 }) {
@@ -25,7 +25,7 @@ async function CollectionLibraryPage({
   const index = Number(searchParams?.index) || 0;
   const customerId = searchParams?.customerId;
   const customerCode = searchParams?.customerCode;
-  const categoryId = searchParams?.catergoryId;
+  const categoryId = searchParams?.categoryId;
   const status = searchParams?.status;
   const collections = await getCollections({
     pageIndex: index,
