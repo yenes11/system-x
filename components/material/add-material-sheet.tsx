@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { PlusIcon } from 'lucide-react';
 
+import api from '@/api';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -32,16 +32,15 @@ import {
   SheetTrigger
 } from '@/components/ui/sheet';
 import { useToast } from '@/components/ui/use-toast';
-import api from '@/api';
-import { MaterialUnit } from '@/lib/types';
+import { BasicEntity } from '@/lib/types';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import Icon from '../ui/icon';
-import { addMaterialFn } from '@/app/actions';
 
 const formSchema = z.object({
-  name: z.string().min(1, 'İsim gereklidir'),
-  unit: z.number()
+  name: z.string().min(1),
+  materialTypeId: z.string().uuid(),
+  attributes: z.any()
 });
 
 function AddMaterialSheet() {
@@ -49,6 +48,22 @@ function AddMaterialSheet() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+
+  const attributes = useQuery({
+    queryKey: ['attributes'],
+    queryFn: async () => {
+      const res = await api.get('/Attributes');
+      return res.data;
+    }
+  });
+
+  const materialTypes = useQuery({
+    queryKey: ['material-types'],
+    queryFn: async () => {
+      const res = await api.get('/MaterialTypes');
+      return res.data;
+    }
+  });
 
   const addMaterial = useMutation({
     mutationKey: ['add-material'],
@@ -72,8 +87,14 @@ function AddMaterialSheet() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      unit: undefined
+      materialTypeId: '',
+      attributes: []
     }
+  });
+
+  const { fields, append } = useFieldArray({
+    name: 'attributes',
+    control: form.control
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -113,24 +134,25 @@ function AddMaterialSheet() {
             />
             <FormField
               control={form.control}
-              name="unit"
+              name="materialTypeId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('unit')}</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                  >
+                  <FormLabel>{t('material_type')}</FormLabel>
+                  <Select onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue
-                          placeholder={t('select_unit_placeholder')}
+                          placeholder={t('select_material_type_placeholder')}
                         />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {Object.entries(MaterialUnit).map(([key, value]) => (
-                        <SelectItem key={key} value={key}>
-                          {t(value)}
+                      {materialTypes.data?.map((materialType: BasicEntity) => (
+                        <SelectItem
+                          key={materialType.id}
+                          value={materialType.id}
+                        >
+                          {materialType.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -139,6 +161,73 @@ function AddMaterialSheet() {
                 </FormItem>
               )}
             />
+
+            {fields.map((field, index) => (
+              <div className="flex gap-2" key={field.id}>
+                <FormField
+                  key={field.id}
+                  control={form.control}
+                  name={`attributes.${index}.attributeId` as any}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('attribute')}</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value.attributeId}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={t('select_attribute_placeholder')}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {attributes.data?.map((materialType: BasicEntity) => (
+                            <SelectItem
+                              key={materialType.id}
+                              value={materialType.id}
+                            >
+                              {materialType.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`attributes.${index}.value` as any}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>{t('value')}</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Pamuk"
+                          type="text"
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            ))}
+
+            <Button
+              className="w-full"
+              onClick={() => append({ attributeId: '', value: '' })}
+              variant="outline"
+              type="button"
+            >
+              {t('add_attribute')}
+            </Button>
+
             <Button
               className="w-full"
               loading={addMaterial.isPending}

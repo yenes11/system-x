@@ -24,16 +24,20 @@ import { getFabrics } from '@/lib/api-calls';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import FabricRow from './fabric-row';
-import { Fabric, PaginatedData } from '@/lib/types';
+import { Fabric, FabricWithColors, PaginatedData } from '@/lib/types';
 import ThemedTooltip from '@/components/ThemedTooltip';
 import { useTranslations } from 'next-intl';
 import Icon from '@/components/ui/icon';
 import ServerPagination from '@/components/server-pagination';
+import { SearchBar } from '@/components/searchbar';
+import ThemedSelect from '@/components/themed-select';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
 const getColumns = (
   setColorState: any,
   setEditFabricState: any
-): ColumnDef<Fabric>[] => {
+): ColumnDef<FabricWithColors>[] => {
   return [
     {
       accessorKey: 'name',
@@ -44,11 +48,11 @@ const getColumns = (
       header: 'grammage'
     },
     {
-      accessorKey: 'fabricUnitName',
+      accessorKey: 'unit',
       header: 'unit'
     },
     {
-      accessorKey: 'fabricTypeName',
+      accessorKey: 'type',
       header: 'fabric_type'
     },
     {
@@ -99,7 +103,7 @@ const getColumns = (
         );
       }
     }
-  ] as ColumnDef<Fabric>[];
+  ] as ColumnDef<FabricWithColors>[];
 };
 
 type Data = {
@@ -113,11 +117,14 @@ type Data = {
 };
 
 interface Props {
-  data: PaginatedData<Fabric>;
+  data: PaginatedData<FabricWithColors>;
 }
 
 function FabricTable({ data }: Props) {
   const t = useTranslations();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [fabricColorState, setFabricColorState] = useState({
     id: '',
@@ -151,8 +158,46 @@ function FabricTable({ data }: Props) {
     }
   };
 
+  const handleNameSearch = useDebouncedCallback((name) => {
+    const newSearchParams = getNewSearchParams('name', name);
+    router.replace(newSearchParams);
+  }, 300);
+
+  const handleGrammageSearch = useDebouncedCallback((grammage) => {
+    const newSearchParams = getNewSearchParams('grammage', grammage);
+    router.replace(newSearchParams);
+  }, 300);
+
+  const getNewSearchParams = (key: string, value: string) => {
+    let filteredUrl = `${pathname}?${key}=${value}`;
+    const name = searchParams.get('name');
+    const grammage = searchParams.get('grammage');
+
+    if (name && key !== 'name') {
+      filteredUrl += `&name=${name}`;
+    }
+    if (grammage && key !== 'grammage') {
+      filteredUrl += `&grammage=${grammage}`;
+    }
+
+    return filteredUrl;
+  };
+
   return (
     <>
+      <div className="flex flex-wrap gap-4">
+        <SearchBar
+          onChange={(e) => handleNameSearch(e.target.value)}
+          className="w-64"
+          placeholder={t('search_fabric')}
+        />
+        <SearchBar
+          type="number"
+          onChange={(e) => handleGrammageSearch(e.target.value)}
+          className="w-64"
+          placeholder={t('search_grammage')}
+        />
+      </div>
       <Table transparent={false} rounded>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -184,10 +229,10 @@ function FabricTable({ data }: Props) {
               .getRowModel()
               .rows.map((row) => (
                 <FabricRow
+                  data={row.original.colors}
                   key={row.id}
                   row={row}
                   expandedRows={expandedRows}
-                  setExpandedRows={setExpandedRows}
                   toggleRow={toggleRow}
                 />
               ))

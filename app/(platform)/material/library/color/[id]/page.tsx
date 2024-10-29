@@ -20,6 +20,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { URL_MATERIAL_COLOR } from '@/constants/api-constants';
+import { getMaterialVariant } from '@/lib/api-calls';
 import { MaterialColor, MaterialUnit } from '@/lib/types';
 import {
   Blocks,
@@ -43,7 +44,7 @@ async function getMaterialColor(id: string): Promise<MaterialColor> {
 }
 
 async function ColorDetailsPage({ params }: { params: { id: string } }) {
-  const color = await getMaterialColor(params.id);
+  const color = await getMaterialVariant(params.id);
   const t = await getTranslations();
   const stockInHandCount = color.stocks.reduce(
     (sum: number, item: any) => sum + item.remainingAmount,
@@ -78,14 +79,32 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
             </div>
             <ul className="grid gap-3">
               <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  {t('material_name')}
-                </span>
+                <span className="text-muted-foreground">{t('name')}</span>
                 <span>{color.materialName}</span>
               </li>
               <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('name')}</span>
-                <span>{color.name}</span>
+                <span className="text-muted-foreground">{t('size')}</span>
+                <span>{color.size}</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">{t('type')}</span>
+                <span>{color.type.name}</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  {t('identity_unit')}
+                </span>
+                <span>{color.type.identityUnit}</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">{t('order_unit')}</span>
+                <span>{color.type.orderUnit}</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  {t('variant_unit')}
+                </span>
+                <span>{color.type.variantUnit}</span>
               </li>
             </ul>
           </div>
@@ -138,7 +157,6 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
                     {t('stock_in_hand')} ({stockInHandCount}) +{' '}
                     {t('incoming_stock')} ({activeOrderCount}) -{' '}
                     {t('reserved_stock')} ({color.reservedAmount}) = {summary}{' '}
-                    {MaterialUnit[color.unit]}
                   </p>
                 </PopoverContent>
               </Popover>
@@ -156,10 +174,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
         <RecentPricesTable id={params.id} />
       </div>
       <div className="mb-4 grid gap-4 md:grid-cols-1 lg:grid-cols-2">
-        <StocksTable
-          data={color.stocks}
-          fabricUnitName={MaterialUnit[color.unit]}
-        />
+        <StocksTable data={color.stocks} fabricUnitName={''} />
         <ActiveOrdersTable color={color} />
       </div>
     </>

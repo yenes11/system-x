@@ -70,8 +70,6 @@ function AddPriceSheet() {
     enabled: open
   });
 
-  console.log(supplierColors.data, 'suppliers');
-
   const addPrice = useMutation({
     mutationKey: ['add-material-price'],
     mutationFn: async (values: any) => {
@@ -104,7 +102,6 @@ function AddPriceSheet() {
       customerId?: string;
     }
   ) => {
-    console.log(values, 'values');
     addPrice.mutate(values);
   };
 

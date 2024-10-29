@@ -14,12 +14,17 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import { PencilLine, Plus, Server } from 'lucide-react';
+import { PencilLine, Plus, PlusCircle, Server } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Empty from '@/components/ui/empty';
-import { IMaterial, MaterialUnit, PaginatedData } from '@/lib/types';
+import {
+  IMaterial,
+  IMaterialUnit,
+  MaterialUnit,
+  PaginatedData
+} from '@/lib/types';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import AddMaterialColorSheet from './add-material-color-sheet';
@@ -28,6 +33,12 @@ import MaterialRow from './material-row';
 import ThemedTooltip from '../ThemedTooltip';
 import Icon from '../ui/icon';
 import ServerPagination from '../server-pagination';
+import { SearchBar } from '../searchbar';
+import { useDebouncedCallback } from 'use-debounce';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import ThemedSelect from '../themed-select';
+import { CrossCircledIcon } from '@radix-ui/react-icons';
+import AddMaterialVariantSheet from './add-material-variant-sheet';
 
 type Fabric = {
   id: string;
@@ -43,14 +54,40 @@ const getColumns = (
 ): ColumnDef<IMaterial>[] => {
   return [
     {
-      accessorKey: 'name',
-      header: 'name'
+      header: '',
+      id: 'expand',
+      meta: {
+        cellClassName: 'px-0 pl-6 w-0 max-w-0'
+      },
+      cell: ({ row }) => {
+        if (row.original.colors.length > 0) {
+          console.log('hello');
+          return <Icon icon="down" size={16} />;
+        }
+      }
     },
     {
-      accessorKey: 'unit',
-      header: 'unit',
+      accessorKey: 'name',
+      header: 'name',
+      enableSorting: true
+    },
+    {
+      header: 'type',
       cell: ({ row }) => {
-        return <Badge>{MaterialUnit[row.original.unit]}</Badge>;
+        return row.original.type.name;
+      }
+    },
+    {
+      header: 'attributes',
+      cell: ({ row }) => {
+        return row.original.attributes.map((attr) => (
+          <Badge variant="secondary" className="mr-2 rounded" key={attr.id}>
+            <span className="font-light text-muted-foreground">
+              {attr.name}:&nbsp;
+            </span>
+            {attr.value}
+          </Badge>
+        ));
       }
     },
     {
@@ -103,6 +140,11 @@ interface Props {
   data: PaginatedData<IMaterial>;
 }
 
+interface SheetState {
+  id: string;
+  open: boolean;
+}
+
 interface MaterialState {
   data: IMaterial | null;
   open: boolean;
@@ -110,11 +152,17 @@ interface MaterialState {
 
 function MaterialTable({ data }: Props) {
   const t = useTranslations();
-  const [expandedRows, setExpandedRows] = useState<string[]>([]);
-  const [materialColorState, setMaterialColorState] = useState<{
-    id: string;
-    open: boolean;
-  }>({
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [expandedColorRows, setExpandedColorRows] = useState<string[]>([]);
+  const [expandedVariantRows, setExpandedVariantRows] = useState<string[]>([]);
+  const [materialColorState, setMaterialColorState] = useState<SheetState>({
+    id: '',
+    open: false
+  });
+
+  const [materialVariantState, setMaterialVariantState] = useState<SheetState>({
     id: '',
     open: false
   });
@@ -128,22 +176,92 @@ function MaterialTable({ data }: Props) {
     return getColumns(setMaterialColorState, setEditMaterialState);
   }, []);
 
+  const unitOptions = Object.entries(MaterialUnit).map(([key, value]) => ({
+    name: t(value),
+    id: key
+  }));
+
+  const selectedUnit =
+    MaterialUnit[searchParams.get('unit') as unknown as IMaterialUnit];
+
   const table = useReactTable({
     data: data.items || [],
     columns,
     getCoreRowModel: getCoreRowModel()
   });
 
-  const toggleRow = (id: string) => {
-    if (expandedRows.includes(id)) {
-      setExpandedRows((prev) => prev.filter((rowId) => rowId !== id));
-    } else {
-      setExpandedRows((prev) => [...prev, id]);
+  const getNewSearchParams = (key: string, value: string) => {
+    let filteredUrl = `${pathname}?${key}=${value}`;
+    const name = searchParams.get('name');
+    const unit = searchParams.get('unit');
+
+    if (name && key !== 'name') {
+      filteredUrl += `&name=${name}`;
     }
+    if (unit && key !== 'unit') {
+      filteredUrl += `&unit=${unit}`;
+    }
+
+    return filteredUrl;
+  };
+
+  const toggleColorRow = (id: string) => {
+    if (expandedColorRows.includes(id)) {
+      setExpandedColorRows((prev) => prev.filter((rowId) => rowId !== id));
+    } else {
+      setExpandedColorRows((prev) => [...prev, id]);
+    }
+  };
+
+  const toggleVariantRow = (id: string) => {
+    if (expandedVariantRows.includes(id)) {
+      setExpandedVariantRows((prev) => prev.filter((rowId) => rowId !== id));
+    } else {
+      setExpandedVariantRows((prev) => [...prev, id]);
+    }
+  };
+
+  const handleNameSearch = useDebouncedCallback((name) => {
+    const newSearchParams = getNewSearchParams('name', name);
+    router.replace(newSearchParams);
+  }, 300);
+
+  const clearSearchParam = (key: string) => {
+    let clearedSearchParams = searchParams.toString();
+    const value = searchParams.get(key);
+    if (value) {
+      clearedSearchParams = clearedSearchParams.replace(`&${key}=${value}`, '');
+      clearedSearchParams = clearedSearchParams.replace(`${key}=${value}`, '');
+    }
+    router.replace(`${pathname}?${clearedSearchParams}`);
+  };
+
+  const handleSearchParams = (key: string, value: string) => {
+    router.replace(getNewSearchParams(key, value));
   };
 
   return (
     <>
+      <div className="flex flex-wrap gap-4">
+        <SearchBar
+          onChange={(e) => handleNameSearch(e.target.value)}
+          className="w-64"
+          placeholder={t('search_material')}
+        />
+        <ThemedSelect
+          onClear={() => clearSearchParam('unit')}
+          options={unitOptions || []}
+          value={searchParams.get('unit') || ''}
+          onValueChange={(value) => handleSearchParams('unit', value)}
+          placeholder={t('select_a_unit')}
+        />
+        {selectedUnit && (
+          <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">
+            {selectedUnit}
+            <CrossCircledIcon onClick={() => clearSearchParam('unit')} />
+          </Badge>
+        )}
+      </div>
       <Table rounded transparent={false}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -174,9 +292,11 @@ function MaterialTable({ data }: Props) {
                   colors={row.original.colors}
                   key={row.id}
                   row={row}
-                  expandedRows={expandedRows}
-                  setExpandedRows={setExpandedRows}
-                  toggleRow={toggleRow}
+                  expandedColorRows={expandedColorRows}
+                  expandedVariantRows={expandedVariantRows}
+                  toggleColorRow={toggleColorRow}
+                  toggleVariantRow={toggleVariantRow}
+                  setMaterialVariantState={setMaterialVariantState}
                 />
               ))
           ) : (
@@ -203,6 +323,10 @@ function MaterialTable({ data }: Props) {
       <EditMaterialSheet
         state={editMaterialState}
         setState={setEditMaterialState as any}
+      />
+      <AddMaterialVariantSheet
+        state={materialVariantState}
+        setState={setMaterialVariantState}
       />
     </>
   );

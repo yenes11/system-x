@@ -10,13 +10,19 @@ import { getTranslations } from 'next-intl/server';
 
 const getMaterials = async ({
   pageIndex,
-  pageSize
+  pageSize,
+  name,
+  unit
 }: {
   pageIndex: number;
   pageSize: number;
+  name?: string;
+  unit?: number;
 }) => {
   try {
-    const res = await api.get(getMaterialUrl({ pageIndex, pageSize }));
+    const res = await api.get(
+      getMaterialUrl({ pageIndex, pageSize, name, unit })
+    );
     return res.data;
   } catch (e: any) {
     console.log(e?.response?.data, 'error');
@@ -26,14 +32,19 @@ const getMaterials = async ({
 export default async function MaterialLibraryPage({
   searchParams
 }: {
-  searchParams: { size: string; index: string };
+  searchParams: { size: string; index: string; name: string; unit: number };
 }) {
   const t = await getTranslations();
   const size = Number(searchParams?.size) || 10;
   const index = Number(searchParams?.index) || 0;
+  const unit = Number(searchParams?.unit) || 0;
+  const name = searchParams?.name || '';
+
   const materials: PaginatedData<IMaterial> = await getMaterials({
     pageIndex: index,
-    pageSize: size
+    pageSize: size,
+    name,
+    unit
   });
 
   return (

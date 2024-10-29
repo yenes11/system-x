@@ -82,14 +82,15 @@ function EditMaterialSheet({ state, setState }: EditMaterialSheetProps) {
     }
   });
 
-  useEffect(() => {
-    if (state.data) {
-      form.reset({
-        name: state.data.name,
-        unit: state.data.unit
-      });
-    }
-  }, [state.data, form]);
+  // ---BURASI DEĞİŞİM NEDENİYLE KAPATILDI DÜZELTİLECEK---
+  // useEffect(() => {
+  //   if (state.data) {
+  //     form.reset({
+  //       name: state.data.name,
+  //       unit: state.data.unit
+  //     });
+  //   }
+  // }, [state.data, form]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     editMaterial.mutate({

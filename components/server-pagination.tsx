@@ -36,12 +36,38 @@ function ServerPagination({
   const size = Number(searchParams.get('size')) || 10;
   const index = Number(searchParams.get('index')) || 0;
 
+  const replacePath = (size: number, index: number) => {
+    let currentSearchParams = searchParams.toString();
+    if (!currentSearchParams) {
+      currentSearchParams = `size=${size}&index=${index}`;
+    } else {
+      if (searchParams.has('size')) {
+        currentSearchParams = currentSearchParams.replace(
+          /size=\d+/,
+          `size=${size}`
+        );
+      } else {
+        currentSearchParams += `&size=${size}`;
+      }
+      if (searchParams.has('index')) {
+        currentSearchParams = currentSearchParams.replace(
+          /index=\d+/,
+          `index=${index}`
+        );
+      } else {
+        currentSearchParams += `&index=${index}`;
+      }
+    }
+    router.replace(`${pathName}/?${currentSearchParams}`);
+  };
+
   return (
     <div className="mt-4 flex gap-4">
       <Select
         value={size.toString()}
         onValueChange={(value) => {
-          router.push(`${pathName}/?size=${value}&index=${0}`);
+          replacePath(Number(value), 0);
+          // router.push(`${pathName}/?size=${value}&index=${0}`);
         }}
       >
         <SelectTrigger className="w-auto min-w-32">
@@ -61,9 +87,10 @@ function ServerPagination({
             <PaginationItem>
               <PaginationPrevious
                 onClick={() => {
-                  router.replace(
-                    `${pathName}/?size=${size}&index=${index - 1}`
-                  );
+                  replacePath(size, index - 1);
+                  // router.replace(
+                  //   `${pathName}/?size=${size}&index=${index - 1}`
+                  // );
                 }}
               />
             </PaginationItem>
@@ -81,7 +108,8 @@ function ServerPagination({
                           : 'cursor-pointer'
                       }
                       onClick={() => {
-                        router.replace(`${pathName}/?size=${size}&index=0`);
+                        replacePath(size, 0);
+                        // router.replace(`${pathName}/?size=${size}&index=0`);
                       }}
                     >
                       1
@@ -107,9 +135,10 @@ function ServerPagination({
                             : 'cursor-pointer'
                         }
                         onClick={() => {
-                          router.replace(
-                            `${pathName}/?size=${size}&index=${pageIndex}`
-                          );
+                          replacePath(size, pageIndex);
+                          // router.replace(
+                          //   `${pathName}/?size=${size}&index=${pageIndex}`
+                          // );
                         }}
                       >
                         {pageIndex + 1}
@@ -135,9 +164,10 @@ function ServerPagination({
                           : 'cursor-pointer'
                       }
                       onClick={() => {
-                        router.replace(
-                          `${pathName}/?size=${size}&index=${data.pages - 1}`
-                        );
+                        replacePath(size, data.pages - 1);
+                        // router.replace(
+                        //   `${pathName}/?size=${size}&index=${data.pages - 1}`
+                        // );
                       }}
                     >
                       {data.pages}
@@ -156,7 +186,8 @@ function ServerPagination({
                       : 'cursor-pointer'
                   }
                   onClick={() => {
-                    router.replace(`${pathName}/?size=${size}&index=${i}`);
+                    replacePath(size, i);
+                    // router.replace(`${pathName}/?size=${size}&index=${i}`);
                   }}
                 >
                   {i + 1}
@@ -168,9 +199,10 @@ function ServerPagination({
             <PaginationItem>
               <PaginationNext
                 onClick={() => {
-                  router.replace(
-                    `${pathName}/?size=${size}&index=${index + 1}`
-                  );
+                  replacePath(size, index + 1);
+                  // router.replace(
+                  //   `${pathName}/?size=${size}&index=${index + 1}`
+                  // );
                 }}
               />
             </PaginationItem>

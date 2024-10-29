@@ -99,8 +99,6 @@ function AssignFabricSheet() {
     }
   });
 
-  console.log('fabric');
-
   const onSubmit = (
     values: Partial<z.infer<typeof formSchema>> & { fabricSupplierId?: string }
   ) => {

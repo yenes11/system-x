@@ -1,8 +1,5 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
 import UserAuthForm from '@/components/forms/user-auth-form';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Metadata } from 'next';
 import { useTranslations } from 'next-intl';
 
 export const metadata: Metadata = {

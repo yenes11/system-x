@@ -133,8 +133,6 @@ function CustomerTable({ data }: { data: any }) {
     data: null
   });
 
-  console.log(editState, 'editstate');
-
   const columns = useMemo(() => {
     return getCustomersTableColumns(setInfoState, setDeletState, setEditState);
   }, []);

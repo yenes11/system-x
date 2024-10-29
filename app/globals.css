@@ -56,7 +56,7 @@
     --destructive-foreground: 210 20% 98%;
     --border: 205.71 6.67% 20.59%; /*215 27.9% 16.9%;*/
     --input: 205.71 6.67% 20.59%; /*215 27.9% 16.9%;*/
-    --ring: 263.4 70% 50.4%;
+    --ring: 174.67 83.85% 31.57%; /*263.4 70% 50.4%;*/
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -75,6 +75,11 @@
   }
   body {
     @apply box-border bg-background text-foreground;
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 }
 

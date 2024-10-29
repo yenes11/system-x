@@ -52,9 +52,7 @@ async function CollectionLibraryPage({
           title={t('collections')}
           description=""
         />
-        {/* <AddFabricSheet /> */}
       </div>
-      {/* <FabricTable data={fabrics} /> */}
       <CollectionTable data={collections} />
     </div>
   );

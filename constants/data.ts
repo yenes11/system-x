@@ -118,12 +118,12 @@ export const _navItems = [
         key: 'fabric_orders',
         title: 'orders',
         href: '/fabric/orders'
-      },
-      {
-        key: 'fibric_supplier_management',
-        title: 'supplier_management',
-        href: '/fabric/supplier-management'
       }
+      // {
+      //   key: 'fibric_supplier_management',
+      //   title: 'supplier_management',
+      //   href: '/fabric/supplier-management'
+      // }
     ]
   },
   {
@@ -145,12 +145,12 @@ export const _navItems = [
         key: 'material_orders',
         title: 'orders',
         href: '/material/orders'
-      },
-      {
-        key: 'material_supplier_management',
-        title: 'supplier_management',
-        href: '/material/supplier-management'
       }
+      // {
+      //   key: 'material_supplier_management',
+      //   title: 'supplier_management',
+      //   href: '/material/supplier-management'
+      // }
     ]
   },
   {
@@ -180,6 +180,13 @@ export const _navItems = [
     title: 'customer',
     icon: 'users',
     href: '/customer/management',
+    children: []
+  },
+  {
+    key: 'supplier',
+    title: 'supplier_management',
+    icon: 'delivery-3',
+    href: '/supplier',
     children: []
   }
   // {

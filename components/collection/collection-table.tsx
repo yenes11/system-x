@@ -1,54 +1,36 @@
 'use client';
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table';
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable
-} from '@tanstack/react-table';
-import { PencilLine, Plus, Server } from 'lucide-react';
 import AddFabricColorSheet from '@/components/fabric-color/add-fabric-color-sheet';
 import EditFabricSheet from '@/components/fabric/edit-fabric-sheet';
+import ServerPagination from '@/components/server-pagination';
+import ThemedTooltip from '@/components/ThemedTooltip';
 import { Button } from '@/components/ui/button';
 import Empty from '@/components/ui/empty';
-import { getCategories, getCustomers, getFabrics } from '@/lib/api-calls';
-import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import Icon from '@/components/ui/icon';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { getCategories, getCustomers } from '@/lib/api-calls';
 import {
   CollectionPingColor,
   CollectionStatus,
   Fabric,
   PaginatedData
 } from '@/lib/types';
-import ThemedTooltip from '@/components/ThemedTooltip';
+import { getAllSubcategories } from '@/lib/utils';
+import { CrossCircledIcon } from '@radix-ui/react-icons';
+import { useQuery } from '@tanstack/react-query';
+import {
+  ColumnDef,
+  getCoreRowModel,
+  useReactTable
+} from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import Icon from '@/components/ui/icon';
-import ServerPagination from '@/components/server-pagination';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
+import { SearchBar } from '../searchbar';
+import ThemedSelect from '../themed-select';
 import ThemedZoom from '../themed-zoom';
 import { Badge } from '../ui/badge';
-import {
-  Select,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectContent
-} from '../ui/select';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Input } from '../ui/input';
-import { SearchBar } from '../searchbar';
-import { useDebouncedCallback } from 'use-debounce';
-import ThemedSelect from '../themed-select';
-import { CrossCircledIcon } from '@radix-ui/react-icons';
-import { getAllSubcategories } from '@/lib/utils';
 
 const getColumns = (
   setColorState: any,
@@ -66,6 +48,10 @@ const getColumns = (
     {
       accessorKey: 'fabricUnitName',
       header: 'unit'
+    },
+    {
+      accessorKey: 'image',
+      header: 'image'
     },
     {
       accessorKey: 'fabricTypeName',
@@ -147,12 +133,6 @@ function CollectionTable({ data }: Props) {
     open: false
   });
 
-  const [params, setParams] = useState({
-    customer: '',
-    category: '',
-    status: ''
-  });
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -167,8 +147,6 @@ function CollectionTable({ data }: Props) {
     queryFn: getCategories,
     select: getAllSubcategories
   });
-
-  console.log(categories.data, 'categories');
 
   const columns = useMemo(() => {
     return getColumns(setFabricColorState, setEditFabricState);
@@ -187,7 +165,6 @@ function CollectionTable({ data }: Props) {
     ];
 
   const handleSearch = useDebouncedCallback((customerCode) => {
-    console.log(`Searching... ${customerCode}`);
     const newSearchParams = getNewSearchParams('customerCode', customerCode);
     router.replace(newSearchParams);
   }, 300);
@@ -235,8 +212,6 @@ function CollectionTable({ data }: Props) {
       name: t(value)
     })
   );
-
-  console.log(categories.data, 'categories');
 
   const table = useReactTable({
     data: data.items || [],

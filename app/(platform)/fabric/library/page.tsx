@@ -1,49 +1,32 @@
-import api from '@/api';
 import AddFabricSheet from '@/components/fabric/add-fabric-sheet';
 import FabricTable from '@/components/tables/fabric-tables/fabric-table';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
-import { getFabricUrl } from '@/constants/api-constants';
-import { ApiError, Fabric, PaginatedData } from '@/lib/types';
-import { AxiosError } from 'axios';
-
-const getFabrics = async ({
-  pageIndex,
-  pageSize
-}: {
-  pageIndex: number;
-  pageSize: number;
-}): Promise<PaginatedData<Fabric> | ApiError> => {
-  try {
-    const res = await api.get(getFabricUrl({ pageIndex, pageSize }));
-    return res.data;
-  } catch (e) {
-    if (e instanceof AxiosError) {
-      return {
-        message: e.response?.data?.title || 'An error occurred',
-        statusCode: e.response?.status as number
-      };
-    } else {
-      return {
-        message: 'An unknown error occurred',
-        statusCode: 500
-      };
-    }
-  }
-};
+import { getFabrics, getFabricsWithColors } from '@/lib/api-calls';
 
 export default async function FabricLibraryPage({
   searchParams
 }: {
-  searchParams: { size: string; index: string };
+  searchParams: { size: string; index: string; name: string; grammage: string };
 }) {
   const size = Number(searchParams?.size) || 10;
   const index = Number(searchParams?.index) || 0;
-  const fabrics = await getFabrics({ pageIndex: index, pageSize: size });
+  const name = searchParams?.name || '';
+  const grammage =
+    searchParams?.grammage && !isNaN(Number(searchParams.grammage))
+      ? searchParams.grammage
+      : '';
 
-  if ('message' in fabrics) {
-    return <div>{fabrics.message}</div>;
-  }
+  const fabrics = await getFabricsWithColors({
+    pageIndex: index,
+    pageSize: size,
+    grammage,
+    name
+  });
+
+  // if ('message' in fabrics) {
+  //   return <div>{fabrics.message}</div>;
+  // }
 
   return (
     <div className="space-y-2">
@@ -58,7 +41,6 @@ export default async function FabricLibraryPage({
             />
           }
           title="Fabric Library"
-          description=""
         />
         <AddFabricSheet />
       </div>

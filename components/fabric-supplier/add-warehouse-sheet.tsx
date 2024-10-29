@@ -61,7 +61,6 @@ function AddWarehouseSheet() {
   const addWarehouse = useMutation({
     mutationKey: ['add-warehouse'],
     mutationFn: async (values: any) => {
-      console.log(endpoint, 'endp');
       const res = await api.post(endpoint, values);
       return res;
     },
@@ -108,7 +107,7 @@ function AddWarehouseSheet() {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <Warehouse className="text-icon mr-2" size={20} />
+          <Warehouse className="mr-2 text-icon" size={20} />
           <SheetTitle>{t('add_warehouse')}</SheetTitle>
         </SheetHeader>
 

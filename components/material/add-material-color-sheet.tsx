@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -26,6 +26,14 @@ import { useToast } from '@/components/ui/use-toast';
 import api from '@/api';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { getMaterialUrl } from '@/constants/api-constants';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '../ui/select';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -40,13 +48,7 @@ const formSchema = z.object({
     .string()
     .min(2, 'Name must be at least 2 characters')
     .max(50, 'Name can be at most 50 characters'),
-  image: z
-    .any()
-    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-    .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-      'Only .jpg, .jpeg, .png and .webp formats are supported.'
-    )
+  materialId: z.string().uuid()
 });
 
 interface AddMaterialColorSheetProps {
@@ -69,14 +71,20 @@ function AddMaterialColorSheet({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      image: null
+      materialId: ''
     }
   });
 
+  useEffect(() => {
+    if (state.open) {
+      form.reset({ name: '', materialId: state.id });
+    }
+  }, [state.id]);
+
   const addMaterialColor = useMutation({
     mutationKey: ['add-material-color'],
-    mutationFn: async (formData: FormData) => {
-      const response = await api.post('/MaterialColors', formData);
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const response = await api.post('/MaterialColors', values);
       return response;
     },
     onSuccess: (response) => {
@@ -98,13 +106,10 @@ function AddMaterialColorSheet({
     }
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const formData = new FormData();
-    formData.append('MaterialId', state.id);
-    formData.append('Name', values.name);
-    formData.append('Image', values.image);
+  console.log(form.getValues(), 'values');
 
-    addMaterialColor.mutate(formData);
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    addMaterialColor.mutate(values);
   };
 
   return (
@@ -135,27 +140,32 @@ function AddMaterialColorSheet({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
-              name="image"
+              name="materialId"
               render={({ field: { onChange, value, ...fieldProps } }) => (
                 <FormItem>
-                  <FormLabel>{t('image')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="py-[7px]"
-                      type="file"
-                      {...fieldProps}
-                      accept="image/*"
-                      onChange={(event) =>
-                        onChange(event.target.files && event.target.files[0])
-                      }
-                    />
-                  </FormControl>
+                  <FormLabel>{t('material_type')}</FormLabel>
+                  <Select onValueChange={onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={t('select_material_type_placeholder')}
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {materials.data?.map((material: any) => (
+                        <SelectItem key={material.id} value={material.id}>
+                          {material.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <Button
               loading={addMaterialColor.isPending}
               className="w-full"

@@ -55,7 +55,7 @@ function FabricColorCollectionCarousel({ data }: { data: ColorCollection[] }) {
         <CarouselContent>
           {filteredData.length === 0 ? (
             <div className="flex w-full justify-center py-8">
-              <Empty />
+              <Empty description={t('no_collection_found')} />
             </div>
           ) : (
             filteredData.map((collection, index) => (

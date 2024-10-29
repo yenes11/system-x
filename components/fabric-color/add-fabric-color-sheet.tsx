@@ -10,19 +10,15 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle
-} from '@/components/ui/sheet';
 import useIngredientsQuery from '@/hooks/queries/useIngredientsQuery';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import ThemedSheet from '../themed-sheet';
 import { Button } from '../ui/button';
+import Icon from '../ui/icon';
 import {
   Select,
   SelectContent,
@@ -62,6 +58,7 @@ interface Props {
 
 function AddFabricColorSheet({ state, setState }: Props) {
   const queryClient = useQueryClient();
+  const t = useTranslations();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -121,142 +118,126 @@ function AddFabricColorSheet({ state, setState }: Props) {
   };
 
   return (
-    <Sheet
+    <ThemedSheet
+      title={t('add_fabric_color')}
       open={state.open}
-      onOpenChange={(val: any) =>
-        setState((prev: any) => ({ ...prev, open: val }))
-      }
+      setOpen={(val: any) => setState((prev: any) => ({ ...prev, open: val }))}
     >
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Add new fabric color</SheetTitle>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('name')}</FormLabel>
+                <FormControl>
+                  <Input placeholder="Blue" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field: { onChange, value, ...fieldProps } }) => (
+              <FormItem>
+                <FormLabel>{t('image')}</FormLabel>
+                <FormControl>
+                  <Input
+                    className=""
+                    type="file"
+                    {...fieldProps}
+                    accept="image/*"
+                    onChange={(event) =>
+                      onChange(event.target.files && event.target.files[0])
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          {/* <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription> */}
-        </SheetHeader>
-
-        {/* {fabricTypes.isLoading || fabricUnits.isLoading ? null : ( */}
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Blue" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field: { onChange, value, ...fieldProps } }) => (
-                <FormItem>
-                  <FormLabel>Image</FormLabel>
-                  <FormControl>
-                    <Input
-                      className=""
-                      type="file"
-                      {...fieldProps}
-                      accept="image/*, application/pdf"
-                      onChange={(event) =>
-                        onChange(event.target.files && event.target.files[0])
-                      }
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {fields.map((field, index) => (
-              <div key={field.id}>
-                <FormField
-                  control={form.control}
-                  name={`ingredients.${index}.id` as any}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Ingredient</FormLabel>
-                      <Select
-                        {...field}
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                        }}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select an ingredient" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="max-h-48 overflow-scroll">
-                          <SelectGroup>
-                            {ingredients.data?.map((ingredient) => (
-                              <SelectItem
-                                key={ingredient.id}
-                                value={ingredient.id}
-                              >
-                                {ingredient.name}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name={`ingredients.${index}.percentage` as any}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Percentage</FormLabel>
+          {fields.map((field, index) => (
+            <div className="flex gap-2" key={field.id}>
+              <FormField
+                control={form.control}
+                name={`ingredients.${index}.id` as any}
+                render={({ field }) => (
+                  <FormItem className="flex-[3]">
+                    <FormLabel>{t('ingredient')}</FormLabel>
+                    <Select
+                      {...field}
+                      onValueChange={(value) => field.onChange(value)}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="30"
-                          type="number"
-                          onChange={(e) => {
-                            field.onChange(e.target.valueAsNumber);
-                          }}
-                        />
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={t('select_an_ingredient')}
+                          />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            ))}
-            <Button
-              type="button"
-              className="w-full"
-              variant="outline"
-              disabled={totalIngredientsPercentage >= 100}
-              onClick={() => append({ id: undefined, percentage: 0 })}
-            >
-              <Plus size={12} className="mr-2" />
-              Add Ingredient
-            </Button>
-            <Button
-              loading={addFabricColor.isPending}
-              disabled={totalIngredientsPercentage !== 100}
-              className="w-full"
-              type="submit"
-            >
-              Submit
-            </Button>
-          </form>
-        </Form>
-        {/* )} */}
-      </SheetContent>
-    </Sheet>
+                      <SelectContent className="max-h-48 overflow-scroll">
+                        <SelectGroup>
+                          {ingredients.data?.map((ingredient) => (
+                            <SelectItem
+                              key={ingredient.id}
+                              value={ingredient.id}
+                            >
+                              {ingredient.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={`ingredients.${index}.percentage` as any}
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>{t('percentage')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="30"
+                        type="number"
+                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          ))}
+          <Button
+            type="button"
+            className="w-full"
+            variant="outline"
+            disabled={totalIngredientsPercentage >= 100}
+            onClick={() => append({ id: undefined, percentage: 0 })}
+          >
+            <Icon icon="plus" size={16} currentColor className="mr-2" />
+            {t('add_ingredient')}
+          </Button>
+          <Button
+            loading={addFabricColor.isPending}
+            disabled={totalIngredientsPercentage !== 100}
+            className="w-full"
+            type="submit"
+          >
+            {addFabricColor.isPending ? t('submitting') : t('submit')}
+          </Button>
+        </form>
+      </Form>
+    </ThemedSheet>
   );
 }
 

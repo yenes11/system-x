@@ -1,20 +1,26 @@
 import api from '@/api';
 import {
-  getCollectionsUrl,
+  getFabricsWithColorsUrl,
   getFabricSuppliersUrl,
   getFabricUrl,
-  getMaterialSuppliersUrl
+  getMaterialSuppliersUrl,
+  getCollectionsUrl,
+  URL_MATERIAL_VARIANT,
+  getSuppliersUrl
 } from '@/constants/api-constants';
-import { ICollectionStatus, PaginatedData, Supplier } from './types';
+import {
+  ApiError,
+  Fabric,
+  ICollectionStatus,
+  MaterialVariant,
+  PaginatedData,
+  Supplier
+} from './types';
+import { AxiosError } from 'axios';
 
 interface Params {
   pageIndex: number;
   pageSize: number;
-}
-
-export async function getFabrics() {
-  const res = await api.get(getFabricUrl({ pageIndex: 0, pageSize: 10 }));
-  return res.data;
 }
 
 export const getFabricSuppliers = async (params: Params) => {
@@ -23,6 +29,33 @@ export const getFabricSuppliers = async (params: Params) => {
     return res.data;
   } catch (e: any) {
     console.log(e?.response?.data, 'error');
+  }
+};
+
+export const getFabrics = async ({
+  pageIndex,
+  pageSize
+}: {
+  pageIndex: number;
+  pageSize: number;
+}): Promise<PaginatedData<Fabric> | ApiError> => {
+  try {
+    const res = await api.get(getFabricUrl({ pageIndex, pageSize }));
+    return res.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.title || 'An error occurred');
+      // return {
+      //   message: e.response?.data?.title || 'An error occurred',
+      //   statusCode: e.response?.status as number
+      // };
+    } else {
+      throw new Error('An unknown error occurred');
+      // return {
+      //   message: 'An unknown error occurred',
+      //   statusCode: 500
+      // };
+    }
   }
 };
 
@@ -41,6 +74,32 @@ export const getCollections = async (
     console.log(e?.response?.data, 'error');
   }
 };
+
+export const getFabricsWithColors = async (
+  params: Params & {
+    name?: string;
+    grammage?: string;
+  }
+) => {
+  try {
+    console.log(getFabricsWithColorsUrl(params), 'search url');
+    const res = await api.get(getFabricsWithColorsUrl(params));
+    console.log(res.data, 'respoonse');
+    return res.data;
+  } catch (e: any) {
+    console.log('error');
+    console.log(e?.response?.data, 'error');
+  }
+};
+
+export async function getMaterialVariant(id: string): Promise<MaterialVariant> {
+  try {
+    const response = await api.get(`${URL_MATERIAL_VARIANT}/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export const getCategories = async () => {
   try {
@@ -73,6 +132,18 @@ export const getMaterialSuppliers = async (
 ): Promise<PaginatedData<Supplier>> => {
   try {
     const res = await api.get(getMaterialSuppliersUrl(params));
+    return res.data;
+  } catch (e: any) {
+    console.log(e?.response?.data, 'error');
+    throw e;
+  }
+};
+
+export const getSuppliers = async (
+  params: Params
+): Promise<PaginatedData<Supplier>> => {
+  try {
+    const res = await api.get(getSuppliersUrl(params));
     return res.data;
   } catch (e: any) {
     console.log(e?.response?.data, 'error');

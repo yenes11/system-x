@@ -58,7 +58,7 @@ function RecentPricesTable({ id }: { id: string }) {
 
   return (
     <Card className="overflow-hidden bg-nutural">
-      <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-3">
+      <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-2">
         <CardTitle>{t('recent_prices')}</CardTitle>
         <AddPriceSheet />
       </CardHeader>

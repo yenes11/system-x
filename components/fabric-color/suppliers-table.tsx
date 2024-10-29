@@ -36,7 +36,7 @@ const suppliersTableColumns = [
     accessorKey: 'manufacturerCode',
     header: 'manufacturer_code',
     cell: ({ row }: { row: any }) => (
-      <Badge className="bg-muted text-black hover:bg-muted/80 dark:text-white">
+      <Badge className="flex-nowrap bg-muted text-black hover:bg-muted/80 dark:text-white">
         {row.getValue('manufacturerCode')}
       </Badge>
     )

@@ -33,13 +33,16 @@ import AddPriceToMaterialSheet from './add-price-to-material-sheet';
 import EditMaterialSheet from './edit-material-sheet';
 
 interface SupplierMaterial {
-  materialSupplierMaterialColorId: string;
+  id: string;
+  materialId: string;
   materialColorId: string;
-  materialName: string;
-  materialColor: string;
+  materialColorVariantId: string;
+  name: string;
+  color: string;
+  size: string;
   manufacturerCode: string;
-  image: string;
-  unit: number;
+  originalImage: string;
+  supplierImage: string;
 }
 
 interface Props {
@@ -68,15 +71,11 @@ function MaterialCarousel({ data }: Props) {
 
   const [searchKey, setSearchKey] = useState('');
 
-  console.log(data, 'hello');
-
   const filteredData: SupplierMaterial[] = useMemo(() => {
     return data.filter(
       (material) =>
-        material.materialName.toLowerCase().includes(searchKey.toLowerCase()) ||
-        material.materialColor
-          .toLowerCase()
-          .includes(searchKey.toLowerCase()) ||
+        material?.name?.toLowerCase().includes(searchKey.toLowerCase()) ||
+        material.color?.toLowerCase().includes(searchKey.toLowerCase()) ||
         material.manufacturerCode
           .toLowerCase()
           .includes(searchKey.toLowerCase())
@@ -103,13 +102,13 @@ function MaterialCarousel({ data }: Props) {
       <EditMaterialSheet state={editState} setState={setEditState} />
       <div className="mb-4 flex gap-4">
         {/* <AssignFabricSheet /> */}
-        <AssignMaterialSheet />
         <SearchBar
           value={searchKey}
           onChange={(e) => setSearchKey(e.target.value)}
-          className="w-auto min-w-72 rounded-full bg-card"
+          className="w-auto min-w-72 bg-card"
           placeholder={t('search_material_color_code')}
         />
+        <AssignMaterialSheet />
       </div>
       <Carousel
         opts={{
@@ -127,14 +126,17 @@ function MaterialCarousel({ data }: Props) {
               <CarouselItem key={index} className="lg:w-64">
                 <Card className="overflow-hidden bg-cover bg-center p-0">
                   <CardHeader className="flex justify-center bg-muted/50 px-3 py-2">
-                    <CardTitle className="text-md gap-2 p-0 text-center ">
-                      {material.materialName}-{material.materialColor}
+                    <CardTitle
+                      title={`${material.color} - ${material.name}`}
+                      className="text-md w-full max-w-full gap-2 overflow-hidden text-ellipsis text-nowrap p-0 text-center"
+                    >
+                      {material.color} - {material.name}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
                     <ThemedZoom>
                       <img
-                        src={material.image}
+                        src={material.supplierImage || material.originalImage}
                         className="aspect-square w-full origin-top-left object-cover object-top"
                       />
                     </ThemedZoom>
@@ -146,18 +148,19 @@ function MaterialCarousel({ data }: Props) {
                     </code>
                     <div className="flex gap-2">
                       <Badge className="bg-blue-600/20 text-blue-800 dark:text-blue-300">
-                        {t(MaterialUnit[material.unit as IMaterialUnit])}
+                        {/* {t(MaterialUnit[material.unit as IMaterialUnit])} */}
+                        {material.size}
                       </Badge>
                     </div>
                     <div className="flex w-full">
                       <Button
                         className="flex-1 rounded-none"
-                        onClick={() =>
-                          setDeleteState({
-                            open: true,
-                            id: material.materialSupplierMaterialColorId
-                          })
-                        }
+                        // onClick={() =>
+                        //   setDeleteState({
+                        //     open: true,
+                        //     id: material.materialSupplierMaterialColorId
+                        //   })
+                        // }
                         // variant={'destructive'}
                         variant="secondary"
                         size="sm"
@@ -170,12 +173,12 @@ function MaterialCarousel({ data }: Props) {
                         className="flex-1 rounded-none"
                         size="sm"
                         onClick={() => {
-                          setEditState({
-                            materialColorId:
-                              material.materialSupplierMaterialColorId,
-                            manufacturerCode: material.manufacturerCode,
-                            open: true
-                          });
+                          // setEditState({
+                          //   materialColorId:
+                          //     material.materialSupplierMaterialColorId,
+                          //   manufacturerCode: material.manufacturerCode,
+                          //   open: true
+                          // });
                         }}
                       >
                         <Pencil size={16} />
@@ -185,11 +188,11 @@ function MaterialCarousel({ data }: Props) {
                         className="flex-1 rounded-none"
                         size="sm"
                         onClick={() => {
-                          setAddPriceState({
-                            open: true,
-                            materialColorId:
-                              material.materialSupplierMaterialColorId
-                          });
+                          // setAddPriceState({
+                          //   open: true,
+                          //   materialColorId:
+                          //     material.materialSupplierMaterialColorId
+                          // });
                         }}
                       >
                         <Plus size={16} />
@@ -199,11 +202,11 @@ function MaterialCarousel({ data }: Props) {
                         className="flex-1 rounded-none"
                         size="sm"
                         onClick={() => {
-                          setRecentPricesState({
-                            open: true,
-                            materialColorId:
-                              material.materialSupplierMaterialColorId
-                          });
+                          // setRecentPricesState({
+                          //   open: true,
+                          //   materialColorId:
+                          //     material.materialSupplierMaterialColorId
+                          // });
                         }}
                       >
                         <Euro size={16} />

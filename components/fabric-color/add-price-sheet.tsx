@@ -118,8 +118,7 @@ function AddPriceSheet() {
       customerId?: string;
     }
   ) => {
-    console.log(values, 'values');
-    // addPrice.mutate(values);
+    addPrice.mutate(values);
   };
 
   return (

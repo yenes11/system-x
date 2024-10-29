@@ -39,8 +39,6 @@ function MaterialCollectionsCarousel({ data }: { data: MaterialCollection[] }) {
   //   );
   // }, [data, searchKey, selectedStatus]);
 
-  console.log(selectedStatus, 'selectedStatus');
-
   return (
     <>
       {/* <div className="mb-2 flex justify-between">

@@ -11,6 +11,35 @@ export type Fabric = {
   fabricTypeName: string;
 };
 
+export interface BasicEntity {
+  id: string;
+  name: string;
+}
+
+export const SupplierType = {
+  1: 'FabricMaterialSupplier',
+  2: 'FabricSupplier',
+  3: 'MaterialSupplier'
+};
+
+export type ISupplierType = keyof typeof SupplierType;
+
+export interface FabricWithColors {
+  id: string;
+  name: string;
+  grammage: number;
+  unit: string;
+  type: string;
+  colors: FabricColor[];
+}
+
+export interface FabricColor {
+  id: string;
+  name: string;
+  image: string;
+  ingredients: Ingredient[];
+}
+
 export interface Warehouse {
   id: string;
   name: string;
@@ -110,11 +139,39 @@ export const MaterialUnit = {
 
 export type IMaterialUnit = keyof typeof MaterialUnit;
 
+interface MaterialType {
+  name: string;
+  identityUnit: string;
+  orderUnit: string;
+  variantUnit: string;
+}
+
+interface MaterialAttribute {
+  id: string;
+  attributeId: string;
+  name: string;
+  value: string;
+}
+
+interface MaterialColorVariant {
+  id: string;
+  size: string;
+  image: string;
+}
+
+export interface MaterialColor {
+  id: string;
+  name: string;
+  image: string;
+  variants: MaterialColorVariant[];
+}
+
 export interface IMaterial {
   id: string;
   name: string;
-  unit: IMaterialUnit;
-  colors: IColor[];
+  type: MaterialType;
+  attributes: MaterialAttribute[];
+  colors: MaterialColor[];
 }
 
 export type PaginatedData<T> = {
@@ -168,13 +225,13 @@ export interface Supplier {
   authorizedPersonFullName: string;
 }
 
-export interface MaterialColor {
+export interface MaterialVariant {
   id: string;
-  name: string;
   image: string;
   materialId: string;
   materialName: string;
-  unit: IMaterialUnit;
+  type: MaterialType;
+  size: string;
   reservedAmount: number;
   collectionColors: CollectionColor[];
   stocks: Stock[];

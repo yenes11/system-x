@@ -18,12 +18,10 @@ export default function DashboardLayout({
     <Providers>
       <div className="flex w-full">
         <Sidebar />
-        {/* <div className="w-full"> */}
-        <div className="bg-soft h-screen w-full min-w-0 max-w-full overflow-auto">
+        <div className="h-screen w-full min-w-0 max-w-full overflow-auto bg-soft">
           <Header />
           <main className="p-4 md:px-8">{children}</main>
         </div>
-        {/* </div> */}
       </div>
     </Providers>
   );

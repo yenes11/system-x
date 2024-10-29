@@ -6,7 +6,7 @@ import { getSuppliers } from '@/lib/api-calls';
 import { getTranslations } from 'next-intl/server';
 import { Mate } from 'next/font/google';
 
-async function MaterialSupplierManagement({
+async function SupplierPage({
   searchParams
 }: {
   searchParams: { size: string; index: string };
@@ -24,7 +24,7 @@ async function MaterialSupplierManagement({
       <div className="space-y-2">
         <div className="mb-4 flex justify-between">
           <Heading
-            title={t('material_management')}
+            title={t('suppliers')}
             icon={<Icon icon="delivery-3" size={24} currentColor />}
           />
           <AddSupplierSheet />
@@ -35,4 +35,4 @@ async function MaterialSupplierManagement({
   );
 }
 
-export default MaterialSupplierManagement;
+export default SupplierPage;

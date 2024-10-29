@@ -66,8 +66,6 @@ function FabricCarousel({ data }: Props) {
 
   const [searchKey, setSearchKey] = useState('');
 
-  console.log(data, 'hello');
-
   const filteredData = useMemo(() => {
     return data.filter(
       (fabric) =>
@@ -96,14 +94,13 @@ function FabricCarousel({ data }: Props) {
       />
       <EditFabricSheet state={editState} setState={setEditState} />
       <div className="mb-4 flex gap-4">
-        <AssignFabricSheet />
-
         <SearchBar
           value={searchKey}
           onChange={(e) => setSearchKey(e.target.value)}
-          className="w-auto min-w-72 rounded-full bg-card"
+          className="w-auto min-w-72 bg-card"
           placeholder={t('search_fabric_color_code')}
         />
+        <AssignFabricSheet />
       </div>
       <Carousel
         opts={{

@@ -91,7 +91,6 @@ export function EditDepartmentSheet() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     editDepartment.mutate(values);
   }
 

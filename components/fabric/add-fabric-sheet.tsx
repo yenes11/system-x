@@ -10,23 +10,19 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
-} from '@/components/ui/sheet';
 import useFabricTypesQuery from '@/hooks/queries/useFabricTypesQuery';
 import useFabricUnitsQuery from '@/hooks/queries/useFabricUnitsQuery';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusIcon } from '@radix-ui/react-icons';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import { Origami } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import ThemedSheet from '../themed-sheet';
 import { Button } from '../ui/button';
+import Icon from '../ui/icon';
 import {
   Select,
   SelectContent,
@@ -36,11 +32,6 @@ import {
   SelectValue
 } from '../ui/select';
 import { useToast } from '../ui/use-toast';
-import { addFabricFn } from '@/app/actions';
-import { Origami } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import Icon from '../ui/icon';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -49,14 +40,22 @@ const formSchema = z.object({
   fabricTypeId: z.string().uuid()
 });
 
+const defaultValues = {
+  name: '',
+  grammage: 0,
+  fabricTypeId: '',
+  fabricUnitId: ''
+}
+
 function AddFabricSheet() {
+  const t = useTranslations();
+  const router = useRouter();
+  const { toast } = useToast();
+  
   const [open, setOpen] = useState(false);
 
   const fabricTypes = useFabricTypesQuery({ enabled: open });
   const fabricUnits = useFabricUnitsQuery({ enabled: open });
-  const t = useTranslations();
-  const router = useRouter();
-  const { toast } = useToast();
 
   const addFabric = useMutation({
     mutationKey: ['add-fabric'],
@@ -77,12 +76,7 @@ function AddFabricSheet() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      grammage: 0,
-      fabricTypeId: '',
-      fabricUnitId: ''
-    }
+    defaultValues
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -90,18 +84,18 @@ function AddFabricSheet() {
   };
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button>
+      <ThemedSheet
+        open={open}
+        setOpen={setOpen}
+        title={t('add_new_fabric')}
+        triggerLabel={t('add_new_fabric')}
+        triggerIcon={
           <Icon className="mr-2" currentColor size={16} icon="plus" />
-          {t('add_new_fabric')}
-        </Button>
-      </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
+        }
+        headerIcon={
           <Origami size={18} className="mr-2 text-muted-foreground" />
-          <SheetTitle>{t('add_new_fabric')}</SheetTitle>
-        </SheetHeader>
+        }
+      >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -109,7 +103,7 @@ function AddFabricSheet() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('name')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Keten" {...field} />
                   </FormControl>
@@ -170,15 +164,14 @@ function AddFabricSheet() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('fabric_unit')}</FormLabel>
+                  <FormControl>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={t('select_fabric_unit')} />
                       </SelectTrigger>
-                    </FormControl>
                     <SelectContent>
                       {fabricUnits.data?.map((fabricUnit) => (
                         <SelectItem key={fabricUnit.id} value={fabricUnit.id}>
@@ -187,6 +180,7 @@ function AddFabricSheet() {
                       ))}
                     </SelectContent>
                   </Select>
+                      </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -200,9 +194,7 @@ function AddFabricSheet() {
             </Button>
           </form>
         </Form>
-        {/* )} */}
-      </SheetContent>
-    </Sheet>
+      </ThemedSheet>
   );
 }
 

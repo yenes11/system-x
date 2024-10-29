@@ -3,6 +3,7 @@ import FabricColorCard from '@/components/fabric-color/fabric-color-card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TableCell, TableRow } from '@/components/ui/table';
+import { FabricColor } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
 import { flexRender } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
@@ -11,39 +12,41 @@ import React from 'react';
 interface Props {
   row: any;
   expandedRows: string[];
-  setExpandedRows: React.Dispatch<React.SetStateAction<string[]>>;
   toggleRow: (id: string) => void;
+  data: FabricColor[];
 }
 
-const data = [
-  { name: 'ingredients', completed: 230, failed: 335, inprogress: 453 }
-];
-
-function getRandomHexColor() {
-  const hex = Math.floor(Math.random() * 0xffffff);
-  const color = '#' + hex.toString(16).padStart(6, '0');
-  return color;
-}
-
-function FabricRow({ row, expandedRows, setExpandedRows, toggleRow }: Props) {
+function FabricRow({ data, row, expandedRows, toggleRow }: Props) {
   const t = useTranslations();
-  const colors = useQuery({
-    queryKey: ['fabric-color', row.original.id],
-    queryFn: async () => {
-      const res = await api.get(`/Fabrics/${row.original.id}`);
-      const colors = res.data.colors;
-      colors.map((color: any) => {
-        const ingredients: any = {};
-        color.ingredients.forEach((ingredient: any) => {
-          ingredients[ingredient.name] = ingredient.percentage;
-        });
-        color.chartData = [ingredients];
-        return color;
+  // const colors = useQuery({
+  //   queryKey: ['fabric-color', row.original.id],
+  //   queryFn: async () => {
+  //     const res = await api.get(`/Fabrics/${row.original.id}`);
+  //     const colors = res.data.colors;
+  //     colors.map((color: any) => {
+  //       const ingredients: any = {};
+  //       color.ingredients.forEach((ingredient: any) => {
+  //         ingredients[ingredient.name] = ingredient.percentage;
+  //       });
+  //       color.chartData = [ingredients];
+  //       return color;
+  //     });
+  //     return colors;
+  //   },
+  //   enabled: expandedRows.includes(row.original.id)
+  // });
+
+  const colors = React.useMemo(() => {
+    data.map((color: any) => {
+      const ingredients: any = {};
+      color.ingredients.forEach((ingredient: any) => {
+        ingredients[ingredient.name] = ingredient.percentage;
       });
-      return colors;
-    },
-    enabled: expandedRows.includes(row.original.id)
-  });
+      color.chartData = [ingredients];
+      return color;
+    });
+    return data;
+  }, [data]);
 
   return (
     <>
@@ -71,26 +74,7 @@ function FabricRow({ row, expandedRows, setExpandedRows, toggleRow }: Props) {
         })}
       </TableRow>
       {expandedRows.includes(row.original.id) &&
-        (colors.isLoading ? (
-          <TableCell colSpan={6}>
-            <div className="grid grid-cols-2 gap-4 py-2">
-              <div className="flex gap-4 space-y-3">
-                <Skeleton className="h-24 w-24 rounded bg-gray-600/20" />
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-[250px] bg-gray-600/20" />
-                  <Skeleton className="h-4 w-[200px] bg-gray-600/20" />
-                </div>
-              </div>
-              <div className="flex gap-4 space-y-3">
-                <Skeleton className="h-24 w-24 rounded bg-gray-600/20" />
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-[250px] bg-gray-600/20" />
-                  <Skeleton className="h-4 w-[200px] bg-gray-600/20" />
-                </div>
-              </div>
-            </div>
-          </TableCell>
-        ) : colors.data.length === 0 ? (
+        (colors.length === 0 ? (
           <TableCell
             className="py-8 text-center text-card-foreground/60"
             colSpan={6}
@@ -101,7 +85,7 @@ function FabricRow({ row, expandedRows, setExpandedRows, toggleRow }: Props) {
           <TableRow>
             <TableCell className="p-0" colSpan={6}>
               <div className="grid grid-cols-1 sm:grid-cols-2">
-                {colors.data?.map((color: any) => (
+                {colors?.map((color: any) => (
                   <FabricColorCard
                     key={color.id}
                     id={color.id}

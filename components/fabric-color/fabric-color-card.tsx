@@ -16,7 +16,7 @@ function FabricColorCard({ id, name, img, ingredients }: Props) {
   return (
     <Link
       href={`/fabric/library/color/${id}`}
-      className="border-r-light-foreground flex gap-4 rounded-none bg-card p-4 shadow-none sm:odd:border-r"
+      className="flex gap-4 rounded-none border-b border-r-light-foreground bg-card p-4 shadow-none sm:odd:border-r"
     >
       <img className="h-24 w-24 rounded object-cover" src={img} alt={name} />
       <div className="flex flex-col gap-2">
@@ -28,10 +28,10 @@ function FabricColorCard({ id, name, img, ingredients }: Props) {
           <span className="mb-1 text-xs text-muted-foreground">
             {t('ingredients')}
           </span>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {ingredients.map((ingredient, index) => (
               <Badge
-                className="border border-primary bg-primary/30 text-primary-foreground"
+                className="text-nowrap border border-primary bg-primary/30 text-primary-foreground"
                 key={index}
               >
                 {ingredient.percentage}% {ingredient.name}

@@ -103,8 +103,6 @@ export function AddEmployeeSheet() {
     setOpen(open);
   };
 
-  console.log(form.getValues());
-
   const employeeTypes = useQuery({
     queryKey: ['employee-types'],
     queryFn: async () => {
@@ -151,7 +149,6 @@ export function AddEmployeeSheet() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(123);
     addEmployee.mutate(values);
   }
 

@@ -29,7 +29,7 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html className="overflow-hidden" lang={locale}>
       <body className={inter.className} suppressHydrationWarning={true}>
         <NextTopLoader color="#0d9488" showSpinner={false} />
         <NextIntlClientProvider locale={locale} messages={messages}>

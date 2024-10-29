@@ -48,8 +48,6 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
     }
   });
 
-  console.log(color.collectionColors);
-
   const stockInHandCount = color.stocks.reduce(
     (sum: number, item: any) => sum + item.remainingAmount,
     0

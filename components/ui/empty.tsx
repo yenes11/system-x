@@ -2,20 +2,27 @@
 
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 function Empty({ description = '' }: { description?: string }) {
   const t = useTranslations();
   const { theme } = useTheme();
+  // let isDark = false;
   const [isDark, setIsDark] = useState(false);
+  const [resolvedTheme, setResolvedTheme] = useState(false);
 
-  useEffect(() => {
-    setIsDark(theme === 'dark');
+  useLayoutEffect(() => {
+    // isDark = theme === 'dark';
+    // console.log(isDark, 'isdark');
+    // setIsDark(theme === 'dark');
+    setResolvedTheme(true);
   }, [theme]);
+
+  if (!resolvedTheme) return null;
 
   return (
     <div className="flex flex-col items-center">
-      {isDark ? (
+      {theme === 'dark' ? (
         <svg
           width="64"
           height="41"
@@ -54,7 +61,7 @@ function Empty({ description = '' }: { description?: string }) {
           </g>
         </svg>
       )}
-      <span className="text-icon mt-2">{description || t('no_data')}</span>
+      <span className="mt-2 text-icon">{description || t('no_data')}</span>
     </div>
   );
 }
