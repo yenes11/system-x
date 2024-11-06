@@ -1,4 +1,5 @@
 import api from '@/api';
+import AddCollectionDialog from '@/components/collection/add-collection-dialog';
 import CollectionTable from '@/components/collection/collection-table';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
@@ -52,6 +53,7 @@ async function CollectionLibraryPage({
           title={t('collections')}
           description=""
         />
+        <AddCollectionDialog />
       </div>
       <CollectionTable data={collections} />
     </div>

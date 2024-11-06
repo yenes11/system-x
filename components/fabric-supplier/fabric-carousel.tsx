@@ -31,13 +31,16 @@ import AssignFabricSheet from './assign-fabric-sheet';
 import ThemedZoom from '../themed-zoom';
 
 interface SupplierFabric {
-  fabricSupplierFabricColorId: string;
-  fabricName: string;
-  fabricColor: string;
+  id: string;
+  fabricId: string;
+  fabricColorId: string;
+  name: string;
+  color: string;
   manufacturerCode: string;
   unit: string;
-  type: string;
-  image: string;
+  originalImage: string;
+  grammage: number;
+  supplierImage: string;
 }
 
 interface Props {
@@ -56,7 +59,7 @@ function FabricCarousel({ data }: Props) {
   });
   const [editState, setEditState] = useState({
     open: false,
-    fabricColorId: '',
+    id: '',
     manufacturerCode: ''
   });
   const [addPriceState, setAddPriceState] = useState({
@@ -69,8 +72,8 @@ function FabricCarousel({ data }: Props) {
   const filteredData = useMemo(() => {
     return data.filter(
       (fabric) =>
-        fabric.fabricName.toLowerCase().includes(searchKey.toLowerCase()) ||
-        fabric.fabricColor.toLowerCase().includes(searchKey.toLowerCase()) ||
+        fabric.name.toLowerCase().includes(searchKey.toLowerCase()) ||
+        fabric.color.toLowerCase().includes(searchKey.toLowerCase()) ||
         fabric.manufacturerCode.toLowerCase().includes(searchKey.toLowerCase())
     );
   }, [data, searchKey]);
@@ -87,7 +90,7 @@ function FabricCarousel({ data }: Props) {
       />
       <ConfirmDeleteDialog
         title={t('delete')}
-        endpoint="/FabricSupplierFabricColors"
+        endpoint="/SupplierFabricColors"
         mutationKey={['delete-collection']}
         state={deleteState}
         setState={setDeleteState}
@@ -114,18 +117,21 @@ function FabricCarousel({ data }: Props) {
               <Empty description={t('fabric_carousel_empty_description')} />
             </div>
           ) : (
-            filteredData?.map((fabric: any, index: number) => (
+            filteredData?.map((fabric, index: number) => (
               <CarouselItem key={index} className="lg:w-64">
                 <Card className="overflow-hidden bg-cover bg-center p-0">
                   <CardHeader className="flex justify-center bg-muted/50 px-3 py-2">
-                    <CardTitle className="text-md gap-2 p-0 text-center ">
-                      {fabric.fabricName}-{fabric.fabricColor}
+                    <CardTitle
+                      title={`${fabric.color} - ${fabric.name}`}
+                      className="text-md w-full max-w-full gap-2 overflow-hidden text-ellipsis text-nowrap p-0 text-center"
+                    >
+                      {fabric.color} - {fabric.name}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
                     <ThemedZoom>
                       <img
-                        src={fabric.image}
+                        src={fabric.supplierImage || fabric.originalImage}
                         className="aspect-square w-full origin-top-left object-cover object-top"
                       />
                     </ThemedZoom>
@@ -137,11 +143,11 @@ function FabricCarousel({ data }: Props) {
                     </code>
                     <div className="flex gap-2">
                       <Badge className="bg-blue-600/20 text-blue-800 dark:text-blue-300">
-                        {fabric.unit}
+                        {fabric.grammage}
                       </Badge>
-                      <Badge className="bg-emerald-600/20 text-emerald-800 dark:text-emerald-300">
+                      {/* <Badge className="bg-emerald-600/20 text-emerald-800 dark:text-emerald-300">
                         {fabric.type}
-                      </Badge>
+                      </Badge> */}
                     </div>
                     <div className="flex w-full">
                       <Button
@@ -149,10 +155,9 @@ function FabricCarousel({ data }: Props) {
                         onClick={() =>
                           setDeleteState({
                             open: true,
-                            id: fabric.fabricSupplierFabricColorId
+                            id: fabric.id
                           })
                         }
-                        // variant={'destructive'}
                         variant="secondary"
                         size="sm"
                       >
@@ -165,7 +170,7 @@ function FabricCarousel({ data }: Props) {
                         size="sm"
                         onClick={() => {
                           setEditState({
-                            fabricColorId: fabric.fabricSupplierFabricColorId,
+                            id: fabric.id,
                             manufacturerCode: fabric.manufacturerCode,
                             open: true
                           });
@@ -181,7 +186,7 @@ function FabricCarousel({ data }: Props) {
                         onClick={() => {
                           setAddPriceState({
                             open: true,
-                            fabricColorId: fabric.fabricSupplierFabricColorId
+                            fabricColorId: fabric.id
                           });
                         }}
                       >
@@ -195,7 +200,7 @@ function FabricCarousel({ data }: Props) {
                         onClick={() => {
                           setRecentPricesState({
                             open: true,
-                            fabricColorId: fabric.fabricSupplierFabricColorId
+                            fabricColorId: fabric.id
                           });
                         }}
                       >

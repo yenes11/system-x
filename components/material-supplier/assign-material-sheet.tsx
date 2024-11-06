@@ -38,10 +38,28 @@ import {
 import { useToast } from '../ui/use-toast';
 import { getMaterialUrl } from '@/constants/api-constants';
 
+const ACCEPTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp'
+];
+const MAX_FILE_SIZE = 5; // MB
+
 const formSchema = z.object({
   material: z.string().uuid(),
   materialColorId: z.string().uuid(),
-  manufacturerCode: z.string()
+  manufacturerCode: z.string(),
+  image: z
+    .any()
+    .refine(
+      (file) => file?.size <= MAX_FILE_SIZE * 1_000_000,
+      `Max image size is ${MAX_FILE_SIZE}MB.`
+    )
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      'Only .jpg, .jpeg, .png and .webp formats are supported.'
+    )
 });
 
 interface Props {
@@ -55,7 +73,7 @@ function AssignMaterialSheet() {
   const router = useRouter();
 
   const params = useParams();
-  const materialSupplierId = params.id as string;
+  const supplierId = params.id as string;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
@@ -91,7 +109,7 @@ function AssignMaterialSheet() {
   const assignMaterial = useMutation({
     mutationKey: ['assign-material'],
     mutationFn: async (values: any) => {
-      const res = await api.post('/MaterialSupplierMaterialColors', values);
+      const res = await api.post('/SupplierMaterialColorVariants', values);
       return res;
     },
     onSuccess: async (res) => {
@@ -104,14 +122,15 @@ function AssignMaterialSheet() {
     }
   });
 
-  const onSubmit = (
-    values: Partial<z.infer<typeof formSchema>> & {
-      materialSupplierId?: string;
-    }
-  ) => {
-    delete values.material;
-    values.materialSupplierId = materialSupplierId;
-    assignMaterial.mutate(values);
+  const onSubmit = (values: Partial<z.infer<typeof formSchema>>) => {
+    const formData = new FormData();
+
+    formData.append('supplierId', supplierId);
+    formData.append('materialColorId', values.materialColorId || '');
+    formData.append('manufacturerCode', values.manufacturerCode || '');
+    formData.append('image', values.image);
+
+    assignMaterial.mutate(formData);
   };
 
   return (
@@ -138,6 +157,7 @@ function AssignMaterialSheet() {
                   <Select
                     onValueChange={(val) => {
                       field.onChange(val);
+                      form.setValue('materialColorId', '');
                     }}
                     defaultValue={field.value}
                   >
@@ -168,6 +188,7 @@ function AssignMaterialSheet() {
                   <FormLabel>{t('color')}</FormLabel>
                   <Select
                     disabled={!isFabricSelected}
+                    key={form.watch('material')}
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
@@ -205,6 +226,29 @@ function AssignMaterialSheet() {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field: { onChange, value, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>{t('image')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      {...fieldProps}
+                      className="px-0 py-0"
+                      accept="image/*"
+                      onChange={(event) =>
+                        onChange(event.target.files && event.target.files[0])
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <Button
               loading={assignMaterial.isPending}
               className="w-full"

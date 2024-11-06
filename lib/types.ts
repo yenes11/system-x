@@ -3,13 +3,11 @@ export interface Ingredient {
   percentage: number;
 }
 
-export type Fabric = {
-  id: string;
-  name: string;
+export interface Fabric extends BasicEntity {
   grammage: number;
   fabricUnitName: string;
   fabricTypeName: string;
-};
+}
 
 export interface BasicEntity {
   id: string;
@@ -24,25 +22,19 @@ export const SupplierType = {
 
 export type ISupplierType = keyof typeof SupplierType;
 
-export interface FabricWithColors {
-  id: string;
-  name: string;
+export interface FabricWithColors extends BasicEntity {
   grammage: number;
   unit: string;
   type: string;
   colors: FabricColor[];
 }
 
-export interface FabricColor {
-  id: string;
-  name: string;
+export interface FabricColor extends BasicEntity {
   image: string;
   ingredients: Ingredient[];
 }
 
-export interface Warehouse {
-  id: string;
-  name: string;
+export interface Warehouse extends BasicEntity {
   address: string;
   longitude: string;
   latitude: string;
@@ -50,9 +42,7 @@ export interface Warehouse {
   supportPhone: string;
 }
 
-export interface Department {
-  id: string;
-  name: string;
+export interface Department extends BasicEntity {
   parentCustomerDepartmentId: string | null;
   employees: Employee[];
   childs: Department[];
@@ -68,10 +58,7 @@ export interface Employee {
   customerDepartmentId: string;
 }
 
-export interface EmployeeType {
-  id: string;
-  name: string;
-}
+export interface EmployeeType extends BasicEntity {}
 
 export const CollectionStatus = {
   1: 'unknown',
@@ -93,23 +80,16 @@ export const CollectionPingColor = {
 
 export type ICollectionStatus = keyof typeof CollectionStatus;
 
-export interface Category {
-  id: string;
-  name: string;
+export interface Category extends BasicEntity {
   parentCategoryId: string | null;
   shortName: string;
   description: string;
   subCategories: Category[];
 }
 
-export interface SubcategoryInfo {
-  id: string;
-  name: string;
-}
+export interface SubcategoryInfo extends BasicEntity {}
 
-export interface ICollection {
-  id: string;
-  name: string;
+export interface ICollection extends BasicEntity {
   image: string;
   customerCode: string;
   manufacturerCode: string;
@@ -125,9 +105,7 @@ export interface MaterialCollection {
   amount: number;
 }
 
-export interface IColor {
-  id: string;
-  name: string;
+export interface IColor extends BasicEntity {
   image: string;
 }
 
@@ -159,16 +137,12 @@ interface MaterialColorVariant {
   image: string;
 }
 
-export interface MaterialColor {
-  id: string;
-  name: string;
+export interface MaterialColor extends BasicEntity {
   image: string;
   variants: MaterialColorVariant[];
 }
 
-export interface IMaterial {
-  id: string;
-  name: string;
+export interface IMaterial extends BasicEntity {
   type: MaterialType;
   attributes: MaterialAttribute[];
   colors: MaterialColor[];
@@ -217,9 +191,7 @@ interface MaterialSupplier {
   authorizedPersonFullName: string;
 }
 
-export interface Supplier {
-  id: string;
-  name: string;
+export interface Supplier extends BasicEntity {
   address: string;
   phone: string;
   authorizedPersonFullName: string;
@@ -243,3 +215,41 @@ export type ApiError = {
   message: string;
   statusCode: number;
 };
+
+export interface ProductStation extends BasicEntity {
+  priority: 1 | 2 | 3;
+}
+
+export interface CollectionNote {
+  id: string;
+  user: string;
+  message: string;
+  createdDate: string;
+  updatedDate?: string;
+}
+
+export interface CollectionGallery {
+  id: string;
+  image: string;
+  createdDate: string;
+}
+
+export interface CollectionDetails extends BasicEntity {
+  description: string;
+  image: string;
+  customerCode: string;
+  manufacturerCode: string;
+  customer: string;
+  department: string;
+  category: string;
+  season: string;
+  buyer: string;
+  sizeType: string;
+  garment1?: string;
+  garment2?: string;
+  designer?: string;
+  status: keyof typeof CollectionStatus;
+  productStations: ProductStation[];
+  collectionNotes: CollectionNote[];
+  collectionGalleries: CollectionGallery[];
+}

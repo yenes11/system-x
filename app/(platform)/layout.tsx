@@ -20,7 +20,7 @@ export default function DashboardLayout({
         <Sidebar />
         <div className="h-screen w-full min-w-0 max-w-full overflow-auto bg-soft">
           <Header />
-          <main className="p-4 md:px-8">{children}</main>
+          <main className="p-4 md:p-8">{children}</main>
         </div>
       </div>
     </Providers>

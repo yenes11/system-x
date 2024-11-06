@@ -26,6 +26,8 @@ export function UserNav() {
   });
   const router = useRouter();
 
+  console.log(user, 'user');
+
   const initials = user?.data?.fullName
     ? user.data.fullName
         .split(' ')

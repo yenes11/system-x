@@ -10,6 +10,7 @@ import {
 } from '@/constants/api-constants';
 import {
   ApiError,
+  CollectionDetails,
   Fabric,
   ICollectionStatus,
   MaterialVariant,
@@ -29,6 +30,19 @@ export const getFabricSuppliers = async (params: Params) => {
     return res.data;
   } catch (e: any) {
     console.log(e?.response?.data, 'error');
+  }
+};
+
+export const getCollectionDetails = async (id: string) => {
+  try {
+    const res = await api.get(`/Collections/${id}`);
+    return res.data as CollectionDetails;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.title || 'An error occurred');
+    } else {
+      throw new Error('An unknown error occurred');
+    }
   }
 };
 

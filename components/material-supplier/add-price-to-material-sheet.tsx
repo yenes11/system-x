@@ -64,7 +64,7 @@ function AddPriceToMaterialSheet({ state, setState }: Props) {
   const addPrice = useMutation({
     mutationKey: ['edit-price-to-material'],
     mutationFn: async (values: any) => {
-      const res = await api.post('/MaterialColorPrices', values);
+      const res = await api.post('/MaterialColorVariantPrices', values);
       return res;
     },
     onSuccess: async (res) => {
@@ -86,10 +86,10 @@ function AddPriceToMaterialSheet({ state, setState }: Props) {
 
   const onSubmit = (
     values: Partial<z.infer<typeof formSchema>> & {
-      materialSupplierMaterialColorId?: string;
+      supplierMaterialColorVariantId?: string;
     }
   ) => {
-    values.materialSupplierMaterialColorId = state.materialColorId;
+    values.supplierMaterialColorVariantId = state.materialColorId;
     addPrice.mutate(values);
   };
 

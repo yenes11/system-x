@@ -26,13 +26,32 @@ import { z } from 'zod';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 
+const ACCEPTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp'
+];
+const MAX_FILE_SIZE = 5; // MB
+
 const formSchema = z.object({
-  manufacturerCode: z.string()
+  manufacturerCode: z.string(),
+  image: z
+    .any()
+    .nullable()
+    .refine(
+      (file) => !file || file?.size <= MAX_FILE_SIZE * 1_000_000,
+      `Max image size is ${MAX_FILE_SIZE}MB.`
+    )
+    .refine(
+      (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      'Only .jpg, .jpeg, .png and .webp formats are supported.'
+    )
 });
 
 interface EditState {
   open: boolean;
-  fabricColorId: string;
+  id: string;
   manufacturerCode: string;
 }
 
@@ -53,14 +72,14 @@ function EditFabricSheet({ state, setState }: Props) {
   const editFabric = useMutation({
     mutationKey: ['edit-fabric'],
     mutationFn: async (values: any) => {
-      const res = await api.put('/FabricSupplierFabricColors', values);
+      const res = await api.put('/SupplierFabricColors', values);
       return res;
     },
     onSuccess: async (res) => {
       router.refresh();
       setState({
         open: false,
-        fabricColorId: '',
+        id: '',
         manufacturerCode: ''
       });
       toast({
@@ -72,16 +91,16 @@ function EditFabricSheet({ state, setState }: Props) {
 
   useEffect(() => {
     form.reset({ manufacturerCode: state.manufacturerCode });
-  }, [state.fabricColorId]);
+  }, [state.id]);
 
-  const onSubmit = (
-    values: Partial<z.infer<typeof formSchema>> & {
-      id?: string;
-    }
-  ) => {
-    values.id = state.fabricColorId;
-    // values.fabricSupplierId = state.fabricSupplierId;
-    editFabric.mutate(values);
+  const onSubmit = (values: Partial<z.infer<typeof formSchema>>) => {
+    const formData = new FormData();
+
+    formData.append('id', state.id);
+    formData.append('ManufacturerCode', values.manufacturerCode || '');
+    formData.append('Image', values.image);
+
+    editFabric.mutate(formData);
   };
 
   return (
@@ -120,6 +139,29 @@ function EditFabricSheet({ state, setState }: Props) {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field: { onChange, value, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>{t('image')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      {...fieldProps}
+                      accept="image/*"
+                      className="px-0 py-0"
+                      onChange={(event) =>
+                        onChange(event.target.files && event.target.files[0])
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <Button className="w-full" type="submit">
               {t('submit')}
             </Button>

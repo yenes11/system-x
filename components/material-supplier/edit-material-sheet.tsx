@@ -26,8 +26,27 @@ import { z } from 'zod';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 
+const ACCEPTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp'
+];
+const MAX_FILE_SIZE = 5; // MB
+
 const formSchema = z.object({
-  manufacturerCode: z.string()
+  manufacturerCode: z.string(),
+  image: z
+    .any()
+    .nullable()
+    .refine(
+      (file) => !file || file?.size <= MAX_FILE_SIZE * 1_000_000,
+      `Max image size is ${MAX_FILE_SIZE}MB.`
+    )
+    .refine(
+      (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      'Only .jpg, .jpeg, .png and .webp formats are supported.'
+    )
 });
 
 interface EditState {
@@ -53,7 +72,7 @@ function EditMaterialSheet({ state, setState }: Props) {
   const editMaterial = useMutation({
     mutationKey: ['edit-material'],
     mutationFn: async (values: any) => {
-      const res = await api.put('/materialSupplierMaterialColors', values);
+      const res = await api.put('/SupplierMaterialColorVariants', values);
       return res;
     },
     onSuccess: async (res) => {
@@ -74,13 +93,14 @@ function EditMaterialSheet({ state, setState }: Props) {
     form.reset({ manufacturerCode: state.manufacturerCode });
   }, [state.materialColorId]);
 
-  const onSubmit = (
-    values: Partial<z.infer<typeof formSchema>> & {
-      id?: string;
-    }
-  ) => {
-    values.id = state.materialColorId;
-    editMaterial.mutate(values);
+  const onSubmit = (values: Partial<z.infer<typeof formSchema>>) => {
+    const formData = new FormData();
+
+    formData.append('id', state.materialColorId);
+    formData.append('ManufacturerCode', values.manufacturerCode || '');
+    formData.append('Image', values.image);
+
+    editMaterial.mutate(formData);
   };
 
   return (
@@ -114,6 +134,29 @@ function EditMaterialSheet({ state, setState }: Props) {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field: { onChange, value, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>{t('image')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      {...fieldProps}
+                      accept="image/*"
+                      className="px-0 py-0"
+                      onChange={(event) =>
+                        onChange(event.target.files && event.target.files[0])
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <Button
               loading={editMaterial.isPending}
               className="w-full"

@@ -200,5 +200,21 @@
   "attribute": "Özellik",
   "add_attribute": "Özellik Ekle",
   "value": "Değer",
-  "supplier": "Tedarikçi"
+  "supplier": "Tedarikçi",
+  "FabricMaterialSupplier": "Kumaş ve Malzeme",
+  "FabricSupplier": "Kumaş",
+  "MaterialSupplier": "Malzeme",
+  "collection_details": "Koleksiyon Detayları",
+  "department": "Departman",
+  "category": "Kategori",
+  "season": "Sezon",
+  "buyer": "Alıcı",
+  "size_type": "Boyut Tipi",
+  "garment_1": "Giysi 1",
+  "garment_2": "Giysi 2",
+  "designer": "Tasarımcı",
+  "product_stations": "Ürün İstasyonları",
+  "notes": "Notlar",
+  "gallery": "Galeri",
+  "note_added": "Not eklendi"
 }

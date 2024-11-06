@@ -59,6 +59,7 @@ function AddPriceSheet() {
   const idProperty = 'materialSupplierMaterialColorId';
   const supplierColorsEndpoint =
     '/MaterialSuppliers/GetSuppliersForMaterialColor?MaterialColorId=';
+
   const addPriceEndpoint = '/MaterialColorPrices';
 
   const supplierColors = useQuery({

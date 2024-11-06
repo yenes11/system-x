@@ -320,7 +320,14 @@ function CollectionTable({ data }: Props) {
                       </Badge>
                     </div>
                     <div className="flex flex-[2] flex-col items-end justify-between gap-2">
-                      <Button variant="outline">
+                      <Button
+                        onClick={() =>
+                          router.push(
+                            `/collection/manage-collection/${row.original.id}`
+                          )
+                        }
+                        variant="outline"
+                      >
                         {t('manage_collection')}
                       </Button>
                       <Button variant="outline">{t('manage_draft')}</Button>

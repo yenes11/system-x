@@ -14,6 +14,7 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
+  SheetTitle,
   SheetTrigger
 } from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -85,10 +86,10 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
 
   const onSubmit = (
     values: Partial<z.infer<typeof formSchema>> & {
-      fabricSupplierFabricColorId?: string;
+      supplierFabricColorId?: string;
     }
   ) => {
-    values.fabricSupplierFabricColorId = state.fabricColorId;
+    values.supplierFabricColorId = state.fabricColorId;
 
     addPrice.mutate(values);
   };
@@ -105,12 +106,7 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
     >
       <SheetContent>
         <SheetHeader>
-          {/* <SheetTitle>Add new fabric</SheetTitle> */}
-
-          {/* <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription> */}
+          <SheetTitle>{t('add_fabric_price')}</SheetTitle>
         </SheetHeader>
 
         <Form {...form}>

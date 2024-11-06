@@ -29,32 +29,34 @@ import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { useToast } from '../ui/use-toast';
 import { usePathname, useRouter } from 'next/navigation';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '../ui/select';
+import { SupplierType } from '@/lib/types';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   address: z.string().min(1).max(255),
   phone: z.string().refine(validator.isMobilePhone),
   authorizedPersonFullName: z.string().min(2).max(50),
-  billingAddress: z.string().min(1).max(255)
+  billingAddress: z.string().min(1).max(255),
+  type: z.number()
 });
 
 function AddSupplierSheet() {
   const t = useTranslations();
-  const queryClient = useQueryClient();
-  const [open, setOpen] = useState(false);
-  const { toast } = useToast();
   const router = useRouter();
-  const pathname = usePathname();
-
-  const endpoint =
-    pathname === '/fabric/supplier-management'
-      ? '/FabricSuppliers'
-      : '/MaterialSuppliers';
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
 
   const addSupplier = useMutation({
     mutationKey: ['add-supplier'],
     mutationFn: async (values: any) => {
-      const res = await api.post(endpoint, values);
+      const res = await api.post('/Suppliers', values);
       return res;
     },
     onSuccess: (res) => {
@@ -75,7 +77,8 @@ function AddSupplierSheet() {
       address: '',
       phone: '',
       authorizedPersonFullName: '',
-      billingAddress: ''
+      billingAddress: '',
+      type: undefined
     }
   });
 
@@ -110,6 +113,32 @@ function AddSupplierSheet() {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('type')}</FormLabel>
+                  <Select onValueChange={(val) => field.onChange(Number(val))}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('select_currency')} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.entries(SupplierType)?.map(([key, value]) => (
+                        <SelectItem key={key} value={key}>
+                          {t(value)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="phone"

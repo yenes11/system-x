@@ -1,36 +1,32 @@
 'use client';
 
+import { Euro, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
+import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import { SearchBar } from '../searchbar';
+import ThemedZoom from '../themed-zoom';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
-  CardFooter
+  CardFooter,
+  CardHeader,
+  CardTitle
 } from '../ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
-  CarouselNext
+  CarouselNext,
+  CarouselPrevious
 } from '../ui/carousel';
-import { useMemo, useState } from 'react';
-import { DeleteIcon, Euro, Pencil, Plus, Trash, Trash2 } from 'lucide-react';
-import AddPriceToFabricSheet from '../suppliers/add-price-to-fabric-sheet';
-import RecentPricesDialog from '../suppliers/recent-prices-dialog';
-import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import Empty from '../ui/empty';
-import { Input } from '../ui/input';
-import { Fabric, IMaterialUnit, MaterialUnit } from '@/lib/types';
-import { SearchBar } from '../searchbar';
-import ThemedZoom from '../themed-zoom';
-import AssignMaterialSheet from './assign-material-sheet';
-import MaterialRecentPricesDialog from './material-recent-prices-dialog';
 import AddPriceToMaterialSheet from './add-price-to-material-sheet';
+import AssignMaterialSheet from './assign-material-sheet';
 import EditMaterialSheet from './edit-material-sheet';
+import MaterialRecentPricesDialog from './material-recent-prices-dialog';
 
 interface SupplierMaterial {
   id: string;
@@ -94,7 +90,7 @@ function MaterialCarousel({ data }: Props) {
       />
       <ConfirmDeleteDialog
         title={t('delete')}
-        endpoint="/MaterialSupplierMaterialColors"
+        endpoint="/SupplierMaterialColorVariants"
         mutationKey={['delete-collection']}
         state={deleteState}
         setState={setDeleteState}
@@ -155,14 +151,13 @@ function MaterialCarousel({ data }: Props) {
                     <div className="flex w-full">
                       <Button
                         className="flex-1 rounded-none"
-                        // onClick={() =>
-                        //   setDeleteState({
-                        //     open: true,
-                        //     id: material.materialSupplierMaterialColorId
-                        //   })
-                        // }
-                        // variant={'destructive'}
-                        variant="secondary"
+                        onClick={() =>
+                          setDeleteState({
+                            open: true,
+                            id: material.id
+                          })
+                        }
+                        variant="destructive"
                         size="sm"
                       >
                         {/* {t('delete')} */}
@@ -173,12 +168,11 @@ function MaterialCarousel({ data }: Props) {
                         className="flex-1 rounded-none"
                         size="sm"
                         onClick={() => {
-                          // setEditState({
-                          //   materialColorId:
-                          //     material.materialSupplierMaterialColorId,
-                          //   manufacturerCode: material.manufacturerCode,
-                          //   open: true
-                          // });
+                          setEditState({
+                            materialColorId: material.id,
+                            manufacturerCode: material.manufacturerCode,
+                            open: true
+                          });
                         }}
                       >
                         <Pencil size={16} />
@@ -188,11 +182,10 @@ function MaterialCarousel({ data }: Props) {
                         className="flex-1 rounded-none"
                         size="sm"
                         onClick={() => {
-                          // setAddPriceState({
-                          //   open: true,
-                          //   materialColorId:
-                          //     material.materialSupplierMaterialColorId
-                          // });
+                          setAddPriceState({
+                            open: true,
+                            materialColorId: material.id
+                          });
                         }}
                       >
                         <Plus size={16} />
@@ -202,11 +195,10 @@ function MaterialCarousel({ data }: Props) {
                         className="flex-1 rounded-none"
                         size="sm"
                         onClick={() => {
-                          // setRecentPricesState({
-                          //   open: true,
-                          //   materialColorId:
-                          //     material.materialSupplierMaterialColorId
-                          // });
+                          setRecentPricesState({
+                            open: true,
+                            materialColorId: material.id
+                          });
                         }}
                       >
                         <Euro size={16} />

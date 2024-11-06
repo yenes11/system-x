@@ -44,7 +44,7 @@ function MaterialRecentPricesDialog({ state, setState }: any) {
     queryKey: ['material-recent-prices', state.materialColorId],
     queryFn: async () => {
       const res = await api.get(
-        `/MaterialColorPrices/GetMaterialPriceForSupplier?Size=20&MaterialSupplierMaterialColorId=${state.materialColorId}`
+        `/MaterialColorVariantPrices/GetMaterialPriceForSupplier?Size=20&MaterialSupplierMaterialColorId=${state.materialColorId}`
       );
       return res.data;
     },

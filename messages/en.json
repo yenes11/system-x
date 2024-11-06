@@ -200,5 +200,18 @@
   "attribute": "Attribute",
   "add_attribute": "Add Attribute",
   "value": "Value",
-  "supplier": "Supplier"
+  "supplier": "Supplier",
+  "FabricMaterialSupplier": "Fabric and Material",
+  "FabricSupplier": "Fabric",
+  "MaterialSupplier": "Material",
+  "collection_details": "Collection Details",
+  "department": "department",
+  "category": "Category",
+  "season": "Season",
+  "buyer": "Buyer",
+  "size_type": "Size Type",
+  "garment1": "Garment 1",
+  "garment2": "Garment 2",
+  "designer": "Designer",
+  "note_added": "Note added"
 }
