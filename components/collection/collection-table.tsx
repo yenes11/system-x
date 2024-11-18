@@ -330,7 +330,16 @@ function CollectionTable({ data }: Props) {
                       >
                         {t('manage_collection')}
                       </Button>
-                      <Button variant="outline">{t('manage_draft')}</Button>
+                      <Button
+                        onClick={() =>
+                          router.push(
+                            `/collection/manage-draft/${row.original.draftColor.id}`
+                          )
+                        }
+                        variant="outline"
+                      >
+                        {t('manage_draft')}
+                      </Button>
                       <div className="flex items-center gap-2">
                         <span className="relative flex h-[10px] w-[10px]">
                           <span

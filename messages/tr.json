@@ -216,5 +216,15 @@
   "product_stations": "Ürün İstasyonları",
   "notes": "Notlar",
   "gallery": "Galeri",
-  "note_added": "Not eklendi"
+  "note_added": "Not eklendi",
+  "add": "Ekle",
+  "add_product_station": "Ürün İstasyonu Ekle",
+  "collection_name": "Koleksiton Adı",
+  "collection_color": "Koleksiyon Rengi",
+  "customer_department": "Müşteri Departmanı",
+  "customer_season": "Müşteri Sezonu",
+  "add_fabric_to_collection": "Koleksiyona Kumaş Ekle",
+  "add_material_to_collection": "Koleksiyona Malzeme Ekle",
+  "select_a_variant": "Bir varyant seçiniz",
+  "material_assigned_successfully": "Malzeme eklendi"
 }

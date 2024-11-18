@@ -213,5 +213,15 @@
   "garment1": "Garment 1",
   "garment2": "Garment 2",
   "designer": "Designer",
-  "note_added": "Note added"
+  "note_added": "Note added",
+  "add": "Add",
+  "add_product_station": "Add Product Station",
+  "collection_name": "Collection Name",
+  "collection_color": "Collection Color",
+  "customer_department": "Customer Department",
+  "customer_season": "Customer Season",
+  "add_fabric_to_collection": "Add Fabric to Collection",
+  "add_material_to_collection": "Add Material to Collection",
+  "select_a_variant": "Select a variant",
+  "material_assigned_successfully": "Material assigned successfully"
 }

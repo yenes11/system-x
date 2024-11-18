@@ -1,48 +1,80 @@
+import api from '@/api';
 import CollectionGallery from '@/components/collection/collection-gallery';
 import CollectionNotes from '@/components/collection/collection-notes';
+import FabricCarousel from '@/components/collection/fabric-carousel';
+import MaterialCarousel from '@/components/collection/material-carousel';
+import ProductStations from '@/components/collection/product-stations';
 import ProductStationsStepper from '@/components/collection/product-stations-stepper';
+import ActiveOrdersTable from '@/components/fabric-color/active-orders-table';
+import FabricColorCollectionCarousel from '@/components/fabric-color/fabric-color-collection-caraousel';
+import IngredientsChart from '@/components/fabric-color/ingredients-chart';
+import RecentPricesTable from '@/components/fabric-color/recent-prices-table';
+import StocksTable from '@/components/fabric-color/stocks-table';
+import SuppliersTable from '@/components/fabric-color/suppliers-table';
 import ThemedZoom from '@/components/themed-zoom';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getCollectionDetails } from '@/lib/api-calls';
+import {
+  getCollectionDetails,
+  getCollectionDraftDetails
+} from '@/lib/api-calls';
+import { CollectionDetails } from '@/lib/types';
+import { cn } from '@/lib/utils';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient
+} from '@tanstack/react-query';
+import {
+  Blocks,
+  ConciergeBell,
+  Info,
+  Layers,
+  PaintBucket,
+  ScrollText
+} from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { Fragment } from 'react';
 // import CollectionCarousel from '@/components/fabric-color/collection-carousel';
 
-const collectionDetailItems = [
+const collectionDraftItems = [
   {
-    title: 'name',
-    key: 'name'
+    title: 'collection_name',
+    key: 'collectionName'
   },
   {
     title: 'description',
     key: 'description'
   },
   {
-    title: 'customer_code',
-    key: 'customerCode'
+    title: 'collection_color',
+    key: 'collectionColor'
   },
   {
-    title: 'manufacturer_code',
-    key: 'manufacturerCode'
-  },
-  {
-    title: 'customer',
-    key: 'customer'
-  },
-  {
-    title: 'department',
-    key: 'department'
+    title: 'customer_department',
+    key: 'customerDepartmentName'
   },
   {
     title: 'category',
-    key: 'category'
+    key: 'categoryName'
   },
   {
-    title: 'season',
-    key: 'season'
+    title: 'customer_season',
+    key: 'customerSeasonName'
   },
   {
     title: 'buyer',
@@ -50,7 +82,7 @@ const collectionDetailItems = [
   },
   {
     title: 'size_type',
-    key: 'sizeType'
+    key: 'sizeTypeName'
   },
   {
     title: 'garment_1',
@@ -63,12 +95,20 @@ const collectionDetailItems = [
   {
     title: 'designer',
     key: 'designer'
+  },
+  {
+    title: 'customer_code',
+    key: 'customerCode'
+  },
+  {
+    title: 'manufacturer_code',
+    key: 'manufacturerCode'
   }
 ];
 
 async function ManageCollectionPage({ params }: { params: { id: string } }) {
   const t = await getTranslations();
-  const collectionDetails = await getCollectionDetails(params.id);
+  const collectionDetails = await getCollectionDraftDetails(params.id);
 
   return (
     <Fragment>
@@ -97,7 +137,7 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
               {t('collection_details')}
             </div>
             <ul className="grid gap-3">
-              {collectionDetailItems.map((item) => (
+              {collectionDraftItems.map((item) => (
                 <li
                   key={item.key}
                   className="flex items-center justify-between"
@@ -111,27 +151,21 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="product-stations" className="space-y-4">
-        <TabsList className="flex">
-          <TabsTrigger className="flex-1" value="product-stations">
-            {t('product_stations')}
+      <Tabs defaultValue="fabric">
+        <TabsList className="mb-2">
+          <TabsTrigger className="w-44" value="fabric">
+            {t('fabric')}
           </TabsTrigger>
-          <TabsTrigger className="flex-1" value="notes">
-            {t('notes')}
-          </TabsTrigger>
-          <TabsTrigger className="flex-1" value="gallery">
-            {t('gallery')}
+
+          <TabsTrigger className="w-44" value="material">
+            {t('material')}
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="product-stations" className="space-y-4">
-          <ProductStationsStepper data={collectionDetails.productStations} />
-          {/* <ProductStations data={collectionDetails.productStations} /> */}
+        <TabsContent value="fabric">
+          <FabricCarousel data={collectionDetails.fabrics} />
         </TabsContent>
-        <TabsContent value="notes" className="">
-          <CollectionNotes notes={collectionDetails.collectionNotes} />
-        </TabsContent>
-        <TabsContent value="gallery" className="">
-          <CollectionGallery images={collectionDetails.collectionGalleries} />
+        <TabsContent value="material">
+          <MaterialCarousel data={collectionDetails.materials} />
         </TabsContent>
       </Tabs>
     </Fragment>

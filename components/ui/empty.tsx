@@ -1,10 +1,17 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 
-function Empty({ description = '' }: { description?: string }) {
+function Empty({
+  description = '',
+  className
+}: {
+  description?: string;
+  className?: string;
+}) {
   const t = useTranslations();
   const { theme } = useTheme();
   // let isDark = false;
@@ -21,7 +28,7 @@ function Empty({ description = '' }: { description?: string }) {
   if (!resolvedTheme) return null;
 
   return (
-    <div className="flex flex-col items-center">
+    <div className={cn('flex flex-col items-center', className)}>
       {theme === 'dark' ? (
         <svg
           width="64"

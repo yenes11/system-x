@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -16,6 +17,7 @@ interface Props {
   headerIcon?: React.ReactNode;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  footer?: React.ReactNode;
 }
 
 function ThemedDialog({
@@ -25,7 +27,8 @@ function ThemedDialog({
   title,
   triggerLabel,
   headerIcon,
-  triggerIcon
+  triggerIcon,
+  footer
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -42,7 +45,12 @@ function ThemedDialog({
           {headerIcon}
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div className="px-6 py-4">{children}</div>
+        <div className="p-4">{children}</div>
+        {footer && (
+          <DialogFooter className="flex flex-row items-center border-t bg-muted/50 px-4 py-3">
+            {footer}
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );

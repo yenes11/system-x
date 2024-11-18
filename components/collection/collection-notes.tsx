@@ -13,6 +13,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { toast } from '../ui/use-toast';
 import { useTranslations } from 'use-intl';
 import { useState } from 'react';
+import Empty from '../ui/empty';
 
 interface Props {
   notes: CollectionNote[];
@@ -52,25 +53,29 @@ function CollectionNotes({ notes }: Props) {
     <Card>
       <CardContent>
         <div className="space-y-4 pt-6">
-          {notes.map((note, index) => (
-            <div
-              key={index}
-              className={cn(
-                'flex w-max max-w-[75%] flex-col gap-2 rounded-lg border px-3 py-2 text-sm',
-                false
-                  ? 'ml-auto bg-primary text-primary-foreground'
-                  : 'bg-muted'
-              )}
-            >
-              <span>{note.message}</span>
-              <span className="text-xs text-gray-500">
-                {moment(note.createdDate).format('lll')}
-              </span>
-              <span className="text-xs italic text-gray-500">
-                &minus; {note.user}
-              </span>
-            </div>
-          ))}
+          {notes.length > 0 ? (
+            notes.map((note, index) => (
+              <div
+                key={index}
+                className={cn(
+                  'flex w-max max-w-[75%] flex-col gap-2 rounded-lg border px-3 py-2 text-sm',
+                  false
+                    ? 'ml-auto bg-primary text-primary-foreground'
+                    : 'bg-muted'
+                )}
+              >
+                <span>{note.message}</span>
+                <span className="text-xs text-gray-500">
+                  {moment(note.createdDate).format('lll')}
+                </span>
+                <span className="text-xs italic text-gray-500">
+                  &minus; {note.user}
+                </span>
+              </div>
+            ))
+          ) : (
+            <Empty className="py-12" />
+          )}
         </div>
       </CardContent>
       <CardFooter>

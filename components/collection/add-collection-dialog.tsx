@@ -15,7 +15,7 @@ import {
   FormLabel,
   FormMessage
 } from '../ui/form';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
 import api from '@/api';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -135,12 +135,12 @@ function AddCollectionDialog() {
       open={open}
       setOpen={setOpen}
       triggerIcon={<Icon icon="plus" className="mr-2" currentColor size={16} />}
-      triggerLabel={'add_collection'}
+      triggerLabel={t('add_collection')}
     >
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="grid gap-x-4 gap-y-6 md:grid-cols-2"
+          className="grid gap-x-4 gap-y-6 p-4 md:grid-cols-2"
         >
           <FormField
             control={form.control}

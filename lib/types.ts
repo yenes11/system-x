@@ -211,6 +211,22 @@ export interface MaterialVariant {
   suppliers: MaterialSupplier[];
 }
 
+export interface Attribute {
+  name: string;
+  value: string;
+}
+
+export interface CollectionMaterial {
+  id: string;
+  materialColorVariantId: string;
+  amount: string;
+  size: string;
+  image: string;
+  name: string;
+  color: string;
+  attributes: Attribute[];
+}
+
 export type ApiError = {
   message: string;
   statusCode: number;
@@ -252,4 +268,31 @@ export interface CollectionDetails extends BasicEntity {
   productStations: ProductStation[];
   collectionNotes: CollectionNote[];
   collectionGalleries: CollectionGallery[];
+}
+
+export interface CollectionDraft {
+  id: string;
+  collectionName: string;
+  description: string;
+  collectionColor: string;
+  customerDepartmentName: string;
+  categoryName: string;
+  customerSeasonName: string;
+  buyer: string;
+  sizeTypeName: string;
+  garment1?: string;
+  garment2?: string;
+  designer?: string;
+  image: string;
+  customerCode: string;
+  manufacturerCode: string;
+  status: keyof typeof CollectionStatus;
+  productStations: ProductStation[];
+  materials: any[];
+  fabrics: any[];
+}
+
+export interface CollectionProductStation {
+  productStationId: string;
+  priority: number;
 }
