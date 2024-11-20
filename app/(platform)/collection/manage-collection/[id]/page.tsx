@@ -74,7 +74,7 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
     <Fragment>
       <div className="mb-4 flex justify-between">
         <Heading
-          title={t('fabric_color')}
+          title={t('manage_collection')}
           icon={<Icon icon="colors-square" currentColor size={32} />}
         />
       </div>

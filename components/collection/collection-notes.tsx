@@ -14,6 +14,7 @@ import { toast } from '../ui/use-toast';
 import { useTranslations } from 'use-intl';
 import { useState } from 'react';
 import Empty from '../ui/empty';
+import { Textarea } from '../ui/textarea';
 
 interface Props {
   notes: CollectionNote[];
@@ -39,6 +40,7 @@ function CollectionNotes({ notes }: Props) {
         title: t('success'),
         description: t('note_added')
       });
+      setInput('');
     },
     onError: (error) => {
       toast({
@@ -80,7 +82,7 @@ function CollectionNotes({ notes }: Props) {
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-center space-x-2">
-          <Input
+          <Textarea
             id="message"
             placeholder="Type your message..."
             className="flex-1"

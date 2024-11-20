@@ -210,9 +210,12 @@
   "season": "Season",
   "buyer": "Buyer",
   "size_type": "Size Type",
-  "garment1": "Garment 1",
-  "garment2": "Garment 2",
+  "garment_1": "Garment 1",
+  "garment_2": "Garment 2",
   "designer": "Designer",
+  "product_stations": "Product Stations",
+  "notes": "Notes",
+  "gallery": "Gallery",
   "note_added": "Note added",
   "add": "Add",
   "add_product_station": "Add Product Station",
@@ -223,5 +226,6 @@
   "add_fabric_to_collection": "Add Fabric to Collection",
   "add_material_to_collection": "Add Material to Collection",
   "select_a_variant": "Select a variant",
-  "material_assigned_successfully": "Material assigned successfully"
+  "material_assigned_successfully": "Material assigned successfully",
+  "save": "Save"
 }

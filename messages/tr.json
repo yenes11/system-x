@@ -226,5 +226,6 @@
   "add_fabric_to_collection": "Koleksiyona Kumaş Ekle",
   "add_material_to_collection": "Koleksiyona Malzeme Ekle",
   "select_a_variant": "Bir varyant seçiniz",
-  "material_assigned_successfully": "Malzeme eklendi"
+  "material_assigned_successfully": "Malzeme eklendi",
+  "save": "Kaydet"
 }
