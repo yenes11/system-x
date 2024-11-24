@@ -164,8 +164,11 @@ function MaterialTable({ data }: Props) {
     open: false
   });
 
-  const [materialVariantState, setMaterialVariantState] = useState<SheetState>({
+  const [materialVariantState, setMaterialVariantState] = useState<
+    SheetState & { variantUnit: string }
+  >({
     id: '',
+    variantUnit: '',
     open: false
   });
 

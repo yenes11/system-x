@@ -21,7 +21,7 @@ interface Props {
   toggleVariantRow: (id: string) => void;
   colors: MaterialColor[];
   setMaterialVariantState: Dispatch<
-    SetStateAction<{ id: string; open: boolean }>
+    SetStateAction<{ id: string; open: boolean; variantUnit: string }>
   >;
 }
 
