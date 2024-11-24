@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import api from '@/api';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -22,18 +23,10 @@ import {
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet';
-import { useToast } from '@/components/ui/use-toast';
-import api from '@/api';
+import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { getMaterialUrl } from '@/constants/api-constants';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '../ui/select';
+import { toast } from 'sonner';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -65,7 +58,6 @@ function AddMaterialColorSheet({
 }: AddMaterialColorSheetProps) {
   const t = useTranslations();
   const router = useRouter();
-  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -91,22 +83,11 @@ function AddMaterialColorSheet({
       router.refresh();
       setState({ open: false, id: '' });
       form.reset();
-      toast({
-        title: response.statusText,
-        description: new Date().toString()
-      });
-    },
-    onError: (error) => {
-      console.error('Error adding material color:', error);
-      toast({
-        title: 'Error',
-        description: 'An error occurred while adding the material color.',
-        variant: 'destructive'
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });
-
-  console.log(form.getValues(), 'values');
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     addMaterialColor.mutate(values);

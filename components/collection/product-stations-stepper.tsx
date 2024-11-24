@@ -18,9 +18,10 @@ import Empty from '../ui/empty';
 
 interface Props {
   data: ProductStation[];
+  editable?: boolean;
 }
 
-function ProductStationsStepper({ data }: Props) {
+function ProductStationsStepper({ data, editable = false }: Props) {
   const t = useTranslations();
   const sortedData = data.toSorted((a, b) => a.priority - b.priority);
 
@@ -30,11 +31,11 @@ function ProductStationsStepper({ data }: Props) {
         <CardTitle className="mr-auto text-xl">
           {t('product_stations')}
         </CardTitle>
-        {data.length > 0 ? (
+        {data.length > 0 && editable ? (
           <Button disabled>{t('edit')}</Button>
-        ) : (
+        ) : data.length === 0 && editable ? (
           <AddStationDialog />
-        )}
+        ) : null}
       </CardHeader>
       <CardContent className="pb-20 pt-4">
         <div className="flex items-center gap-2 px-20 text-sm text-card-foreground">

@@ -110,7 +110,7 @@ function AddMaterialVariantSheet({ state, setState }: Props) {
 
   return (
     <ThemedSheet
-      title={t('add_fabric_color')}
+      title={t('add_material_variant')}
       open={state.open}
       setOpen={(val: any) => setState((prev: any) => ({ ...prev, open: val }))}
     >
@@ -121,9 +121,14 @@ function AddMaterialVariantSheet({ state, setState }: Props) {
             name="size"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('size')}</FormLabel>
+                <FormLabel>
+                  {t('size')}
+                  <span className="ml-2 text-xs text-slate-400">
+                    **{state.variantUnit}**
+                  </span>
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder="30cm" {...field} />
+                  <Input placeholder={t('enter_size')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -137,7 +142,7 @@ function AddMaterialVariantSheet({ state, setState }: Props) {
                 <FormLabel>{t('image')}</FormLabel>
                 <FormControl>
                   <Input
-                    className=""
+                    className="px-0 py-0"
                     type="file"
                     {...fieldProps}
                     accept="image/*"

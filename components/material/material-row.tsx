@@ -104,7 +104,8 @@ function MaterialRow({
                             e.stopPropagation();
                             setMaterialVariantState({
                               open: true,
-                              id: color.id
+                              id: color.id,
+                              variantUnit: row.original.type.variantUnit
                             });
                           }}
                           className="flex items-center justify-center rounded-full"

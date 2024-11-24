@@ -31,23 +31,28 @@ import {
   SheetTitle,
   SheetTrigger
 } from '@/components/ui/sheet';
-import { useToast } from '@/components/ui/use-toast';
 import { BasicEntity } from '@/lib/types';
+import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import Icon from '../ui/icon';
 
 const formSchema = z.object({
   name: z.string().min(1),
   materialTypeId: z.string().uuid(),
-  attributes: z.any()
+  attributes: z.array(
+    z.object({
+      attributeId: z.string().uuid(),
+      value: z.string()
+    })
+  )
 });
 
 function AddMaterialSheet() {
   const t = useTranslations();
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
 
   const attributes = useQuery({
     queryKey: ['attributes'],
@@ -76,9 +81,8 @@ function AddMaterialSheet() {
       router.refresh();
       setOpen(false);
       form.reset();
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });
@@ -92,7 +96,7 @@ function AddMaterialSheet() {
     }
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: 'attributes',
     control: form.control
   });
@@ -163,7 +167,7 @@ function AddMaterialSheet() {
             />
 
             {fields.map((field, index) => (
-              <div className="flex gap-2" key={field.id}>
+              <div className="flex items-end gap-2" key={field.id}>
                 <FormField
                   key={field.id}
                   control={form.control}
@@ -176,7 +180,7 @@ function AddMaterialSheet() {
                         value={field.value.attributeId}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="min-w-32">
                             <SelectValue
                               placeholder={t('select_attribute_placeholder')}
                             />
@@ -207,7 +211,6 @@ function AddMaterialSheet() {
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="Pamuk"
                           type="text"
                           onChange={field.onChange}
                         />
@@ -216,6 +219,14 @@ function AddMaterialSheet() {
                     </FormItem>
                   )}
                 />
+
+                <Button
+                  onClick={() => remove(index)}
+                  variant="destructive"
+                  className="mt-auto"
+                >
+                  <Icon icon="cross-circle" size={16} currentColor />
+                </Button>
               </div>
             ))}
 

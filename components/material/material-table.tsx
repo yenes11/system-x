@@ -39,6 +39,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import ThemedSelect from '../themed-select';
 import { CrossCircledIcon } from '@radix-ui/react-icons';
 import AddMaterialVariantSheet from './add-material-variant-sheet';
+import { useQuery } from '@tanstack/react-query';
+import api from '@/api';
 
 type Fabric = {
   id: string;
@@ -61,7 +63,6 @@ const getColumns = (
       },
       cell: ({ row }) => {
         if (row.original.colors.length > 0) {
-          console.log('hello');
           return <Icon icon="down" size={16} />;
         }
       }
@@ -74,6 +75,7 @@ const getColumns = (
     {
       header: 'type',
       cell: ({ row }) => {
+        console.log(row.original.attributes);
         return row.original.type.name;
       }
     },
@@ -172,17 +174,17 @@ function MaterialTable({ data }: Props) {
     open: false
   });
 
+  const materialTypes = useQuery({
+    queryKey: ['material-types'],
+    queryFn: async () => {
+      const res = await api.get('/MaterialTypes');
+      return res.data;
+    }
+  });
+
   const columns = useMemo(() => {
     return getColumns(setMaterialColorState, setEditMaterialState);
   }, []);
-
-  const unitOptions = Object.entries(MaterialUnit).map(([key, value]) => ({
-    name: t(value),
-    id: key
-  }));
-
-  const selectedUnit =
-    MaterialUnit[searchParams.get('unit') as unknown as IMaterialUnit];
 
   const table = useReactTable({
     data: data.items || [],
@@ -191,16 +193,19 @@ function MaterialTable({ data }: Props) {
   });
 
   const getNewSearchParams = (key: string, value: string) => {
-    let filteredUrl = `${pathname}?${key}=${value}`;
-    const name = searchParams.get('name');
-    const unit = searchParams.get('unit');
+    let filteredUrl = `${pathname}`;
+    const params = new URLSearchParams(searchParams);
 
-    if (name && key !== 'name') {
-      filteredUrl += `&name=${name}`;
+    if (value.trim() === '') {
+      // Remove the key from the params if the value is empty
+      params.delete(key);
+    } else {
+      // Update or set the key in the params
+      params.set(key, value);
     }
-    if (unit && key !== 'unit') {
-      filteredUrl += `&unit=${unit}`;
-    }
+
+    // Construct the URL with the updated search parameters
+    filteredUrl += `?${params.toString()}`;
 
     return filteredUrl;
   };
@@ -249,18 +254,18 @@ function MaterialTable({ data }: Props) {
           placeholder={t('search_material')}
         />
         <ThemedSelect
-          onClear={() => clearSearchParam('unit')}
-          options={unitOptions || []}
-          value={searchParams.get('unit') || ''}
-          onValueChange={(value) => handleSearchParams('unit', value)}
-          placeholder={t('select_a_unit')}
+          onClear={() => clearSearchParam('type')}
+          options={materialTypes.data || []}
+          value={searchParams.get('type') || ''}
+          onValueChange={(value) => handleSearchParams('type', value)}
+          placeholder={t('select_a_type')}
         />
-        {selectedUnit && (
+        {/* {selectedUnit && (
           <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">
             {selectedUnit}
             <CrossCircledIcon onClick={() => clearSearchParam('unit')} />
           </Badge>
-        )}
+        )} */}
       </div>
       <Table rounded transparent={false}>
         <TableHeader>

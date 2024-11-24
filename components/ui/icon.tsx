@@ -25,6 +25,7 @@ function Icon({
 
   const isDark = theme === 'dark';
   const color = currentColor ? 'currentColor' : isDark ? '#5eead4' : '#0d9488';
+  // const color = currentColor ? 'currentColor' : '#2563eb';
 
   return (
     <IcoMoon

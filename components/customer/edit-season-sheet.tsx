@@ -1,23 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
-import { PlusIcon } from 'lucide-react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import api from '@/api';
 import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
-} from '@/components/ui/sheet';
 import {
   Form,
   FormControl,
@@ -27,8 +19,14 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
-import { AxiosError } from 'axios';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle
+} from '@/components/ui/sheet';
+import moment from 'moment';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   id: z.string(),
@@ -50,7 +48,6 @@ interface Props {
 
 export function EditSeasonSheet({ state, setState }: Props) {
   const t = useTranslations();
-  const { toast } = useToast();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -76,18 +73,8 @@ export function EditSeasonSheet({ state, setState }: Props) {
           name: ''
         }
       });
-      toast({
-        title: t('success'),
-        description: t('season_added_successfully')
-      });
-    },
-    onError: (error: AxiosError) => {
-      const responseData = error.response?.data as { Title: string };
-      const errorMessage = responseData.Title || t('unknown_error');
-      toast({
-        title: t('error'),
-        description: errorMessage,
-        variant: 'destructive'
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

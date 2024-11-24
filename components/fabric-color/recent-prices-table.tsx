@@ -12,7 +12,7 @@ import AddPriceSheet from './add-price-sheet';
 
 const recentPricesTableColumns = [
   {
-    accessorKey: 'fabricSupplierName',
+    accessorKey: 'supplierName',
     header: 'supplier_name'
   },
   {
@@ -55,6 +55,8 @@ function RecentPricesTable({ id }: { id: string }) {
       return res.data;
     }
   });
+
+  console.log(data, 'recent');
 
   return (
     <Card className="overflow-hidden bg-nutural">

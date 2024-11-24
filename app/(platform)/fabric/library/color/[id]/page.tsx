@@ -1,6 +1,7 @@
 import api from '@/api';
 import ActiveOrdersTable from '@/components/fabric-color/active-orders-table';
 import FabricColorCollectionCarousel from '@/components/fabric-color/fabric-color-collection-caraousel';
+import FabricColorTableTabs from '@/components/fabric-color/fabric-color-table-tabs';
 import IngredientsChart from '@/components/fabric-color/ingredients-chart';
 import RecentPricesTable from '@/components/fabric-color/recent-prices-table';
 import StocksTable from '@/components/fabric-color/stocks-table';
@@ -21,6 +22,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   dehydrate,
   HydrationBoundary,
@@ -179,8 +181,10 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
           </CardContent>
         </Card>
       </div>
-      <FabricColorCollectionCarousel data={color.collectionColors} />
-      <div className="mb-4 grid gap-4 md:grid-cols-1 lg:grid-cols-2">
+      {color?.collectionColors.length > 0 && (
+        <FabricColorCollectionCarousel data={color.collectionColors} />
+      )}
+      {/* <div className="mb-4 grid gap-4 md:grid-cols-1 lg:grid-cols-2">
         <SuppliersTable data={color.suppliers} />
         <RecentPricesTable id={params.id} />
       </div>
@@ -190,7 +194,30 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
           fabricUnitName={color.fabricUnitName}
         />
         <ActiveOrdersTable color={color} />
-      </div>
+      </div> */}
+      <Tabs defaultValue="suppliers" className="">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="suppliers">{t('suppliers')}</TabsTrigger>
+          <TabsTrigger value="prices">{t('recent_prices')}</TabsTrigger>
+          <TabsTrigger value="stocks">{t('stocks')}</TabsTrigger>
+          <TabsTrigger value="orders">{t('orders')}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="suppliers">
+          <SuppliersTable data={color.suppliers} />
+        </TabsContent>
+        <TabsContent value="prices">
+          <RecentPricesTable id={params.id} />
+        </TabsContent>
+        <TabsContent value="stocks">
+          <StocksTable
+            data={color.stocks}
+            fabricUnitName={color.fabricUnitName}
+          />
+        </TabsContent>
+        <TabsContent value="orders">
+          <ActiveOrdersTable color={color} />
+        </TabsContent>
+      </Tabs>
     </HydrationBoundary>
   );
 }

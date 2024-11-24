@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
-import ThemedSheet from '../themed-sheet';
-import { useTranslations } from 'next-intl';
-import Icon from '../ui/icon';
-import { z } from 'zod';
-import { useParams, useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import api from '@/api';
+import { getMaterialUrl } from '@/constants/api-constants';
+import { getFabricsWithColors } from '@/lib/api-calls';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import moment from 'moment';
+import { useTranslations } from 'next-intl';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import ThemedSheet from '../themed-sheet';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
@@ -14,6 +20,7 @@ import {
   FormLabel,
   FormMessage
 } from '../ui/form';
+import Icon from '../ui/icon';
 import { Input } from '../ui/input';
 import {
   Select,
@@ -22,14 +29,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { getFabricsWithColors } from '@/lib/api-calls';
-import { FabricColor } from '@/lib/types';
-import { Button } from '../ui/button';
-import api from '@/api';
-import { getFabricUrl, getMaterialUrl } from '@/constants/api-constants';
-import { toast } from '../ui/use-toast';
-import { AxiosError } from 'axios';
 
 const formSchema = z.object({
   material: z.string().uuid(),
@@ -98,18 +97,8 @@ function AddMaterialToCollectionSheet() {
       router.refresh();
       setOpen(false);
       form.reset();
-      toast({
-        title: t('success'),
-        description: t('material_assigned_successfully')
-      });
-    },
-    onError: (error: AxiosError) => {
-      const responseData = error.response?.data as { Title: string };
-      const errorMessage = responseData.Title || t('unknown_error');
-      toast({
-        title: t('error'),
-        description: errorMessage,
-        variant: 'destructive'
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

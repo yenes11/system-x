@@ -17,18 +17,18 @@ import {
   SheetTitle,
   SheetTrigger
 } from '@/components/ui/sheet';
+import { currencyEnums } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import moment from 'moment';
+import { useTranslations } from 'next-intl';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import validator from 'validator';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '../ui/button';
-import { Textarea } from '../ui/textarea';
-import { useToast } from '../ui/use-toast';
-import { useTranslations } from 'next-intl';
 import {
   Select,
   SelectContent,
@@ -36,7 +36,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { currencyEnums } from '@/types';
 // import { useRouter } from 'next/router';
 
 const formSchema = z.object({
@@ -47,7 +46,6 @@ const formSchema = z.object({
 
 function AddPriceSheet() {
   const [open, setOpen] = useState(false);
-  const { toast } = useToast();
   const router = useRouter();
   const params = useParams();
   const path = usePathname();
@@ -81,9 +79,8 @@ function AddPriceSheet() {
       router.refresh();
       setOpen(false);
       form.reset();
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

@@ -27,7 +27,9 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { useToast } from '../ui/use-toast';
+import { useRouter } from 'next/navigation';
+import moment from 'moment';
+import { toast } from 'sonner';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -57,9 +59,8 @@ interface Props {
 }
 
 function AddFabricColorSheet({ state, setState }: Props) {
-  const queryClient = useQueryClient();
+  const router = useRouter();
   const t = useTranslations();
-  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,7 +70,7 @@ function AddFabricColorSheet({ state, setState }: Props) {
     }
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: 'ingredients',
     control: form.control
   });
@@ -87,17 +88,13 @@ function AddFabricColorSheet({ state, setState }: Props) {
       return res;
     },
     onSuccess: (res) => {
-      queryClient.invalidateQueries({
-        queryKey: ['fabric-color', state.id]
-      });
+      router.refresh();
       setState({ id: '', open: false });
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
       form.reset();
-    },
-    onError: (e) => {}
+    }
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -132,7 +129,7 @@ function AddFabricColorSheet({ state, setState }: Props) {
               <FormItem>
                 <FormLabel>{t('name')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Blue" {...field} />
+                  <Input placeholder={t('blue')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -215,6 +212,13 @@ function AddFabricColorSheet({ state, setState }: Props) {
                   </FormItem>
                 )}
               />
+              <Button
+                onClick={() => remove(index)}
+                variant="destructive"
+                className="mt-auto"
+              >
+                <Icon icon="cross-circle" size={16} currentColor />
+              </Button>
             </div>
           ))}
           <Button

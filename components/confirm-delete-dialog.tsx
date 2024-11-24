@@ -13,8 +13,11 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
-import { toast } from './ui/use-toast';
 import { revalidatePath } from 'next/cache';
+import moment from 'moment';
+import { toast } from 'sonner';
+import { BadgeCheck } from 'lucide-react';
+import { AxiosError } from 'axios';
 
 interface Props {
   state: any;
@@ -22,6 +25,7 @@ interface Props {
   mutationKey: Array<string | number>;
   endpoint: string;
   title: string;
+  onSuccessMessage?: string;
 }
 
 export default function ConfirmDeleteDialog({
@@ -29,13 +33,14 @@ export default function ConfirmDeleteDialog({
   setState,
   mutationKey,
   endpoint,
-  title
+  title,
+  onSuccessMessage
 }: Props) {
   const t = useTranslations();
   const router = useRouter();
   const path = usePathname();
 
-  const deleteFabric = useMutation({
+  const confirmDelete = useMutation({
     mutationKey,
     mutationFn: async () => {
       const res = await api.delete(`${endpoint}/${state.id}`);
@@ -47,9 +52,9 @@ export default function ConfirmDeleteDialog({
         id: '',
         open: false
       });
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+
+      toast.success(t('item_deleted'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });
@@ -81,9 +86,9 @@ export default function ConfirmDeleteDialog({
             {t('cancel')}
           </Button>
           <Button
-            loading={deleteFabric.isPending}
+            loading={confirmDelete.isPending}
             onClick={() => {
-              deleteFabric.mutate();
+              confirmDelete.mutate();
             }}
             variant="destructive"
           >

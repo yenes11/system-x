@@ -17,16 +17,17 @@ import {
   SheetTitle
 } from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import moment from 'moment';
+import { useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import validator from 'validator';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
-import { useToast } from '../ui/use-toast';
-import { useTranslations } from 'next-intl';
-import { usePathname, useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -38,7 +39,6 @@ const formSchema = z.object({
 
 function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
   const t = useTranslations();
-  const { toast } = useToast();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -59,9 +59,8 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
         data: undefined,
         open: false
       });
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

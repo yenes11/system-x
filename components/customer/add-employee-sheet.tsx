@@ -30,7 +30,6 @@ import {
   UserRoundPlus,
   UserRoundPlusIcon
 } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
 import {
   Select,
   SelectContent,
@@ -44,6 +43,8 @@ import { EmployeeType } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { useCustomerDepartmentsSlice } from '@/store/customer-departments-slice';
 import validator from 'validator';
+import moment from 'moment';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   fullName: z.string().min(1),
@@ -62,7 +63,6 @@ const defaultValues = {
 
 export function AddEmployeeSheet() {
   const t = useTranslations();
-  const { toast } = useToast();
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
@@ -83,12 +83,8 @@ export function AddEmployeeSheet() {
 
   const onOpenChange = (open: boolean) => {
     if (!selectedDepartmentId) {
-      toast({
-        title: t('warning'),
-        description: t('select_department'),
-        variant: 'default',
-        // className: 'bg-orange-300'
-        className: 'bg-destructive'
+      toast.warning(t('warning'), {
+        description: t('select_department')
       });
       return;
     }
@@ -134,17 +130,9 @@ export function AddEmployeeSheet() {
         ]
       }));
       setOpen(false);
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
-    },
-    onError: (error) => {
-      // toast({
-      //   title: error.response.data.title,
-      //   description: error.response.data.detail,
-      //   variant: 'destructive'
-      // });
     }
   });
 

@@ -12,16 +12,16 @@ const getMaterials = async ({
   pageIndex,
   pageSize,
   name,
-  unit
+  type
 }: {
   pageIndex: number;
   pageSize: number;
   name?: string;
-  unit?: number;
+  type?: string;
 }) => {
   try {
     const res = await api.get(
-      getMaterialUrl({ pageIndex, pageSize, name, unit })
+      getMaterialUrl({ pageIndex, pageSize, name, type })
     );
     return res.data;
   } catch (e: any) {
@@ -32,19 +32,19 @@ const getMaterials = async ({
 export default async function MaterialLibraryPage({
   searchParams
 }: {
-  searchParams: { size: string; index: string; name: string; unit: number };
+  searchParams: { size: string; index: string; name: string; type: string };
 }) {
   const t = await getTranslations();
   const size = Number(searchParams?.size) || 10;
   const index = Number(searchParams?.index) || 0;
-  const unit = Number(searchParams?.unit) || 0;
+  const type = searchParams?.type || '';
   const name = searchParams?.name || '';
 
   const materials: PaginatedData<IMaterial> = await getMaterials({
     pageIndex: index,
     pageSize: size,
     name,
-    unit
+    type
   });
 
   return (

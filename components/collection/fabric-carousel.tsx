@@ -66,7 +66,7 @@ function FabricCarousel({ data }: Props) {
       <ConfirmDeleteDialog
         title={t('delete')}
         endpoint="/SupplierFabricColors"
-        mutationKey={['delete-collection']}
+        mutationKey={['delete-supplier-fabric-color']}
         state={deleteState}
         setState={setDeleteState}
       />

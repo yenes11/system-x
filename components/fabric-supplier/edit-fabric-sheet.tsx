@@ -18,13 +18,14 @@ import {
 } from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '../ui/button';
-import { useToast } from '../ui/use-toast';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -61,7 +62,6 @@ interface Props {
 }
 
 function EditFabricSheet({ state, setState }: Props) {
-  const { toast } = useToast();
   const t = useTranslations();
   const router = useRouter();
 
@@ -82,9 +82,8 @@ function EditFabricSheet({ state, setState }: Props) {
         id: '',
         manufacturerCode: ''
       });
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_updated'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

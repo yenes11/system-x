@@ -124,7 +124,10 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="product-stations" className="space-y-4">
-          <ProductStationsStepper data={collectionDetails.productStations} />
+          <ProductStationsStepper
+            editable
+            data={collectionDetails.productStations}
+          />
           {/* <ProductStations data={collectionDetails.productStations} /> */}
         </TabsContent>
         <TabsContent value="notes" className="">

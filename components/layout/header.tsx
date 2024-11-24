@@ -1,9 +1,8 @@
 import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
 import { cn } from '@/lib/utils';
+import LocaleDropdown from './locale-dropdown';
 import { MobileSidebar } from './mobile-sidebar';
 import { UserNav } from './user-nav';
-import { Input } from '../ui/input';
-import LocaleDropdown from './locale-dropdown';
 
 export default function Header() {
   return (
@@ -13,6 +12,7 @@ export default function Header() {
           <MobileSidebar />
         </div>
         {/* <Input placeholder="Search..." /> */}
+        {/* <SidebarTrigger className="-ml-1 mr-auto" /> */}
         <div className="flex items-center gap-2">
           <LocaleDropdown />
           <ThemeToggle />

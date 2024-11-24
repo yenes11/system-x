@@ -6,9 +6,10 @@ import ThemedZoom from '../themed-zoom';
 import { useParams, useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import api from '@/api';
-import { toast } from '../ui/use-toast';
 import { useTranslations } from 'next-intl';
 import { Input } from '../ui/input';
+import moment from 'moment';
+import { toast } from 'sonner';
 
 interface Props {
   images: CollectionImage[];
@@ -28,16 +29,8 @@ function CollectionGallery({ images }: Props) {
     onSuccess: (res) => {
       router.refresh();
       setInputKey((prev) => prev + 1);
-      toast({
-        title: t('success'),
-        description: t('note_added')
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: t('error'),
-        description: t('unknown_error'),
-        variant: 'destructive'
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });
@@ -48,10 +41,8 @@ function CollectionGallery({ images }: Props) {
         key={inputKey}
         onChange={(event) => {
           if (!event.target.files) {
-            toast({
-              title: t('error'),
-              description: t('unknown_error'),
-              variant: 'destructive'
+            toast.error(t('error'), {
+              description: t('unknown_error')
             });
             return;
           }

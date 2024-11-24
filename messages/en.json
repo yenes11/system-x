@@ -227,5 +227,18 @@
   "add_material_to_collection": "Add Material to Collection",
   "select_a_variant": "Select a variant",
   "material_assigned_successfully": "Material assigned successfully",
-  "save": "Save"
+  "save": "Save",
+  "select_a_fabric_type": "Select a fabric type",
+  "select_a_fabric_unit": "Select a fabric unit",
+  "edit_fabric_success": "Fabric edited successfully",
+  "blue": "Blue",
+  "select_a_type": "Select a type",
+  "edit_color": "Edit Color",
+  "add_variant": "Add Variant",
+  "add_material_variant": "Add Material Variant",
+  "material_color_variant": "Material Color Variant",
+  "item_deleted": "Item Deleted",
+  "item_added": "Item Added",
+  "item_updated": "Item Updated",
+  "enter_size": "Enter size"
 }

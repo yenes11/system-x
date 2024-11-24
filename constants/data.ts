@@ -108,21 +108,16 @@ export const _navItems = [
         key: 'fabric_library',
         title: 'library',
         href: '/fabric/library'
-      },
-      {
-        key: 'fibric_stock_management',
-        title: 'stock_management',
-        href: '/fabric/stock-management'
-      },
-      {
-        key: 'fabric_orders',
-        title: 'orders',
-        href: '/fabric/orders'
       }
       // {
-      //   key: 'fibric_supplier_management',
-      //   title: 'supplier_management',
-      //   href: '/fabric/supplier-management'
+      //   key: 'fibric_stock_management',
+      //   title: 'stock_management',
+      //   href: '/fabric/stock-management'
+      // },
+      // {
+      //   key: 'fabric_orders',
+      //   title: 'orders',
+      //   href: '/fabric/orders'
       // }
     ]
   },
@@ -135,21 +130,16 @@ export const _navItems = [
         key: 'material_library',
         title: 'library',
         href: '/material/library'
-      },
-      {
-        key: 'material_stock_management',
-        title: 'stock_management',
-        href: '/material/stock-management'
-      },
-      {
-        key: 'material_orders',
-        title: 'orders',
-        href: '/material/orders'
       }
       // {
-      //   key: 'material_supplier_management',
-      //   title: 'supplier_management',
-      //   href: '/material/supplier-management'
+      //   key: 'material_stock_management',
+      //   title: 'stock_management',
+      //   href: '/material/stock-management'
+      // },
+      // {
+      //   key: 'material_orders',
+      //   title: 'orders',
+      //   href: '/material/orders'
       // }
     ]
   },
@@ -162,17 +152,17 @@ export const _navItems = [
         key: 'collection_library',
         title: 'library',
         href: '/collection/library'
-      },
-      {
-        key: 'collection_color_list',
-        title: 'color_list',
-        href: '/collection/color-list'
-      },
-      {
-        key: 'collection_orders',
-        title: 'color_orders',
-        href: '/collection/color-orders'
       }
+      // {
+      //   key: 'collection_color_list',
+      //   title: 'color_list',
+      //   href: '/collection/color-list'
+      // },
+      // {
+      //   key: 'collection_orders',
+      //   title: 'color_orders',
+      //   href: '/collection/color-orders'
+      // }
     ]
   },
   {

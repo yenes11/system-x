@@ -9,9 +9,11 @@ import {
   QueryClientProvider,
   isServer
 } from '@tanstack/react-query';
-import { toast } from '@/components/ui/use-toast';
+
 import { useTranslations } from 'next-intl';
 import { AxiosError } from 'axios';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { toast } from 'sonner';
 
 function makeQueryClient() {
   const t = useTranslations();
@@ -27,10 +29,8 @@ function makeQueryClient() {
           const axiosError = error as AxiosError;
           const responseData = axiosError.response?.data as { Title: string };
           const errorMessage = responseData.Title || t('unknown_error');
-          toast({
-            title: t('error'),
-            description: errorMessage,
-            variant: 'destructive'
+          toast.error(t('error'), {
+            description: errorMessage
           });
         }
       }
@@ -71,6 +71,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <SidebarProvider>{children}</SidebarProvider>
+    </QueryClientProvider>
   );
 }

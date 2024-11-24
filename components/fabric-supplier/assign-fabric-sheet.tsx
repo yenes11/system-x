@@ -17,14 +17,16 @@ import {
   SheetTitle,
   SheetTrigger
 } from '@/components/ui/sheet';
-import { getFabrics } from '@/lib/api-calls';
+import { getFabricUrl } from '@/constants/api-constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import moment from 'moment';
 import { useTranslations } from 'next-intl';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import {
@@ -35,8 +37,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { useToast } from '../ui/use-toast';
-import { getFabricUrl } from '@/constants/api-constants';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -68,7 +68,6 @@ interface Props {
 
 function AssignFabricSheet() {
   const [open, setOpen] = useState(false);
-  const { toast } = useToast();
   const t = useTranslations();
   const router = useRouter();
   const params = useParams();
@@ -113,9 +112,8 @@ function AssignFabricSheet() {
     onSuccess: async (res) => {
       router.refresh();
       setOpen(false);
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

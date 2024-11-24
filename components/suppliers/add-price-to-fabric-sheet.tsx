@@ -11,30 +11,29 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTitle,
-  SheetTrigger
+  SheetTitle
 } from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusIcon } from '@radix-ui/react-icons';
 import { useMutation } from '@tanstack/react-query';
+import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '../ui/button';
-import { useToast } from '../ui/use-toast';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectGroup,
-  SelectItem
-} from '@/components/ui/select';
 
 const formSchema = z.object({
   // fabricSupplierFabricColorId: z.string(),
@@ -53,7 +52,6 @@ interface Props {
 }
 
 function AddPriceToFabricSheet({ state, setState }: Props) {
-  const { toast } = useToast();
   const t = useTranslations();
   const router = useRouter();
 
@@ -73,9 +71,8 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
         open: false,
         fabricColorId: ''
       });
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

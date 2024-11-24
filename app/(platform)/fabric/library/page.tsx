@@ -3,12 +3,14 @@ import FabricTable from '@/components/tables/fabric-tables/fabric-table';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
 import { getFabrics, getFabricsWithColors } from '@/lib/api-calls';
+import { getTranslations } from 'next-intl/server';
 
 export default async function FabricLibraryPage({
   searchParams
 }: {
   searchParams: { size: string; index: string; name: string; grammage: string };
 }) {
+  const t = await getTranslations();
   const size = Number(searchParams?.size) || 10;
   const index = Number(searchParams?.index) || 0;
   const name = searchParams?.name || '';
@@ -40,7 +42,7 @@ export default async function FabricLibraryPage({
               className="text-icon"
             />
           }
-          title="Fabric Library"
+          title={t('fabric_library')}
         />
         <AddFabricSheet />
       </div>

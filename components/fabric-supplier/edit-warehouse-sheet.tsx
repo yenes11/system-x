@@ -10,18 +10,19 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusIcon } from '@radix-ui/react-icons';
 import { useMutation } from '@tanstack/react-query';
+import moment from 'moment';
+import { useTranslations } from 'next-intl';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import validator from 'validator';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
-import { useToast } from '../ui/use-toast';
 // import { useRouter } from 'next/router';
 
 const formSchema = z.object({
@@ -40,10 +41,10 @@ interface Props {
 
 function EditWarehouseSheet({ state, setState }: Props) {
   // const [open, setOpen] = useState(false);
-  const { toast } = useToast();
   const router = useRouter();
   const params = useParams();
   const path = usePathname();
+  const t = useTranslations();
 
   const endpoint = path.startsWith('/customer/management')
     ? '/CustomerWarehouses'
@@ -61,9 +62,8 @@ function EditWarehouseSheet({ state, setState }: Props) {
         data: null,
         open: false
       });
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });
@@ -103,7 +103,7 @@ function EditWarehouseSheet({ state, setState }: Props) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('name')}</FormLabel>
                   <FormControl>
                     <Input placeholder="John Fabric" {...field} />
                   </FormControl>
@@ -116,7 +116,7 @@ function EditWarehouseSheet({ state, setState }: Props) {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>{t('address')}</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Enter address..." {...field} />
                   </FormControl>
@@ -129,7 +129,7 @@ function EditWarehouseSheet({ state, setState }: Props) {
               name="longitude"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Longitude</FormLabel>
+                  <FormLabel>{t('longitude')}</FormLabel>
                   <FormControl>
                     <Input placeholder="40.52" {...field} />
                   </FormControl>
@@ -142,7 +142,7 @@ function EditWarehouseSheet({ state, setState }: Props) {
               name="latitude"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Latitude</FormLabel>
+                  <FormLabel>{t('latitude')}</FormLabel>
                   <FormControl>
                     <Input placeholder="40.52" {...field} />
                   </FormControl>
@@ -155,7 +155,7 @@ function EditWarehouseSheet({ state, setState }: Props) {
               name="supportFullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Suport Name</FormLabel>
+                  <FormLabel>{t('support_name')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Jane Doe" {...field} />
                   </FormControl>
@@ -168,7 +168,7 @@ function EditWarehouseSheet({ state, setState }: Props) {
               name="supportPhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Support Phone</FormLabel>
+                  <FormLabel>{t('support_phone')}</FormLabel>
                   <FormControl>
                     <Input placeholder="555 555 5555" {...field} />
                   </FormControl>
@@ -182,7 +182,7 @@ function EditWarehouseSheet({ state, setState }: Props) {
               className="w-full"
               type="submit"
             >
-              Submit
+              {addWarehouse.isPending ? t('submitting') : t('submit')}
             </Button>
           </form>
         </Form>

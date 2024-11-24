@@ -29,7 +29,8 @@ import {
   SelectValue
 } from '../ui/select';
 import { Textarea } from '../ui/textarea';
-import { useToast } from '../ui/use-toast';
+import { toast } from 'sonner';
+import moment from 'moment';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -47,7 +48,6 @@ function AddCustomerSheet() {
   const t = useTranslations();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const { toast } = useToast();
 
   const addCustomer = useMutation({
     mutationKey: ['add-customer'],
@@ -59,9 +59,8 @@ function AddCustomerSheet() {
       router.refresh();
       form.reset();
       setOpen(false);
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

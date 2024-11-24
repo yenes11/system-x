@@ -1,19 +1,18 @@
 'use client';
 
-import { CollectionNote } from '@/lib/types';
-import { Card, CardContent, CardFooter } from '../ui/card';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { cn } from '@/lib/utils';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import Icon from '../ui/icon';
-import moment from 'moment';
 import api from '@/api';
+import { CollectionNote } from '@/lib/types';
+import { cn } from '@/lib/utils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import moment from 'moment';
 import { useParams, useRouter } from 'next/navigation';
-import { toast } from '../ui/use-toast';
-import { useTranslations } from 'use-intl';
 import { useState } from 'react';
+import { toast } from 'sonner';
+import { useTranslations } from 'use-intl';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardFooter } from '../ui/card';
 import Empty from '../ui/empty';
+import Icon from '../ui/icon';
 import { Textarea } from '../ui/textarea';
 
 interface Props {
@@ -26,7 +25,6 @@ function CollectionNotes({ notes }: Props) {
   const router = useRouter();
   const t = useTranslations();
   const params = useParams();
-  console.log(params, 'params');
   const [input, setInput] = useState('');
 
   const addNote = useMutation({
@@ -36,18 +34,10 @@ function CollectionNotes({ notes }: Props) {
     },
     onSuccess: (res) => {
       router.refresh();
-      toast({
-        title: t('success'),
-        description: t('note_added')
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
       setInput('');
-    },
-    onError: (error) => {
-      toast({
-        title: t('error'),
-        description: t('unknown_error'),
-        variant: 'destructive'
-      });
     }
   });
 

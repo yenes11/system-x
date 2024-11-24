@@ -137,16 +137,29 @@ function CollectionTable({ data }: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const allOption = {
+    id: 'all',
+    name: t('all')
+  };
+
   const customers = useQuery({
     queryKey: ['customers'],
     queryFn: () => getCustomers({ pageIndex: 0, pageSize: 99999 })
   });
+
+  const customersOptions = customers.data
+    ? [allOption, ...customers.data.items]
+    : [];
 
   const categories = useQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
     select: getAllSubcategories
   });
+
+  const categoriesOptions = categories.data
+    ? [allOption, ...categories.data]
+    : [];
 
   const columns = useMemo(() => {
     return getColumns(setFabricColorState, setEditFabricState);
@@ -184,23 +197,41 @@ function CollectionTable({ data }: Props) {
   };
 
   const getNewSearchParams = (key: string, value: string) => {
-    let filteredUrl = `${pathname}?${key}=${value}`;
+    let filteredUrl = `${pathname}`;
     const customerId = searchParams.get('customerId');
     const categoryId = searchParams.get('categoryId');
     const status = searchParams.get('status');
     const customerCode = searchParams.get('customerCode');
 
-    if (customerId && key !== 'customerId') {
-      filteredUrl += `&customerId=${customerId}`;
+    // Construct the updated query parameters based on conditions
+    const params = new URLSearchParams();
+
+    if (key !== 'customerId' && customerId) {
+      params.set('customerId', customerId);
     }
-    if (categoryId && key !== 'categoryId') {
-      filteredUrl += `&categoryId=${categoryId}`;
+    if (key !== 'categoryId' && categoryId) {
+      params.set('categoryId', categoryId);
     }
-    if (status && key !== 'status') {
-      filteredUrl += `&status=${status}`;
+    if (key !== 'status' && status) {
+      params.set('status', status);
     }
-    if (customerCode && key !== 'customerCode') {
-      filteredUrl += `&customerCode=${customerCode}`;
+    if (key !== 'customerCode' && customerCode) {
+      params.set('customerCode', customerCode);
+    }
+
+    // Special condition handling
+    if (
+      value.toLowerCase() !== 'all' &&
+      !(key === 'customerCode' && value === '')
+    ) {
+      params.set(key, value);
+    } else if (key === 'customerCode' && value === '') {
+      params.delete('customerCode');
+    }
+
+    // Append updated search parameters to the URL
+    if (Array.from(params).length > 0) {
+      filteredUrl += `?${params.toString()}`;
     }
 
     return filteredUrl;
@@ -214,7 +245,7 @@ function CollectionTable({ data }: Props) {
   );
 
   const table = useReactTable({
-    data: data.items || [],
+    data: data?.items || [],
     columns,
     getCoreRowModel: getCoreRowModel()
   });
@@ -231,26 +262,26 @@ function CollectionTable({ data }: Props) {
         <ThemedSelect
           onClear={() => clearSearchParam('customerId')}
           value={searchParams.get('customerId') || ''}
-          options={customers.data?.items}
+          options={customersOptions}
           onValueChange={(value) => handleSearchParams('customerId', value)}
           placeholder={t('select_a_customer')}
         />
 
         <ThemedSelect
           onClear={() => clearSearchParam('categoryId')}
-          options={categories.data || []}
+          options={categoriesOptions}
           value={searchParams.get('categoryId') || ''}
           onValueChange={(value) => handleSearchParams('categoryId', value)}
           placeholder={t('select_a_category')}
         />
-        <ThemedSelect
+        {/* <ThemedSelect
           onClear={() => clearSearchParam('status')}
           value={searchParams.get('status') || ''}
           onValueChange={(value) => handleSearchParams('status', value)}
-          options={collectionOptions}
+          options={[allOption, ...collectionOptions]}
           placeholder={t('select_a_status')}
-        />
-        <div className="flex gap-2">
+        /> */}
+        {/* <div className="flex gap-2">
           {selectedCategory && (
             <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">
               {selectedCategory?.name}
@@ -273,7 +304,7 @@ function CollectionTable({ data }: Props) {
               <CrossCircledIcon onClick={() => clearSearchParam('status')} />
             </Badge>
           )}
-        </div>
+        </div> */}
       </div>
       <Table transparent={false} rounded>
         <TableBody>

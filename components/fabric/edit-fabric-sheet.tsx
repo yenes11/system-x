@@ -13,18 +13,19 @@ import { Input } from '@/components/ui/input';
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
-  SheetTitle,
-  SheetTrigger
+  SheetTitle
 } from '@/components/ui/sheet';
 import useFabricTypesQuery from '@/hooks/queries/useFabricTypesQuery';
 import useFabricUnitsQuery from '@/hooks/queries/useFabricUnitsQuery';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusIcon } from '@radix-ui/react-icons';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import moment from 'moment';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import {
@@ -35,8 +36,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { useToast } from '../ui/use-toast';
-import { useTranslations } from 'next-intl';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -53,10 +52,8 @@ interface Props {
 function AddFabricSheet({ state, setState }: Props) {
   const fabricTypes = useFabricTypesQuery({ enabled: true });
   const fabricUnits = useFabricUnitsQuery({ enabled: true });
-  const queryClient = useQueryClient();
+  const router = useRouter();
   const t = useTranslations();
-  // const [open, setOpen] = useState(false);
-  const { toast } = useToast();
 
   const editFabric = useMutation({
     mutationKey: ['edit-fabric'],
@@ -65,28 +62,21 @@ function AddFabricSheet({ state, setState }: Props) {
       return res;
     },
     onSuccess: (res) => {
-      queryClient.invalidateQueries({
-        queryKey: ['fabrics']
-      });
+      router.refresh();
       setState({
         open: false,
         data: null
       });
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_updated'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });
 
   useEffect(() => {
     if (!state.data || fabricTypes.isLoading || fabricUnits.isLoading) return;
-    const unit = fabricUnits.data?.find(
-      (u) => u.name === state.data.fabricUnitName
-    );
-    const type = fabricTypes.data?.find(
-      (t) => t.name === state.data.fabricTypeName
-    );
+    const unit = fabricUnits.data?.find((u) => u.name === state.data.unit);
+    const type = fabricTypes.data?.find((t) => t.name === state.data.type);
 
     form.reset({
       ...state.data,
@@ -129,7 +119,7 @@ function AddFabricSheet({ state, setState }: Props) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('name')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Keten" {...field} />
                   </FormControl>
@@ -142,7 +132,7 @@ function AddFabricSheet({ state, setState }: Props) {
               name="grammage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Grammage</FormLabel>
+                  <FormLabel>{t('grammage')}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="250"
@@ -160,14 +150,14 @@ function AddFabricSheet({ state, setState }: Props) {
               name="fabricTypeId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Fabric Type</FormLabel>
+                  <FormLabel>{t('fabric_type')}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a fabric type" />
+                        <SelectValue placeholder={t('select_a_fabric_type')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -189,14 +179,14 @@ function AddFabricSheet({ state, setState }: Props) {
               name="fabricUnitId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Fabric Unit</FormLabel>
+                  <FormLabel>{t('fabric_unit')}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a fabric unit" />
+                        <SelectValue placeholder={t('select_a_fabric_unit')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -216,7 +206,7 @@ function AddFabricSheet({ state, setState }: Props) {
               className="w-full"
               type="submit"
             >
-              Submit
+              {editFabric.isPending ? t('submitting') : t('submit')}
             </Button>
           </form>
         </Form>

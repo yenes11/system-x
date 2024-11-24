@@ -1,23 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
+import { PlusIcon, SunSnow } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
-import { Leaf, PlusIcon, SunSnow } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import api from '@/api';
 import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
-} from '@/components/ui/sheet';
 import {
   Form,
   FormControl,
@@ -27,8 +20,15 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
-import { AxiosError } from 'axios';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from '@/components/ui/sheet';
+import moment from 'moment';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Sezon adı gereklidir' })
@@ -37,7 +37,6 @@ const formSchema = z.object({
 export function AddSeasonSheet() {
   const [open, setOpen] = useState(false);
   const t = useTranslations();
-  const { toast } = useToast();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -59,18 +58,8 @@ export function AddSeasonSheet() {
       router.refresh();
       setOpen(false);
       form.reset();
-      toast({
-        title: t('success'),
-        description: t('season_added_successfully')
-      });
-    },
-    onError: (error: AxiosError) => {
-      const responseData = error.response?.data as { Title: string };
-      const errorMessage = responseData.Title || t('unknown_error');
-      toast({
-        title: t('error'),
-        description: errorMessage,
-        variant: 'destructive'
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });
@@ -89,7 +78,7 @@ export function AddSeasonSheet() {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SunSnow className="text-icon mr-2" size={20} />
+          <SunSnow className="mr-2 text-icon" size={20} />
 
           <SheetTitle>{t('add_season')}</SheetTitle>
         </SheetHeader>

@@ -25,6 +25,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
+import moment from 'moment';
+import { toast } from 'sonner';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -61,7 +63,6 @@ interface Props {
 }
 
 function EditMaterialSheet({ state, setState }: Props) {
-  const { toast } = useToast();
   const t = useTranslations();
   const router = useRouter();
 
@@ -82,9 +83,8 @@ function EditMaterialSheet({ state, setState }: Props) {
         materialColorId: '',
         manufacturerCode: ''
       });
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_updated'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

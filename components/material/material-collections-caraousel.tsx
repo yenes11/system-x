@@ -10,9 +10,11 @@ import {
 } from '@/components/ui/carousel';
 import { MaterialCollection } from '@/lib/types';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Empty from '../ui/empty';
 import ThemedZoom from '../themed-zoom';
+import { SearchBar } from '../searchbar';
+import Code from '../ui/code';
 
 const statusOptions = [
   { value: '0', label: 'all' },
@@ -28,16 +30,22 @@ function MaterialCollectionsCarousel({ data }: { data: MaterialCollection[] }) {
   const [commandValue, setCommandValue] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<any>('0');
 
-  // const filteredData = useMemo(() => {
-  //   return data.filter(
-  //     (collection) =>
-  //       (selectedStatus === '0' ||
-  //         collection.status.toString() === selectedStatus) &&
-  //       collection.manufacturerCode
-  //         .toLowerCase()
-  //         .includes(searchKey.toLowerCase())
-  //   );
-  // }, [data, searchKey, selectedStatus]);
+  console.log(data, 'hellos');
+
+  const filteredData = useMemo(() => {
+    return data.filter(
+      (collection) =>
+        collection.collectionColorName
+          .toLowerCase()
+          .includes(searchKey.toLowerCase()) ||
+        collection.collectionName
+          .toLocaleLowerCase()
+          .includes(searchKey.toLowerCase()) ||
+        collection.collectionManufacturerCode
+          .toLowerCase()
+          .includes(searchKey.toLowerCase())
+    );
+  }, [data, searchKey, selectedStatus]);
 
   return (
     <>
@@ -100,6 +108,14 @@ function MaterialCollectionsCarousel({ data }: { data: MaterialCollection[] }) {
           </PopoverContent>
         </Popover>
       </div> */}
+      <div className="mb-4 flex justify-between gap-4">
+        <SearchBar
+          value={searchKey}
+          onChange={(e) => setSearchKey(e.target.value)}
+          className="w-auto min-w-72 bg-card"
+          placeholder={t('search_fabric_color_code')}
+        />
+      </div>
       <Carousel
         opts={{
           align: 'start'
@@ -107,7 +123,7 @@ function MaterialCollectionsCarousel({ data }: { data: MaterialCollection[] }) {
         className="m-auto mb-4 min-w-0 max-w-full"
       >
         <CarouselContent>
-          {data?.length === 0 ? (
+          {filteredData?.length === 0 ? (
             <div className="flex w-full items-center justify-center py-10">
               <Empty description={t('no_collections_found')} />
             </div>
@@ -131,23 +147,11 @@ function MaterialCollectionsCarousel({ data }: { data: MaterialCollection[] }) {
                       <span className="text-xs text-muted-foreground">
                         {t('manufacturer_code')}
                       </span>
-                      <code className="mb-1 text-sm tracking-wide">
-                        {collection.collectionManufacturerCode}
-                      </code>
-                      <span className="text-xs text-muted-foreground">
+                      <Code>{collection.collectionManufacturerCode}</Code>
+                      <span className="mt-1 text-xs text-muted-foreground">
                         {t('amount')}
                       </span>
-                      {/* <Badge
-                        className={`rounded-sm text-xs  ${
-                          collection.status === 1
-                            ? 'bg-muted text-muted-foreground'
-                            : collection.status === 2
-                            ? 'bg-green-500'
-                            : 'bg-destructive'
-                        }`}
-                      > */}
                       {collection.amount}
-                      {/* </Badge> */}
                     </CardFooter>
                   </Card>
                 </div>

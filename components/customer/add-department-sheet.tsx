@@ -27,8 +27,9 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import api from '@/api';
-import { toast } from '../ui/use-toast';
 import { Building } from 'lucide-react';
+import { toast } from 'sonner';
+import moment from 'moment';
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -72,9 +73,8 @@ export function AddDepartmentSheet() {
     },
     onSuccess: () => {
       setIsAddSheetOpen(false, null);
-      toast({
-        title: t('department_added'),
-        description: new Date().toLocaleTimeString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
       router.refresh();
     }

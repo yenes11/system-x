@@ -19,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { URL_MATERIAL_COLOR } from '@/constants/api-constants';
 import { getMaterialVariant } from '@/lib/api-calls';
 import { MaterialColor, MaterialUnit } from '@/lib/types';
@@ -60,7 +61,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
     <>
       <div className="mb-4 flex justify-between">
         <Heading
-          title={t('material_color')}
+          title={t('material_color_variant')}
           icon={<PaintBucket size={28} className="text-icons" />}
         />
       </div>
@@ -68,15 +69,18 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
         <CardHeader className="flex flex-row items-start bg-muted/50">
           <div className="flex h-full flex-col">
             <ThemedZoom>
-              <img src={color.image} className="h-52 w-52 object-cover" />
+              <img
+                src={color.image}
+                className="h-52 w-52 rounded object-cover object-top"
+              />
             </ThemedZoom>
           </div>
         </CardHeader>
         <CardContent className="flex-1 p-6 text-sm">
           <div className="grid gap-3">
-            <div className="text-lg font-semibold">
+            {/* <div className="text-lg font-semibold">
               {t('material_color_details')}
-            </div>
+            </div> */}
             <ul className="grid gap-3">
               <li className="flex items-center justify-between">
                 <span className="text-muted-foreground">{t('name')}</span>
@@ -168,7 +172,32 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
           </CardContent>
         </Card>
       </div>
-      <MaterialCollectionsCarousel data={color.collectionColors} />
+      {color?.collectionColors?.length > 0 && (
+        <MaterialCollectionsCarousel data={color.collectionColors} />
+      )}
+
+      <Tabs defaultValue="suppliers" className="">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="suppliers">{t('suppliers')}</TabsTrigger>
+          <TabsTrigger value="prices">{t('recent_prices')}</TabsTrigger>
+          <TabsTrigger value="stocks">{t('stocks')}</TabsTrigger>
+          <TabsTrigger value="orders">{t('orders')}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="suppliers">
+          <SuppliersTable data={color.suppliers} />
+        </TabsContent>
+        <TabsContent value="prices">
+          <RecentPricesTable id={params.id} />
+        </TabsContent>
+        <TabsContent value="stocks">
+          <StocksTable data={color.stocks} fabricUnitName={''} />
+        </TabsContent>
+        <TabsContent value="orders">
+          <ActiveOrdersTable color={color} />
+        </TabsContent>
+      </Tabs>
+
+      {/* 
       <div className="mb-4 grid gap-4 md:grid-cols-1 lg:grid-cols-2">
         <SuppliersTable data={color.suppliers} />
         <RecentPricesTable id={params.id} />
@@ -176,7 +205,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
       <div className="mb-4 grid gap-4 md:grid-cols-1 lg:grid-cols-2">
         <StocksTable data={color.stocks} fabricUnitName={''} />
         <ActiveOrdersTable color={color} />
-      </div>
+      </div> */}
     </>
   );
 }

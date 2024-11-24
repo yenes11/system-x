@@ -30,6 +30,7 @@ import api from '@/api';
 import { getFabricUrl } from '@/constants/api-constants';
 import { toast } from '../ui/use-toast';
 import { AxiosError } from 'axios';
+import moment from 'moment';
 
 const formSchema = z.object({
   fabric: z.string().uuid(),
@@ -90,17 +91,8 @@ function AddFabricToCollectionSheet() {
       setOpen(false);
       form.reset();
       toast({
-        title: t('success'),
-        description: t('fabric_assigned_successfully')
-      });
-    },
-    onError: (error: AxiosError) => {
-      const responseData = error.response?.data as { Title: string };
-      const errorMessage = responseData.Title || t('unknown_error');
-      toast({
-        title: t('error'),
-        description: errorMessage,
-        variant: 'destructive'
+        title: t('item_added'),
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

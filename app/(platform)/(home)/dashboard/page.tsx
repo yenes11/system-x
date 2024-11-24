@@ -1,3 +1,4 @@
+'use client';
 import { AreaGraph } from '@/components/charts/area-graph';
 import { BarGraph } from '@/components/charts/bar-graph';
 import { PieGraph } from '@/components/charts/pie-graph';
@@ -15,9 +16,13 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BadgeCheck } from 'lucide-react';
+import moment from 'moment';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 export default function page() {
+  const t = useTranslations();
   return (
     <div>
       <div className="space-y-2">
@@ -27,7 +32,15 @@ export default function page() {
           </h2>
           <div className="hidden items-center space-x-2 md:flex">
             <CalendarDateRangePicker />
-            <Button>Download</Button>
+            <Button
+              onClick={() => {
+                toast.success(t('item_deleted'), {
+                  description: moment().format('DD/MM/YYYY, HH:mm')
+                });
+              }}
+            >
+              Downloads
+            </Button>
           </div>
         </div>
         <Tabs defaultValue="overview" className="space-y-4">

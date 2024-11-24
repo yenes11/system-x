@@ -1,35 +1,19 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import ThemedDialog from '../themed-dialog';
-import { useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import api from '@/api';
-import {
-  closestCenter,
-  DndContext,
-  DragEndEvent,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors
-} from '@dnd-kit/core';
 import { BasicEntity } from '@/lib/types';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy
-} from '@dnd-kit/sortable';
+import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import moment from 'moment';
+import { useTranslations } from 'next-intl';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import ThemedDialog from '../themed-dialog';
+import { Button } from '../ui/button';
 import Icon from '../ui/icon';
 import TransferList from './transfer-list';
-import ThemedSheet from '../themed-sheet';
-import { Button } from '../ui/button';
-import { useParams, useRouter } from 'next/navigation';
-import { toast } from '../ui/use-toast';
-import { AxiosError } from 'axios';
 
 function AddStationDialog() {
   const t = useTranslations();
@@ -57,18 +41,8 @@ function AddStationDialog() {
     onSuccess: (res) => {
       router.refresh();
       setOpen(false);
-      toast({
-        title: t('success'),
-        description: t('product_station_added')
-      });
-    },
-    onError: (error: AxiosError) => {
-      const responseData = error.response?.data as { Title: string };
-      const errorMessage = responseData.Title || t('unknown_error');
-      toast({
-        title: t('error'),
-        description: errorMessage,
-        variant: 'destructive'
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

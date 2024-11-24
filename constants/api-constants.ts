@@ -25,15 +25,15 @@ export const getFabricUrl = (params: QueryParams) =>
 export const getMaterialUrl = (
   params: QueryParams & {
     name?: string;
-    unit?: number;
+    type?: string;
   }
 ) => {
   let url = `${URL_MATERIAL}?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}`;
   if (params.name) {
     url += `&Name=${params.name}`;
   }
-  if (params.unit) {
-    url += `&Unit=${params.unit}`;
+  if (params.type) {
+    url += `&materialTypeId=${params.type}`;
   }
 
   return url;

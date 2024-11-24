@@ -22,7 +22,6 @@ import {
   SheetTitle
 } from '@/components/ui/sheet';
 import { UserCog } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
 import {
   Select,
   SelectContent,
@@ -36,6 +35,8 @@ import { Employee, EmployeeType } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import { useCustomerDepartmentsSlice } from '@/store/customer-departments-slice';
 import validator from 'validator';
+import moment from 'moment';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   id: z.string().uuid(),
@@ -65,7 +66,6 @@ interface Props {
 
 export function EditEmployeeSheet({ state, setState }: Props) {
   const t = useTranslations();
-  const { toast } = useToast();
   const router = useRouter();
 
   const _defaultValues = state.data || defaultValues;
@@ -111,16 +111,8 @@ export function EditEmployeeSheet({ state, setState }: Props) {
     onSuccess: (res) => {
       router.refresh();
       setState({ data: null, open: false });
-      toast({
-        title: t('success'),
-        description: t('employee_updated')
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: t('error'),
-        description: t('unknown_error'),
-        variant: 'destructive'
+      toast.success(t('item_updated'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

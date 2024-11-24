@@ -17,18 +17,19 @@ import {
   SheetTitle,
   SheetTrigger
 } from '@/components/ui/sheet';
+import { SupplierType } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import moment from 'moment';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import validator from 'validator';
 import { z } from 'zod';
 import { Button } from '../ui/button';
-import { Textarea } from '../ui/textarea';
-import { useToast } from '../ui/use-toast';
-import { usePathname, useRouter } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -36,7 +37,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { SupplierType } from '@/lib/types';
+import { Textarea } from '../ui/textarea';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -50,7 +51,6 @@ const formSchema = z.object({
 function AddSupplierSheet() {
   const t = useTranslations();
   const router = useRouter();
-  const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
   const addSupplier = useMutation({
@@ -63,9 +63,8 @@ function AddSupplierSheet() {
       router.refresh();
       setOpen(false);
       form.reset();
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

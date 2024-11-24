@@ -27,6 +27,10 @@ import {
   SelectValue
 } from '../ui/select';
 import { BasicEntity } from '@/lib/types';
+import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
+import moment from 'moment';
+import { toast } from 'sonner';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -64,6 +68,7 @@ const formSchema = z.object({
 
 function AddCollectionDialog() {
   const t = useTranslations();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -76,6 +81,15 @@ function AddCollectionDialog() {
     mutationFn: async (formData: FormData) => {
       const res = await api.post('/Collections', formData);
       return res;
+    },
+    onSuccess: (res) => {
+      router.refresh();
+      setOpen(false);
+      form.reset();
+
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
+      });
     }
   });
 

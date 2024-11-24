@@ -28,7 +28,8 @@ import {
   SelectValue
 } from '../ui/select';
 import { Textarea } from '../ui/textarea';
-import { useToast } from '../ui/use-toast';
+import moment from 'moment';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -50,7 +51,6 @@ interface Props {
 function EditCustomerSheet({ state, setState }: Props) {
   const t = useTranslations();
   const router = useRouter();
-  const { toast } = useToast();
 
   useEffect(() => {
     if (state.data) {
@@ -73,9 +73,8 @@ function EditCustomerSheet({ state, setState }: Props) {
         open: false,
         data: null
       });
-      toast({
-        title: res.statusText,
-        description: new Date().toString()
+      toast.success(t('item_updated'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });

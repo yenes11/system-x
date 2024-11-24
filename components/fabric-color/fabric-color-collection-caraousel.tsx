@@ -16,6 +16,7 @@ import { toast } from '../ui/use-toast';
 import ThemedZoom from '../themed-zoom';
 import { SearchBar } from '../searchbar';
 import Empty from '../ui/empty';
+import Code from '../ui/code';
 
 interface ColorCollection {
   collectionId: string;
@@ -78,26 +79,7 @@ function FabricColorCollectionCarousel({ data }: { data: ColorCollection[] }) {
                         {t('code')}
                       </span>
                       <div className="flex items-center gap-2">
-                        <code>{collection.collectionManufacturerCode}</code>
-                        <Button
-                          size="icon"
-                          variant="outline"
-                          onClick={() => {
-                            navigator.clipboard.writeText(
-                              collection.collectionManufacturerCode
-                            );
-                            toast({
-                              title: t('copied_to_clipboard'),
-                              description: t(
-                                'collection_code_copied_to_clipboard'
-                              )
-                            });
-                          }}
-                          className="h-6 w-6"
-                        >
-                          <Copy className="h-3 w-3" />
-                          <span className="sr-only">Copy Order ID</span>
-                        </Button>
+                        <Code>{collection.collectionManufacturerCode}</Code>
                       </div>
                       <span className="text-xs text-muted-foreground">
                         {t('percentage')}

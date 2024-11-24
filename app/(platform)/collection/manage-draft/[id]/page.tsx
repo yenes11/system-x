@@ -1,52 +1,12 @@
-import api from '@/api';
-import CollectionGallery from '@/components/collection/collection-gallery';
-import CollectionNotes from '@/components/collection/collection-notes';
 import FabricCarousel from '@/components/collection/fabric-carousel';
 import MaterialCarousel from '@/components/collection/material-carousel';
-import ProductStations from '@/components/collection/product-stations';
 import ProductStationsStepper from '@/components/collection/product-stations-stepper';
-import ActiveOrdersTable from '@/components/fabric-color/active-orders-table';
-import FabricColorCollectionCarousel from '@/components/fabric-color/fabric-color-collection-caraousel';
-import IngredientsChart from '@/components/fabric-color/ingredients-chart';
-import RecentPricesTable from '@/components/fabric-color/recent-prices-table';
-import StocksTable from '@/components/fabric-color/stocks-table';
-import SuppliersTable from '@/components/fabric-color/suppliers-table';
 import ThemedZoom from '@/components/themed-zoom';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  getCollectionDetails,
-  getCollectionDraftDetails
-} from '@/lib/api-calls';
-import { CollectionDetails } from '@/lib/types';
-import { cn } from '@/lib/utils';
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient
-} from '@tanstack/react-query';
-import {
-  Blocks,
-  ConciergeBell,
-  Info,
-  Layers,
-  PaintBucket,
-  ScrollText
-} from 'lucide-react';
+import { getCollectionDraftDetails } from '@/lib/api-calls';
 import { getTranslations } from 'next-intl/server';
 import { Fragment } from 'react';
 // import CollectionCarousel from '@/components/fabric-color/collection-carousel';
@@ -133,9 +93,6 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
         </CardHeader>
         <CardContent className="flex-1 p-6 text-sm">
           <div className="grid gap-3">
-            <div className="text-lg font-semibold">
-              {t('collection_details')}
-            </div>
             <ul className="grid gap-3">
               {collectionDraftItems.map((item) => (
                 <li
@@ -168,6 +125,8 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
           <MaterialCarousel data={collectionDetails.materials} />
         </TabsContent>
       </Tabs>
+
+      <ProductStationsStepper data={collectionDetails.productStations} />
     </Fragment>
   );
 }
