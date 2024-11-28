@@ -170,7 +170,7 @@ export const getMaterialSuppliers = async (
 };
 
 export const getSuppliers = async (
-  params: Params
+  params: Params & { name: string }
 ): Promise<PaginatedData<Supplier>> => {
   try {
     const res = await api.get(getSuppliersUrl(params));

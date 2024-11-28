@@ -9,14 +9,16 @@ import { Mate } from 'next/font/google';
 async function SupplierPage({
   searchParams
 }: {
-  searchParams: { size: string; index: string };
+  searchParams: { size: string; index: string; name: string };
 }) {
   const t = await getTranslations();
   const size = Number(searchParams?.size) || 10;
   const index = Number(searchParams?.index) || 0;
+  const name = searchParams?.name || '';
   const materialSuppliers = await getSuppliers({
     pageIndex: index,
-    pageSize: size
+    pageSize: size,
+    name
   });
 
   return (

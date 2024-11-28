@@ -2,12 +2,14 @@ import api from '@/api';
 import AddCollectionDialog from '@/components/collection/add-collection-dialog';
 import CollectionTable from '@/components/collection/collection-table';
 import FabricCarousel from '@/components/collection/fabric-carousel';
+import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollections } from '@/lib/api-calls';
 import { CollectionStatus } from '@/lib/types';
 import { getMessages, getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 import React from 'react';
 
 type Props = {};
@@ -55,7 +57,10 @@ async function CollectionLibraryPage({
           title={t('collections')}
           description=""
         />
-        <AddCollectionDialog />
+        <Link href="/collection/new-collection">
+          <Button>{t('add_collection')}</Button>
+        </Link>
+        {/* <AddCollectionDialog /> */}
       </div>
       <CollectionTable data={collections} />
     </div>

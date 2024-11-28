@@ -40,6 +40,25 @@ interface SupplierFabric {
   percent: number;
 }
 
+const materialProperties = [
+  {
+    title: 'name',
+    value: 'name'
+  },
+  {
+    title: 'color',
+    value: 'color'
+  },
+  {
+    title: 'size',
+    value: 'size'
+  },
+  {
+    title: 'amount',
+    value: 'amount'
+  }
+];
+
 interface Props {
   data: CollectionMaterial[];
 }
@@ -50,6 +69,8 @@ function MaterialCarousel({ data }: Props) {
     open: false,
     id: ''
   });
+
+  console.log(data, 'data');
 
   const [searchKey, setSearchKey] = useState('');
 
@@ -103,9 +124,40 @@ function MaterialCarousel({ data }: Props) {
                       />
                     </ThemedZoom>
                   </CardContent>
-                  <CardFooter className="flex flex-col items-center justify-center gap-0 p-2 px-0 pb-0 text-sm">
-                    <span>{material.name}</span>
-                    <span>{material.color}</span>
+                  <CardFooter className="flex w-full flex-col items-stretch gap-0 p-2 px-0 pb-0 text-sm">
+                    {/* <span>{material.name}</span>
+                    <span>{material.color}</span> */}
+
+                    <ul className="grid gap-2 px-3">
+                      {materialProperties.map((m) => (
+                        <li
+                          key={m.value}
+                          className="flex items-center justify-between"
+                        >
+                          <span className="text-xs text-muted-foreground">
+                            {t(m.title)}
+                          </span>
+                          <span className="text-xs">
+                            {(material as any)[m.value]}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* <div className="my-2 flex w-full flex-col px-5">
+                      <div className="flex w-full justify-between">
+                        <span className="text-xs text-muted-foreground">
+                          {t('size')}
+                        </span>
+                        <span className="text-xs">{material.size}</span>
+                      </div>
+                      <div className="flex w-full justify-between">
+                        <span className="text-xs text-muted-foreground">
+                          {t('amount')}
+                        </span>
+                        <span className="text-xs">{material.amount}</span>
+                      </div>
+                    </div> */}
                     <div className="my-2 flex flex-wrap justify-center gap-2">
                       {material.attributes.map((attr) => (
                         <Badge

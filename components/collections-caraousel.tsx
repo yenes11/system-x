@@ -43,6 +43,7 @@ import {
 import { SearchBar } from './searchbar';
 import { toast } from './ui/use-toast';
 import ThemedZoom from './themed-zoom';
+import Code from './ui/code';
 
 const statusOptions = [
   { value: '0', label: 'all' },
@@ -162,26 +163,7 @@ function CollectionsCarousel({ data }: { data: ICollection[] }) {
                         {t('manufacturer_code')}
                       </span>
                       <div className="flex items-center gap-2">
-                        <code>{collection.manufacturerCode}</code>
-                        <Button
-                          size="icon"
-                          variant="outline"
-                          onClick={() => {
-                            navigator.clipboard.writeText(
-                              collection.manufacturerCode
-                            );
-                            toast({
-                              title: t('copied_to_clipboard'),
-                              description: t(
-                                'collection_code_copied_to_clipboard'
-                              )
-                            });
-                          }}
-                          className="h-6 w-6"
-                        >
-                          <Copy className="h-3 w-3" />
-                          <span className="sr-only">Copy Order ID</span>
-                        </Button>
+                        <Code>{collection.manufacturerCode}</Code>
                       </div>
                       <span className="text-xs text-muted-foreground">
                         {t('status')}

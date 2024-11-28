@@ -182,7 +182,14 @@ function MaterialTable({ data }: Props) {
     queryFn: async () => {
       const res = await api.get('/MaterialTypes');
       return res.data;
-    }
+    },
+    select: (data) => [
+      {
+        id: 'all',
+        name: t('all')
+      },
+      ...data
+    ]
   });
 
   const columns = useMemo(() => {
@@ -199,8 +206,11 @@ function MaterialTable({ data }: Props) {
     let filteredUrl = `${pathname}`;
     const params = new URLSearchParams(searchParams);
 
-    if (value.trim() === '') {
-      // Remove the key from the params if the value is empty
+    if (
+      value.trim() === '' ||
+      (key === 'type' && value.toLowerCase() === 'all')
+    ) {
+      // Remove the key from the params if the value is empty or if the key is 'type' and value is 'all'
       params.delete(key);
     } else {
       // Update or set the key in the params
@@ -208,7 +218,7 @@ function MaterialTable({ data }: Props) {
     }
 
     // Construct the URL with the updated search parameters
-    filteredUrl += `?${params.toString()}`;
+    filteredUrl += params.toString() ? `?${params.toString()}` : '';
 
     return filteredUrl;
   };

@@ -252,7 +252,7 @@ function CollectionTable({ data }: Props) {
 
   return (
     <>
-      <div className="flex gap-4">
+      <div className="flex flex-wrap gap-4">
         <SearchBar
           onChange={(e) => handleSearch(e.target.value)}
           className="w-64"
@@ -274,13 +274,13 @@ function CollectionTable({ data }: Props) {
           onValueChange={(value) => handleSearchParams('categoryId', value)}
           placeholder={t('select_a_category')}
         />
-        {/* <ThemedSelect
+        <ThemedSelect
           onClear={() => clearSearchParam('status')}
           value={searchParams.get('status') || ''}
           onValueChange={(value) => handleSearchParams('status', value)}
           options={[allOption, ...collectionOptions]}
           placeholder={t('select_a_status')}
-        /> */}
+        />
         {/* <div className="flex gap-2">
           {selectedCategory && (
             <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">

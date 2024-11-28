@@ -1,4 +1,12 @@
 import { NavItem } from '@/types';
+import {
+  Disc3,
+  Layers,
+  LayoutGrid,
+  Package2,
+  SwatchBook,
+  UserRound
+} from 'lucide-react';
 
 export type User = {
   id: number;
@@ -95,14 +103,14 @@ export const _navItems = [
   {
     key: 'dashboard',
     title: 'dashboard',
-    icon: 'chart-line',
+    icon: LayoutGrid /* 'chart-line',*/,
     href: '/dashboard',
     children: []
   },
   {
     key: 'fabric',
     title: 'fabric',
-    icon: 'color-swatch',
+    icon: SwatchBook /*'color-swatch',*/,
     children: [
       {
         key: 'fabric_library',
@@ -124,7 +132,7 @@ export const _navItems = [
   {
     key: 'material',
     title: 'material',
-    icon: 'disk',
+    icon: Disc3 /*'disk',*/,
     children: [
       {
         key: 'material_library',
@@ -146,7 +154,7 @@ export const _navItems = [
   {
     key: 'collection',
     title: 'collection',
-    icon: 'abstract-26',
+    icon: Layers /*'abstract-26',*/,
     children: [
       {
         key: 'collection_library',
@@ -168,14 +176,14 @@ export const _navItems = [
   {
     key: 'customer',
     title: 'customer',
-    icon: 'users',
+    icon: UserRound /*'users',*/,
     href: '/customer/management',
     children: []
   },
   {
     key: 'supplier',
     title: 'supplier_management',
-    icon: 'delivery-3',
+    icon: Package2 /*'delivery-3',*/,
     href: '/supplier',
     children: []
   }

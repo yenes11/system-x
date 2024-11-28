@@ -22,7 +22,9 @@ import { Button } from '../ui/button';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue
 } from '../ui/select';
@@ -31,6 +33,7 @@ import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 import moment from 'moment';
 import { toast } from 'sonner';
+import { NestedSelect } from '../nested-select';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -46,6 +49,10 @@ const formSchema = z.object({
   categoryId: z.string().uuid(),
   customerSeasonId: z.string().uuid(),
   sizeTypeId: z.string().uuid(),
+  customerReceiverId: z.string().uuid(),
+  customerProjectId: z.string().uuid(),
+  customerSubProjectId: z.string().uuid(),
+  customerBuyerGroupId: z.string().uuid(),
   name: z.string(),
   description: z.string(),
   customerCode: z.string(),
@@ -122,7 +129,8 @@ function AddCollectionDialog() {
     queryFn: async () => {
       const res = await api.get(`/CustomerDepartments/${selectedCustomerId}`);
       return res.data;
-    }
+    },
+    enabled: !!form.getValues('customerId')
   });
 
   const seasons = useQuery({
@@ -132,6 +140,17 @@ function AddCollectionDialog() {
       return res.data;
     }
   });
+  const selectOptions = useQuery({
+    queryKey: ['select-options', selectedCustomerId],
+    queryFn: async () => {
+      const res = await api.get(
+        `/Collections/GetCustomerInfoForCollection?CustomerId=${selectedCustomerId}`
+      );
+      return res.data;
+    }
+  });
+
+  console.log(sizeTypes.data, 'deps');
 
   const onSubmit = (values: Partial<z.infer<typeof formSchema>>) => {
     const formData = new FormData();
@@ -143,6 +162,8 @@ function AddCollectionDialog() {
     addCollection.mutate(formData);
   };
 
+  console.log(form.getValues('customerDepartmentId'), 'vvvvv');
+
   return (
     <ThemedDialog
       title={t('add_collection')}
@@ -150,6 +171,7 @@ function AddCollectionDialog() {
       setOpen={setOpen}
       triggerIcon={<Icon icon="plus" className="mr-2" currentColor size={16} />}
       triggerLabel={t('add_collection')}
+      contentClassName="h-[80%]"
     >
       <Form {...form}>
         <form
@@ -277,7 +299,12 @@ function AddCollectionDialog() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('customer')}</FormLabel>
-                <Select onValueChange={field.onChange}>
+                <Select
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                    form.resetField('customerDepartmentId');
+                  }}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue
@@ -300,11 +327,34 @@ function AddCollectionDialog() {
 
           <FormField
             control={form.control}
+            name="customerDepartmentId"
+            render={({ field }) => (
+              <FormItem key={form.getValues('customerId')}>
+                <FormLabel>{t('customer_department')}</FormLabel>
+                <FormControl>
+                  <NestedSelect
+                    key={form.getValues('customerId')}
+                    data={departments.data || []}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="categoryId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('category')}</FormLabel>
-                <Select onValueChange={field.onChange}>
+                <Select
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                  }}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue
@@ -316,6 +366,188 @@ function AddCollectionDialog() {
                     {categories.data?.map((category: any) => (
                       <SelectItem key={category.id} value={category.id}>
                         {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="customerSeasonId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('customer_season')}</FormLabel>
+                <Select
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                  }}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t('select_season_placeholder')}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {seasons.data?.map((season: any) => (
+                      <SelectItem key={season.id} value={season.id}>
+                        {season.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="sizeTypeId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('size_types')}</FormLabel>
+                <Select
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                  }}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t('select_size_type_placeholder')}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {sizeTypes.data?.map((sizeType: any) => (
+                      <SelectItem key={sizeType.id} value={sizeType.id}>
+                        {sizeType.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="customerReceiverId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('customer_reciever')}</FormLabel>
+                <Select
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                  }}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t('select_customer_reciever_placeholder')}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {selectOptions.data?.receivers.map((sizeType: any) => (
+                      <SelectItem key={sizeType.id} value={sizeType.id}>
+                        {sizeType.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="customerProjectId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('customer_project')}</FormLabel>
+                <Select
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                  }}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t('select_customer_project_placeholder')}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {selectOptions.data?.projects.map((sizeType: any) => (
+                      <SelectItem key={sizeType.id} value={sizeType.id}>
+                        {sizeType.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="customerSubProjectId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('customer_sub_project')}</FormLabel>
+                <Select
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                  }}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t('select_subproject_placeholder')}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {selectOptions.data?.subProjects.map((sizeType: any) => (
+                      <SelectItem key={sizeType.id} value={sizeType.id}>
+                        {sizeType.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="customerBuyerGroupId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('customer_buyer_group')}</FormLabel>
+                <Select
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                  }}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t('select_group_placeholder')}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {selectOptions.data?.buyerGroups.map((sizeType: any) => (
+                      <SelectItem key={sizeType.id} value={sizeType.id}>
+                        {sizeType.name}
                       </SelectItem>
                     ))}
                   </SelectContent>

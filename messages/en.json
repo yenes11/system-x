@@ -212,6 +212,7 @@
   "size_type": "Size Type",
   "garment_1": "Garment 1",
   "garment_2": "Garment 2",
+  "garment": "Garment",
   "designer": "Designer",
   "product_stations": "Product Stations",
   "notes": "Notes",
@@ -240,5 +241,18 @@
   "item_deleted": "Item Deleted",
   "item_added": "Item Added",
   "item_updated": "Item Updated",
-  "enter_size": "Enter size"
+  "enter_size": "Enter size",
+  "select_category_placeholder": "Select a category",
+  "select_customer_placeholder": "Select a customer",
+  "select_season_placeholder": "Select a season",
+  "select_size_type_placeholder": "Select a size type",
+  "select_customer_reciever_placeholder": "Select the reciever",
+  "select_customer_project_placeholder": "Select a customer project",
+  "select_customer_subproject_placeholder": "Select a customer sub-project",
+  "select_group_placeholder": "Select a group",
+  "customer_reciever": "Reciever",
+  "customer_project": "Customer project",
+  "customer_sub_project": "Customer sub-project",
+  "customer_buyer_group": "Customer buyer group",
+  "collection_library": "Collection Library"
 }

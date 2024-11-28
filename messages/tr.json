@@ -212,6 +212,7 @@
   "size_type": "Boyut Tipi",
   "garment_1": "Garment 1",
   "garment_2": "Garment 2",
+  "garment": "Garment",
   "designer": "Designer",
   "product_stations": "Ürün İstasyonları",
   "notes": "Notlar",
@@ -240,5 +241,18 @@
   "item_deleted": "Öğe Silindi",
   "item_added": "Öğe Eklendi",
   "item_updated": "Öğe Güncellendi",
-  "enter_size": "Boyut giriniz"
+  "enter_size": "Boyut giriniz",
+  "select_category_placeholder": "Bir kategori seçiniz",
+  "select_customer_placeholder": "Bir müşteri seçiniz",
+  "select_season_placeholder": "Bir sezon seçiniz",
+  "select_size_type_placeholder": "Bir boyut türü seçiniz",
+  "select_customer_reciever_placeholder": "Teslim alan kişiyi seçiniz",
+  "select_customer_project_placeholder": "Bir müşteri projesi seçiniz",
+  "select_customer_subproject_placeholder": "Bir müşteri alt projesi seçiniz",
+  "select_group_placeholder": "Bir grup seçiniz",
+  "customer_reciever": "Teslim alan",
+  "customer_project": "Müşteri projesi",
+  "customer_sub_project": "Müşteri alt projesi",
+  "customer_buyer_group": "Müşteri buyer grubu",
+  "collection_library": "Koleksiyon Kütüphanesi"
 }

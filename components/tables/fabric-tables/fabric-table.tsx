@@ -169,16 +169,19 @@ function FabricTable({ data }: Props) {
   }, 300);
 
   const getNewSearchParams = (key: string, value: string) => {
-    let filteredUrl = `${pathname}?${key}=${value}`;
-    const name = searchParams.get('name');
-    const grammage = searchParams.get('grammage');
+    let filteredUrl = `${pathname}`;
+    const params = new URLSearchParams(searchParams);
 
-    if (name && key !== 'name') {
-      filteredUrl += `&name=${name}`;
+    if (value.trim() === '') {
+      // Remove the key from the params if the value is empty
+      params.delete(key);
+    } else {
+      // Update or set the key in the params
+      params.set(key, value);
     }
-    if (grammage && key !== 'grammage') {
-      filteredUrl += `&grammage=${grammage}`;
-    }
+
+    // Construct the URL with the updated search parameters
+    filteredUrl += params.toString() ? `?${params.toString()}` : '';
 
     return filteredUrl;
   };
@@ -191,12 +194,12 @@ function FabricTable({ data }: Props) {
           className="w-64"
           placeholder={t('search_fabric')}
         />
-        <SearchBar
+        {/* <SearchBar
           type="number"
           onChange={(e) => handleGrammageSearch(e.target.value)}
           className="w-64"
           placeholder={t('search_grammage')}
-        />
+        /> */}
       </div>
       <Table transparent={false} rounded>
         <TableHeader>

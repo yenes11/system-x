@@ -85,7 +85,12 @@ export const getFabricsWithColorsUrl = (
 export const getMaterialSuppliersUrl = (params: QueryParams) =>
   `${URL_MATERIAL_SUPPLIERS}?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}`;
 
-export const getSuppliersUrl = (params: QueryParams) =>
-  `${URL_SUPPLIERS}?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}&Name=a`;
+export const getSuppliersUrl = (params: QueryParams & { name: string }) => {
+  let url = `${URL_SUPPLIERS}?PageIndex=${params.pageIndex}&PageSize=${params.pageSize}`;
+  if (params.name) {
+    url += `&Name=${params.name}`;
+  }
+  return url;
+};
 
 export const URL_USER = `/Users/GetFromAuth`;

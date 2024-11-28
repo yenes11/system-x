@@ -3,8 +3,8 @@
 import React, { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { ClipboardCopyIcon, CopyIcon } from '@radix-ui/react-icons';
 import clsx from 'clsx';
-import { toast } from './use-toast';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 function Code({
   children,
@@ -15,9 +15,8 @@ function Code({
   const handleCopy = () => {
     if (typeof children === 'string') {
       navigator.clipboard.writeText(children).then(() => {
-        toast({
-          title: t('copied_to_clipboard'),
-          description: t('collection_code_copied_to_clipboard')
+        toast.success(t('copied_to_clipboard'), {
+          // description: t('collection_code_copied_to_clipboard')
         });
       });
     }

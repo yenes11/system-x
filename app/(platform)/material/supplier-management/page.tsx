@@ -16,7 +16,8 @@ async function MaterialSupplierManagement({
   const index = Number(searchParams?.index) || 0;
   const materialSuppliers = await getSuppliers({
     pageIndex: index,
-    pageSize: size
+    pageSize: size,
+    name: ''
   });
 
   return (

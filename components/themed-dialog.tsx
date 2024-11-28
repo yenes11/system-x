@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 import React from 'react';
 
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   footer?: React.ReactNode;
+  contentClassName?: string;
 }
 
 function ThemedDialog({
@@ -28,7 +30,8 @@ function ThemedDialog({
   triggerLabel,
   headerIcon,
   triggerIcon,
-  footer
+  footer,
+  contentClassName
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -40,12 +43,22 @@ function ThemedDialog({
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="max-h-[70%] w-full max-w-3xl gap-0 overflow-auto p-0 sm:w-full">
-        <DialogHeader className="flex flex-row items-start bg-muted/50 px-6 py-4">
+      <DialogContent
+        className={cn(
+          'max-h-[90%] max-w-3xl gap-0 overflow-hidden p-0 sm:w-full',
+          contentClassName
+        )}
+      >
+        {/* Fixed Header */}
+        <DialogHeader className="sticky top-0 z-10 flex max-h-12 flex-row items-start bg-muted/50 px-6 py-4">
           {headerIcon}
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div className="p-4">{children}</div>
+
+        {/* Scrollable Content */}
+        <div className="h-full overflow-auto p-4">{children}</div>
+
+        {/* Footer (optional) */}
         {footer && (
           <DialogFooter className="flex flex-row items-center border-t bg-muted/50 px-4 py-3">
             {footer}

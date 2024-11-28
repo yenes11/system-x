@@ -1,13 +1,40 @@
 'use client';
 import React, { useLayoutEffect } from 'react';
-import { DashboardNav } from '@/components/dashboard-nav';
+// import { DashboardNav } from '@/components/dashboard-nav';
 import { navItems } from '@/constants/data';
 import { cn } from '@/lib/utils';
-import { ArrowLeftToLine, ChevronLeft, ChevronsLeft } from 'lucide-react';
+import {
+  ArrowLeftToLine,
+  AudioWaveform,
+  ChevronLeft,
+  ChevronsLeft,
+  Command,
+  GalleryVerticalEnd,
+  PanelRightClose
+} from 'lucide-react';
 import { useSidebar } from '@/hooks/useSidebar';
 import Link from 'next/link';
 import { Label } from '../ui/label';
 import Icon from '../ui/icon';
+import { TeamSwitcher } from '../team-switcher';
+
+const teams = [
+  {
+    name: 'Acme Inc',
+    logo: GalleryVerticalEnd,
+    plan: 'Enterprise'
+  },
+  {
+    name: 'Acme Corp.',
+    logo: AudioWaveform,
+    plan: 'Startup'
+  },
+  {
+    name: 'Evil Corp.',
+    logo: Command,
+    plan: 'Free'
+  }
+];
 
 type SidebarProps = {
   className?: string;
@@ -37,7 +64,7 @@ export default function Sidebar({ className }: SidebarProps) {
     <aside
       className={cn(
         `relative hidden h-screen flex-none flex-shrink-0 flex-col border-r bg-card transition-[width] duration-500 md:flex`,
-        !isMinimized ? 'w-64' : 'w-[72px]',
+        !isMinimized ? 'w-64' : 'w-16',
         className
       )}
     >
@@ -50,6 +77,15 @@ export default function Sidebar({ className }: SidebarProps) {
         )}
         onClick={handleToggle}
       /> */}
+
+      <PanelRightClose
+        onClick={handleToggle}
+        className={cn(
+          'absolute -right-14 top-4 z-50 cursor-pointer overflow-scroll rounded text-3xl text-foreground transition-all duration-700 ease-out',
+          isMinimized ? '' : 'rotate-180'
+        )}
+      />
+
       <svg
         onClick={handleToggle}
         className={cn(
@@ -77,7 +113,7 @@ export default function Sidebar({ className }: SidebarProps) {
         />
       </svg>
 
-      <div className="hidden h-14 w-64 items-center border-b border-r  p-6 md:flex">
+      <div className="hidden h-14 w-64 items-center border-r  p-6 md:flex">
         <Link className="box-border flex items-center gap-2" href="/dashboard">
           <Icon icon="abstract-25" size={24} />
           <span
@@ -91,8 +127,11 @@ export default function Sidebar({ className }: SidebarProps) {
           </span>
         </Link>
       </div>
+      {/* <div className="mx-3 mt-3">
+        <TeamSwitcher teams={teams} />
+      </div> */}
 
-      <DashboardNav items={navItems} />
+      {/* <DashboardNav items={navItems} /> */}
     </aside>
   );
 }

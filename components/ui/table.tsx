@@ -23,7 +23,7 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
       className={`overflow-auto shadow
         ${bordered && 'border border-light-foreground'}
       ${rounded ? 'rounded-xl' : 'rounded-none'} ${
-        transparent === true ? 'bg-transparent' : 'bg-light'
+        transparent === true ? 'bg-transparent' : 'bg-card'
       }`}
     >
       <table

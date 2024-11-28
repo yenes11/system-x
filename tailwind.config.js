@@ -40,6 +40,10 @@ module.exports = {
           DEFAULT: 'hsl(var(--light))',
           foreground: 'hsl(var(--light-foreground))'
         },
+        info: {
+          DEFAULT: 'hsl(var(--info))',
+          foreground: 'hsl(var(--info-foreground))'
+        },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))'
