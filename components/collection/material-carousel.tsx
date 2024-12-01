@@ -1,33 +1,23 @@
 'use client';
 
+import { CollectionMaterial } from '@/lib/types';
+import { Pencil, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
+import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import { SearchBar } from '../searchbar';
+import ThemedZoom from '../themed-zoom';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter
-} from '../ui/card';
+import { Card, CardContent, CardFooter } from '../ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
-  CarouselNext
+  CarouselNext,
+  CarouselPrevious
 } from '../ui/carousel';
-import { useMemo, useState } from 'react';
-import { DeleteIcon, Euro, Pencil, Plus, Trash, Trash2 } from 'lucide-react';
-import AddPriceToFabricSheet from '../suppliers/add-price-to-fabric-sheet';
-import RecentPricesDialog from '../suppliers/recent-prices-dialog';
-import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import Empty from '../ui/empty';
-import { Input } from '../ui/input';
-import { CollectionMaterial, Fabric } from '@/lib/types';
-import { SearchBar } from '../searchbar';
-import ThemedZoom from '../themed-zoom';
-import AddFabricToCollectionSheet from './add-fabric-to-collection-sheet';
 import AddMaterialToCollectionSheet from './add-material-to-collection-sheet';
 
 interface SupplierFabric {
@@ -114,8 +104,8 @@ function MaterialCarousel({ data }: Props) {
             </div>
           ) : (
             filteredData?.map((material, index: number) => (
-              <CarouselItem key={index} className="lg:w-64">
-                <Card className="overflow-hidden bg-cover bg-center p-0">
+              <CarouselItem key={index} className="">
+                <Card className="w-full overflow-hidden bg-cover bg-center p-0">
                   <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
                     <ThemedZoom>
                       <img
