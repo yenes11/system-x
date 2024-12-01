@@ -1,7 +1,6 @@
 import { AppSidebar } from '@/components/app-sidebar';
 import Header from '@/components/layout/header';
 // import Sidebar from '@/components/layout/sidebar';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import Providers from '@/providers/query-provider';
 import type { Metadata } from 'next';
 

@@ -37,19 +37,19 @@ function ProductStationsStepper({ data, editable = false }: Props) {
           <AddStationDialog />
         ) : null}
       </CardHeader>
-      <CardContent className="pb-20 pt-4">
-        <div className="flex items-center gap-2 px-20 text-sm text-card-foreground">
+      <CardContent className="pb-20 pt-4 @container">
+        <div className="flex flex-col gap-2 px-20 text-sm text-card-foreground @sm:!flex-row @sm:items-center">
           {data.length > 0 ? (
             sortedData.map((station, index) => (
               <React.Fragment key={station.id}>
-                <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-emerald-200">
-                  <span className="text-emerald-600">{station.priority}</span>
-                  <span className="absolute left-1/2 top-12 w-40 -translate-x-1/2 text-center text-emerald-500">
+                <div className="relative flex size-8 items-center justify-center rounded-full bg-blue-500">
+                  <span className="text-white">{station.priority}</span>
+                  <span className="absolute left-10 w-40 @sm:left-1/2 @sm:top-12 @sm:-translate-x-1/2 @sm:text-center">
                     {station.name}
                   </span>
                 </div>
                 {index !== sortedData.length - 1 && (
-                  <div className="h-px flex-1 rounded-full bg-emerald-100"></div>
+                  <div className="h-1 flex-1 rounded-full bg-theme-blue-foreground/70"></div>
                 )}
               </React.Fragment>
             ))

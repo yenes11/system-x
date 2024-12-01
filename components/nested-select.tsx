@@ -22,7 +22,7 @@ import {
 interface NestedItem {
   name: string;
   id: string;
-  childs?: NestedItem[];
+  [key: string]: any; // Dinamik çocuk elemanları desteklemek için
 }
 
 interface ComboboxNestedProps {
@@ -30,13 +30,15 @@ interface ComboboxNestedProps {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  childrenKey?: string; // Dinamik olarak alt elemanların property adı
 }
 
 export function NestedSelect({
   data,
   value,
   onChange,
-  disabled = false
+  disabled = false,
+  childrenKey = 'childs'
 }: ComboboxNestedProps) {
   const [open, setOpen] = React.useState(false);
   const [expandedItems, setExpandedItems] = React.useState<
@@ -59,11 +61,11 @@ export function NestedSelect({
         const matchesQuery = item.name
           .toLowerCase()
           .includes(query.toLowerCase());
-        const filteredChildren = item.childs
-          ? filterData(item.childs, query)
+        const filteredChildren = item[childrenKey]
+          ? filterData(item[childrenKey], query)
           : [];
         if (matchesQuery || filteredChildren.length > 0) {
-          return { ...item, childs: filteredChildren };
+          return { ...item, [childrenKey]: filteredChildren };
         }
         return null;
       })
@@ -81,7 +83,7 @@ export function NestedSelect({
             setOpen(false);
           }}
         >
-          {item.childs && (
+          {item[childrenKey] && (
             <Button
               variant="ghost"
               size="icon"
@@ -98,19 +100,19 @@ export function NestedSelect({
               )}
             </Button>
           )}
-          <span className={cn('flex-1', !item.childs && 'pl-7')}>
+          <span className={cn('flex-1', !item[childrenKey] && 'pl-7')}>
             {item.name}
           </span>
           <Check
             className={cn(
               'ml-auto shrink-0',
-              value === item.name ? 'opacity-100' : 'opacity-0'
+              value === item.id ? 'opacity-100' : 'opacity-0'
             )}
           />
         </CommandItem>
-        {item.childs && expandedItems[item.id] && (
+        {item[childrenKey] && expandedItems[item.id] && (
           <CommandGroup className="pl-6">
-            {renderNestedItems(item.childs)}
+            {renderNestedItems(item[childrenKey])}
           </CommandGroup>
         )}
       </React.Fragment>

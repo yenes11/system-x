@@ -1,12 +1,14 @@
 import CollectionGallery from '@/components/collection/collection-gallery';
 import CollectionNotes from '@/components/collection/collection-notes';
 import ProductStationsStepper from '@/components/collection/product-stations-stepper';
+import DescriptionList from '@/components/description-list';
 import ThemedZoom from '@/components/themed-zoom';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollectionDetails } from '@/lib/api-calls';
+import { SlidersVertical } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { Fragment } from 'react';
 // import CollectionCarousel from '@/components/fabric-color/collection-carousel';
@@ -70,15 +72,67 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
   const t = await getTranslations();
   const collectionDetails = await getCollectionDetails(params.id);
 
+  const collectionDetailItems = [
+    {
+      title: t('name'),
+      description: collectionDetails.name
+    },
+    {
+      title: t('description'),
+      description: collectionDetails.description
+    },
+    {
+      title: t('customer_code'),
+      description: collectionDetails.customerCode
+    },
+    {
+      title: t('manufacturer_code'),
+      description: collectionDetails.manufacturerCode
+    },
+    {
+      title: t('customer'),
+      description: collectionDetails.customer
+    },
+    {
+      title: t('department'),
+      description: collectionDetails.department
+    },
+    {
+      title: t('category'),
+      description: collectionDetails.category
+    },
+    {
+      title: t('season'),
+      description: collectionDetails.season
+    },
+    {
+      title: t('buyer'),
+      description: collectionDetails.buyer
+    },
+    {
+      title: t('size_type'),
+      description: collectionDetails.sizeType
+    },
+    {
+      title: t('garment_1'),
+      description: collectionDetails.garment1
+    },
+    {
+      title: t('garment_2'),
+      description: collectionDetails.garment2
+    },
+    {
+      title: t('designer'),
+      description: collectionDetails.designer
+    }
+  ];
+
   return (
     <Fragment>
       <div className="mb-4 flex justify-between">
-        <Heading
-          title={t('manage_collection')}
-          icon={<Icon icon="colors-square" currentColor size={32} />}
-        />
+        <Heading title={t('manage_collection')} icon={<SlidersVertical />} />
       </div>
-      <Card className="mb-4 flex overflow-hidden md:flex-col lg:flex-row">
+      <Card className="mb-4 flex flex-col overflow-hidden sm:!flex-row">
         <CardHeader className="flex flex-row items-start bg-muted/50">
           <div className="flex h-full flex-col">
             <div className="flex h-full w-full justify-center p-0">
@@ -91,11 +145,9 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="flex-1 p-6 text-sm">
-          <div className="grid gap-3">
-            <div className="text-lg font-semibold">
-              {t('collection_details')}
-            </div>
+        <CardContent className="flex-1 p-0 text-sm">
+          <DescriptionList listItems={collectionDetailItems as any} />
+          {/* <div className="grid gap-3">
             <ul className="grid gap-3">
               {collectionDetailItems.map((item) => (
                 <li
@@ -107,7 +159,7 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
 
@@ -128,7 +180,6 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
             editable
             data={collectionDetails.productStations}
           />
-          {/* <ProductStations data={collectionDetails.productStations} /> */}
         </TabsContent>
         <TabsContent value="notes" className="">
           <CollectionNotes notes={collectionDetails.collectionNotes} />

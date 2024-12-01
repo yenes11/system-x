@@ -131,6 +131,8 @@ function NewCollectionPage() {
     enabled: !!form.getValues('customerId')
   });
 
+  console.log(categories.data, 'dddd');
+
   const seasons = useQuery({
     queryKey: ['seasons', selectedCustomerId],
     queryFn: async () => {
@@ -336,8 +338,26 @@ function NewCollectionPage() {
                   </FormItem>
                 )}
               />
-
               <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('category')}</FormLabel>
+                    <FormControl>
+                      <NestedSelect
+                        childrenKey="subCategories"
+                        data={categories.data || []}
+                        onChange={field.onChange}
+                        value={field.value}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* <FormField
                 control={form.control}
                 name="categoryId"
                 render={({ field }) => (
@@ -366,7 +386,7 @@ function NewCollectionPage() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               <FormField
                 control={form.control}

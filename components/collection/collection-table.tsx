@@ -281,30 +281,6 @@ function CollectionTable({ data }: Props) {
           options={[allOption, ...collectionOptions]}
           placeholder={t('select_a_status')}
         />
-        {/* <div className="flex gap-2">
-          {selectedCategory && (
-            <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">
-              {selectedCategory?.name}
-              <CrossCircledIcon
-                onClick={() => clearSearchParam('categoryId')}
-              />
-            </Badge>
-          )}
-          {selectedCustomer && (
-            <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">
-              {selectedCustomer?.name}
-              <CrossCircledIcon
-                onClick={() => clearSearchParam('customerId')}
-              />
-            </Badge>
-          )}
-          {selectedStatus && (
-            <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">
-              {t(selectedStatus)}
-              <CrossCircledIcon onClick={() => clearSearchParam('status')} />
-            </Badge>
-          )}
-        </div> */}
       </div>
       <Table transparent={false} rounded>
         <TableBody>
@@ -337,16 +313,16 @@ function CollectionTable({ data }: Props) {
                       <span>{row.original.manufacturerCode}</span>
                     </div>
                     <div className="px-4">
-                      <Badge className="mb-2 mr-2 border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">
+                      <Badge className="bg-theme-blue/20 border-theme-blue-foreground/25 text-theme-blue-foreground mb-2 mr-2">
                         {row.original.categoryName}
                       </Badge>
-                      <Badge className="mb-2 mr-2 border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">
+                      <Badge className="bg-theme-blue/20 border-theme-blue-foreground/25 text-theme-blue-foreground mb-2 mr-2">
                         {row.original.customerDepartment}
                       </Badge>
-                      <Badge className="mb-2 mr-2 border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">
+                      <Badge className="bg-theme-blue/20 border-theme-blue-foreground/25 text-theme-blue-foreground mb-2 mr-2">
                         {row.original.customerSeasonName}
                       </Badge>
-                      <Badge className="border border-blue-300 bg-blue-300/20 px-4 text-blue-500 dark:border-blue-400 dark:bg-blue-500/20 dark:text-blue-300">
+                      <Badge className="bg-theme-blue/20 border-theme-blue-foreground/25 text-theme-blue-foreground mb-2 mr-2">
                         {row.original.sizeTypeName}
                       </Badge>
                     </div>
@@ -406,7 +382,7 @@ function CollectionTable({ data }: Props) {
                       if (color.colorName === 'Taslak') return;
                       return (
                         <Badge
-                          className="rounded-md border border-teal-300 bg-teal-300/20 px-4 text-teal-500 dark:border-teal-400 dark:bg-teal-500/20 dark:text-teal-300"
+                          className="bg-theme-teal/15 text-theme-teal-foreground border-theme-teal-foreground/30 rounded-md"
                           key={color.id}
                         >
                           {color.colorName}

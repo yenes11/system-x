@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import LocaleDropdown from './locale-dropdown';
 import { MobileSidebar } from './mobile-sidebar';
 import { UserNav } from './user-nav';
+import { SidebarTrigger } from '../ui/sidebar';
 
 export default function Header() {
   return (
@@ -11,6 +12,7 @@ export default function Header() {
         <div className={cn('block md:!hidden')}>
           <MobileSidebar />
         </div>
+        <SidebarTrigger className="mr-auto" />
         {/* <Input placeholder="Search..." /> */}
         {/* <SidebarTrigger className="-ml-1 mr-auto" /> */}
         <div className="flex items-center gap-2">

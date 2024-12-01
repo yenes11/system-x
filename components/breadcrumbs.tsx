@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/breadcrumb';
 import { ChevronRight, Slash } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { usePathname, useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 
 type BreadcrumbItemProps = {

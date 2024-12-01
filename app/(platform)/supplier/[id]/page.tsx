@@ -1,4 +1,6 @@
 import api from '@/api';
+import { description } from '@/components/charts/bar-graph';
+import DescriptionList from '@/components/description-list';
 import AssignFabricSheet from '@/components/fabric-supplier/assign-fabric-sheet';
 import FabricCarousel from '@/components/fabric-supplier/fabric-carousel';
 import MaterialCarousel from '@/components/material-supplier/material-carousel';
@@ -29,20 +31,41 @@ async function SupplierDetailsPage({ params }: { params: { id: string } }) {
   const defaultTab =
     supplier?.type === 1 || supplier?.type === 2 ? 'fabric' : 'material';
 
-  console.log(defaultTab, 'defaulttab');
+  const listItems = [
+    {
+      title: t('name'),
+      description: supplier.name
+    },
+    {
+      title: t('address'),
+      description: supplier.address
+    },
+    {
+      title: t('phone'),
+      description: supplier.phone
+    },
+    {
+      title: t('authorized_person'),
+      description: supplier.authorizedPersonFullName
+    },
+    {
+      title: t('billing_address'),
+      description: supplier.billingAddress
+    }
+  ];
 
   return (
     <>
       <Card className="mb-4 flex flex-col overflow-hidden">
-        <CardHeader className="flex flex-row items-start bg-muted px-6 py-2">
+        <CardHeader className="flex flex-row items-start border-b bg-muted px-6 py-2">
           <div className="flex h-full flex-col">
             <CardTitle className="group flex items-center gap-2 text-lg">
               {t('details')}
             </CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="flex-1 p-6 text-sm">
-          <div className="grid gap-3">
+        <CardContent className="flex-1 p-0 text-sm">
+          {/* <div className="grid gap-3">
             <ul className="grid gap-3">
               <li className="flex items-center justify-between">
                 <span className="text-muted-foreground">{t('name')}</span>
@@ -71,7 +94,8 @@ async function SupplierDetailsPage({ params }: { params: { id: string } }) {
                 <span>{supplier.billingAddress}</span>
               </li>
             </ul>
-          </div>
+          </div> */}
+          <DescriptionList listItems={listItems} />
         </CardContent>
       </Card>
 

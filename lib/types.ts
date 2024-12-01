@@ -34,6 +34,33 @@ export interface FabricColor extends BasicEntity {
   ingredients: Ingredient[];
 }
 
+export interface FabricColorDetails {
+  id: string;
+  fabricName: string;
+  fabricGrammage: number;
+  fabricUnitName: string;
+  fabricTypeName: string;
+  fabricColorName: string;
+  fabricColorImage: string;
+  fabricColorReservedAmount: number;
+  collectionColors: ColorCollection[];
+  stocks: Stock[];
+  suppliers: Supplier[];
+  ingredients: Ingredient[];
+  activeOrders: ActiveOrder[];
+}
+
+export interface ColorCollection {
+  collectionId: string;
+  collectionColorId: string;
+  collectionName: string;
+  collectionCustomerCode: string;
+  collectionManufacturerCode: string;
+  collectionImage: string;
+  collectionColorName: string;
+  percent: number;
+}
+
 export interface Warehouse extends BasicEntity {
   address: string;
   longitude: string;

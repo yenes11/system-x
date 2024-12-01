@@ -17,17 +17,7 @@ import ThemedZoom from '../themed-zoom';
 import { SearchBar } from '../searchbar';
 import Empty from '../ui/empty';
 import Code from '../ui/code';
-
-interface ColorCollection {
-  collectionId: string;
-  collectionColorId: string;
-  collectionName: string;
-  collectionCustomerCode: string;
-  collectionManufacturerCode: string;
-  collectionImage: string;
-  collectionColorName: string;
-  percent: number;
-}
+import { ColorCollection } from '@/lib/types';
 
 function FabricColorCollectionCarousel({ data }: { data: ColorCollection[] }) {
   const t = useTranslations();

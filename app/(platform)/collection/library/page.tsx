@@ -8,6 +8,7 @@ import Icon from '@/components/ui/icon';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollections } from '@/lib/api-calls';
 import { CollectionStatus } from '@/lib/types';
+import { SwatchBook } from 'lucide-react';
 import { getMessages, getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import React from 'react';
@@ -46,14 +47,7 @@ async function CollectionLibraryPage({
     <div className="space-y-2">
       <div className="mb-4 flex justify-between">
         <Heading
-          icon={
-            <Icon
-              currentColor
-              icon="abstract-26"
-              size={24}
-              className="text-icon"
-            />
-          }
+          icon={<SwatchBook />}
           title={t('collections')}
           description=""
         />

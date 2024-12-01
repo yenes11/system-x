@@ -13,6 +13,7 @@ import {
   CollectionDetails,
   CollectionDraft,
   Fabric,
+  FabricColorDetails,
   ICollectionStatus,
   MaterialVariant,
   PaginatedData,
@@ -53,6 +54,19 @@ export const getCollectionDraftDetails = async (id: string) => {
       `/CollectionColors/GetCollectionDraftDetail/${id}`
     );
     return res.data as CollectionDraft;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.title || 'An error occurred');
+    } else {
+      throw new Error('An unknown error occurred');
+    }
+  }
+};
+
+export const getFabricColorDetail = async (id: string) => {
+  try {
+    const res = await api.get(`/FabricColors/${id}`);
+    return res.data as FabricColorDetails;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.title || 'An error occurred');

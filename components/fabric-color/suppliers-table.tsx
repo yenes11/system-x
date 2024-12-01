@@ -55,7 +55,7 @@ function SuppliersTable({ data }: Props) {
   const t = useTranslations();
   return (
     <Card className="overflow-hidden bg-nutural">
-      <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-3">
+      <CardHeader className="flex-row items-center justify-between border-b bg-muted/50 px-4 py-3">
         <CardTitle>{t('suppliers')}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">

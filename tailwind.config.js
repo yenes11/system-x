@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   darkMode: ['class'],
   content: [
@@ -27,6 +30,13 @@ module.exports = {
       ]
     },
     extend: {
+      containers: {
+        sm: '640px', // Small devices (e.g., tablets)
+        md: '768px', // Medium devices (e.g., small laptops)
+        lg: '1024px', // Large devices (e.g., desktops)
+        xl: '1280px', // Extra-large devices
+        '2xl': '1536px' // 2X Extra-large devices
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -36,6 +46,18 @@ module.exports = {
         icon: 'hsl(var(--icon))',
         nutural: 'hsl(var(--nutural))',
         soft: 'hsl(var(--soft))',
+        success: {
+          DEFAULT: 'rgb(var(--success) / <alpha-value>)',
+          foreground: 'rgb(var(--success-foreground) / <alpha-value>)'
+        },
+        'theme-blue': {
+          DEFAULT: 'rgb(var(--theme-blue) / <alpha-value>)',
+          foreground: 'rgb(var(--theme-blue-foreground) / <alpha-value>)'
+        },
+        'theme-teal': {
+          DEFAULT: 'rgb(var(--theme-teal) / <alpha-value>)',
+          foreground: 'rgb(var(--theme-teal-foreground) / <alpha-value>)'
+        },
         light: {
           DEFAULT: 'hsl(var(--light))',
           foreground: 'hsl(var(--light-foreground))'
@@ -130,5 +152,8 @@ module.exports = {
       }
     }
   },
-  plugins: [require('tailwindcss-animate')]
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/container-queries')
+  ]
 };

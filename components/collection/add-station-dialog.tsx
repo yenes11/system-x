@@ -28,6 +28,7 @@ function AddStationDialog() {
     queryKey: ['product-stations'],
     queryFn: async () => {
       const res = await api.get('/ProductStations');
+      console.log(res.data, 'sssss');
       setAllStations(res.data);
       return res.data;
     }

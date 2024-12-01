@@ -20,6 +20,8 @@ import {
 import { ChevronRightIcon } from '@radix-ui/react-icons';
 import { useTranslations } from 'next-intl';
 import { Fragment } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export function NavMain({
   items
@@ -36,6 +38,11 @@ export function NavMain({
   }[];
 }) {
   const t = useTranslations();
+  const pathname = usePathname();
+
+  const isActive = (url: string) =>
+    pathname === url || pathname.startsWith(url);
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -63,10 +70,16 @@ export function NavMain({
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                          <SidebarMenuSubButton
+                            isActive={isActive(subItem.url)}
+                            asChild
+                          >
+                            <Link
+                              // data-active={isActive(subItem.url)}
+                              href={subItem.url}
+                            >
                               <span>{t(subItem.title)}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
@@ -74,11 +87,11 @@ export function NavMain({
                   </CollapsibleContent>
                 </Fragment>
               ) : (
-                <SidebarMenuButton asChild>
-                  <a href={item.url}>
+                <SidebarMenuButton isActive={isActive(item.url)} asChild>
+                  <Link href={item.url}>
                     {item.icon && <item.icon />}
                     <span>{t(item.title)}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               )}
             </SidebarMenuItem>

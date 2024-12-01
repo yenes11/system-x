@@ -121,7 +121,7 @@ function AddPriceSheet() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button className="rounded-full bg-nutural" variant="outline">
+        <Button className="rounded-full " variant="outline">
           <PlusIcon className="mr-2" />
           {t('add_price')}
         </Button>

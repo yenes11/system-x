@@ -57,7 +57,7 @@ function ActiveOrdersTable({ color }: { color: any }) {
   const t = useTranslations();
   return (
     <Card className="overflow-auto bg-nutural">
-      <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-3">
+      <CardHeader className="flex-row items-center justify-between border-b bg-muted/50 px-4 py-3">
         <CardTitle>{t('active_orders')}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
