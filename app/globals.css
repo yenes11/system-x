@@ -29,7 +29,7 @@
     --destructive-foreground: 210 20% 98%;
     --border: 205.71 12.28% 88.82%; /*220 13% 91%;*/
     --input: 220 13% 91%;
-    --ring: 262.1 83.3% 57.8%;
+    --ring: 224.3 76.3% 48%;
     --radius: 0.5rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -82,7 +82,7 @@
     --destructive-foreground: 210 20% 98%;
     --border: 205.71 6.67% 20.59%; /*215 27.9% 16.9%;*/
     --input: 205.71 6.67% 20.59%; /*215 27.9% 16.9%;*/
-    --ring: 174.67 83.85% 31.57%; /*263.4 70% 50.4%;*/
+    --ring: 224.3 76.3% 48%; /*263.4 70% 50.4%;*/
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -178,12 +178,12 @@
   scrollbar-width: none; /* Firefox */
 }
 
-.custom-zoom [data-rmiz-modal-overlay],
+/* .custom-zoom [data-rmiz-modal-overlay],
 .custom-zoom [data-rmiz-modal-img] {
   transition-property: all;
   transition-duration: 0.2s;
   transition-timing-function: linear;
-}
+} */
 
 .custom-zoom [data-rmiz-modal-overlay='hidden'] {
   background-color: #00000090;
@@ -207,3 +207,57 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* custom zoom component */
+/* .custom-zoom-thumbnail {
+  display: inline-block;
+  cursor: zoom-in;
+}
+
+.custom-zoom-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.custom-zoom-content {
+  max-width: 90%;
+  max-height: 90%;
+  animation: zoomIn 0.3s ease-in-out;
+}
+
+.custom-zoom-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  transform-origin: center center;
+}
+
+@keyframes fadeIn {
+  from {
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+} */

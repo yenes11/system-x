@@ -162,23 +162,36 @@ function CollectionsCarousel({ data }: { data: ICollection[] }) {
                       <span className="text-xs text-muted-foreground">
                         {t('manufacturer_code')}
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="mb-1 flex items-center gap-2">
                         <Code>{collection.manufacturerCode}</Code>
                       </div>
                       <span className="text-xs text-muted-foreground">
                         {t('status')}
                       </span>
-                      <Badge
-                        className={`rounded-sm text-xs  ${
-                          collection.status === 1
-                            ? 'bg-muted text-muted-foreground'
-                            : collection.status === 2
-                            ? 'bg-green-500'
-                            : 'bg-destructive'
-                        }`}
-                      >
+
+                      <div className="flex items-center gap-2">
+                        <span className="relative flex size-2">
+                          <span
+                            className={`absolute inline-flex h-full w-full animate-ping rounded-full ${
+                              collection.status === 1
+                                ? 'bg-gray-300'
+                                : collection.status === 2
+                                ? 'bg-green-600'
+                                : 'bg-destructive'
+                            } opacity-75`}
+                          ></span>
+                          <span
+                            className={`relative inline-flex size-2 rounded-full ${
+                              collection.status === 1
+                                ? 'bg-gray-300'
+                                : collection.status === 2
+                                ? 'bg-green-600'
+                                : 'bg-destructive'
+                            }`}
+                          ></span>
+                        </span>
                         {t(CollectionStatus[collection.status])}
-                      </Badge>
+                      </div>
                     </CardFooter>
                   </Card>
                 </div>

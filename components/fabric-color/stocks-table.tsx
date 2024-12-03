@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { DataTable } from '../ui/data-table';
+import { Package } from 'lucide-react';
 
 interface Props {
   data: any;
@@ -27,7 +28,8 @@ function StocksTable({ data, fabricUnitName }: Props) {
 
   return (
     <Card className="overflow-hidden bg-nutural">
-      <CardHeader className="flex-row items-center justify-between border-b bg-muted/50 px-4 py-3">
+      <CardHeader className="h-12 flex-row items-center gap-2 border-b px-4 py-0">
+        <Package />
         <CardTitle>{t('stocks')}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">

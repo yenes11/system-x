@@ -6,7 +6,13 @@ import { DataTable } from '../ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 import { Button } from '../ui/button';
-import { Pencil, Plus, Trash2 } from 'lucide-react';
+import {
+  Building2,
+  Pencil,
+  Plus,
+  Trash2,
+  Warehouse as WarehouseIcon
+} from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { DeleteWarehouseDialog } from '../fabric-supplier/delete-warehouse-dialog';
@@ -141,8 +147,11 @@ function WarehouseTable({ data }: Props) {
         endpoint={endpoint}
       />
       <Card className="flex-[2] overflow-auto bg-nutural">
-        <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-2">
-          <CardTitle>{t('warehouses')}</CardTitle>
+        <CardHeader className="flex-row items-center justify-between border-b px-4 py-2">
+          <div className="flex items-center gap-2">
+            <Building2 />
+            <CardTitle>{t('warehouses')}</CardTitle>
+          </div>
           <AddWarehouseSheet />
         </CardHeader>
         <CardContent className="p-0">

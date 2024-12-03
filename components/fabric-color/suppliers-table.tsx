@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { DataTable } from '../ui/data-table';
 import { useTranslations } from 'next-intl';
+import { Blocks } from 'lucide-react';
 
 type Fabric = {
   id: string;
@@ -55,7 +56,8 @@ function SuppliersTable({ data }: Props) {
   const t = useTranslations();
   return (
     <Card className="overflow-hidden bg-nutural">
-      <CardHeader className="flex-row items-center justify-between border-b bg-muted/50 px-4 py-3">
+      <CardHeader className="h-12 flex-row items-center gap-2 border-b px-4">
+        <Blocks />
         <CardTitle>{t('suppliers')}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">

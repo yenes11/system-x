@@ -254,5 +254,16 @@
   "customer_project": "Customer project",
   "customer_sub_project": "Customer sub-project",
   "customer_buyer_group": "Customer buyer group",
-  "collection_library": "Collection Library"
+  "collection_library": "Collection Library",
+  "name_placeholder": "Enter a name",
+  "description_placeholder": "Enter a description",
+  "customer_code_placeholder": "Enter a customer code",
+  "garment_placeholder": "Enter a garment",
+  "designer_placeholder": "Enter a designer",
+  "buyer_placeholder": "Enter a buyer",
+  "category_placeholder": "Select a category",
+  "department_placeholder": "Select a department",
+  "costs": "Costs",
+  "samples": "Samples",
+  "no_image_found": "There are currently no photos in your gallery. Please add a new photo to get started."
 }

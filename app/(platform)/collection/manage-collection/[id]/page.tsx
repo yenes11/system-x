@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollectionDetails } from '@/lib/api-calls';
 import { SlidersVertical } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import Image from 'next/image';
 import { Fragment } from 'react';
 // import CollectionCarousel from '@/components/fabric-color/collection-carousel';
 
@@ -137,8 +138,12 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
           <div className="flex h-full flex-col">
             <div className="flex h-full w-full justify-center p-0">
               <ThemedZoom>
-                <img
+                <Image
                   src={collectionDetails.image}
+                  alt={collectionDetails.name}
+                  width={208}
+                  height={208}
+                  objectFit="cover"
                   className="h-52 w-52 rounded object-cover object-top"
                 />
               </ThemedZoom>

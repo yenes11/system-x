@@ -254,5 +254,16 @@
   "customer_project": "Müşteri projesi",
   "customer_sub_project": "Müşteri alt projesi",
   "customer_buyer_group": "Müşteri buyer grubu",
-  "collection_library": "Koleksiyon Kütüphanesi"
+  "collection_library": "Koleksiyon Kütüphanesi",
+  "name_placeholder": "Bir isim giriniz",
+  "description_placeholder": "Bir açıklama giriniz",
+  "customer_code_placeholder": "Bir müşteri kodu giriniz",
+  "garment_placeholder": "Bir garmet giriniz",
+  "designer_placeholder": "Bir tasarımcı giriniz",
+  "buyer_placeholder": "Bir alıcı giriniz",
+  "category_placeholder": "Bir kategori seçiniz",
+  "department_placeholder": "Bir departman seçiniz",
+  "costs": "Maliyetler",
+  "samples": "Numuneler",
+  "no_image_found": "Galerinizde şu anda herhangi bir fotoğraf bulunmamaktadır. Lütfen yeni bir fotoğraf ekleyerek başlayın."
 }

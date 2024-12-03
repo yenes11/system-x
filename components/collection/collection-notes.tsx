@@ -10,10 +10,17 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslations } from 'use-intl';
 import { Button } from '../ui/button';
-import { Card, CardContent, CardFooter } from '../ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '../ui/card';
 import Empty from '../ui/empty';
 import Icon from '../ui/icon';
 import { Textarea } from '../ui/textarea';
+import { NotebookTabs, NotepadText, Send } from 'lucide-react';
 
 interface Props {
   notes: CollectionNote[];
@@ -43,6 +50,10 @@ function CollectionNotes({ notes }: Props) {
 
   return (
     <Card>
+      <CardHeader className="h-16 flex-row items-center gap-2 border-b py-0">
+        <NotebookTabs className="size-6" />
+        <CardTitle className="text-lg">{t('notes')}</CardTitle>
+      </CardHeader>
       <CardContent>
         <div className="space-y-4 pt-6">
           {notes.length > 0 ? (
@@ -75,14 +86,15 @@ function CollectionNotes({ notes }: Props) {
           <Textarea
             id="message"
             placeholder="Type your message..."
-            className="flex-1"
+            className="h-10 flex-1"
             autoComplete="off"
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
           <Button
-            variant="secondary"
+            // variant="outline"
             size="icon"
+            className="size-12"
             disabled={false}
             onClick={() => {
               addNote.mutate({
@@ -91,12 +103,7 @@ function CollectionNotes({ notes }: Props) {
               });
             }}
           >
-            <Icon
-              icon="plus"
-              // currentColor
-              size={16}
-              className="h-4 w-4"
-            />
+            <Send className="size-4" />
             <span className="sr-only">Send</span>
           </Button>
         </div>

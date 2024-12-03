@@ -1,3 +1,4 @@
+import CustomZoom from '@/components/custom-zoom';
 import DescriptionList from '@/components/description-list';
 import ActiveOrdersTable from '@/components/fabric-color/active-orders-table';
 import FabricColorCollectionCarousel from '@/components/fabric-color/fabric-color-collection-caraousel';
@@ -30,6 +31,7 @@ import {
   ShoppingBasket
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import Image from 'next/image';
 // import CollectionCarousel from '@/components/fabric-color/collection-carousel';
 
 const listItems = [
@@ -86,11 +88,19 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
             <div className="flex h-full flex-col">
               <div className="flex h-full w-full items-center justify-center p-0">
                 <ThemedZoom>
-                  <img
+                  <Image
+                    width={208}
+                    height={208}
                     src={color.fabricColorImage}
-                    className="h-52 w-52 rounded object-cover"
+                    alt="Color cover"
+                    objectFit="cover"
+                    className="h-52 w-52 rounded"
                   />
                 </ThemedZoom>
+                {/* <img
+                    src={color.fabricColorImage}
+                    className="h-52 w-52 rounded object-cover"
+                  /> */}
               </div>
             </div>
           </CardHeader>

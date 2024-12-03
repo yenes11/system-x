@@ -6,6 +6,7 @@ import { DataTable } from '../ui/data-table';
 import { Badge } from '../ui/badge';
 import { Currency, currencyEnums, Status, statusEnums } from '@/types';
 import { useTranslations } from 'next-intl';
+import { ShoppingBasket, ShoppingCart } from 'lucide-react';
 
 const statusClasses = {
   1: 'bg-muted text-black hover:bg-muted/80',
@@ -57,7 +58,8 @@ function ActiveOrdersTable({ color }: { color: any }) {
   const t = useTranslations();
   return (
     <Card className="overflow-auto bg-nutural">
-      <CardHeader className="flex-row items-center justify-between border-b bg-muted/50 px-4 py-3">
+      <CardHeader className="h-12 flex-row items-center gap-2 border-b px-4 py-0">
+        <ShoppingCart className="size-5" />
         <CardTitle>{t('active_orders')}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">

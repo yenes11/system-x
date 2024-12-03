@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl';
 import AddStationDialog from './add-station-dialog';
 import TransferList from './transfer-list';
 import Empty from '../ui/empty';
+import { Waypoints } from 'lucide-react';
 
 interface Props {
   data: ProductStation[];
@@ -27,8 +28,9 @@ function ProductStationsStepper({ data, editable = false }: Props) {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row justify-end gap-2">
-        <CardTitle className="mr-auto text-xl">
+      <CardHeader className="flex h-16 flex-row items-center justify-end gap-2 border-b py-0">
+        <Waypoints className="size-6" />
+        <CardTitle className="mr-auto text-lg">
           {t('product_stations')}
         </CardTitle>
         {data.length > 0 && editable ? (
@@ -37,7 +39,7 @@ function ProductStationsStepper({ data, editable = false }: Props) {
           <AddStationDialog />
         ) : null}
       </CardHeader>
-      <CardContent className="pb-20 pt-4 @container">
+      <CardContent className="pb-20 pt-16 @container">
         <div className="flex flex-col gap-2 px-20 text-sm text-card-foreground @sm:!flex-row @sm:items-center">
           {data.length > 0 ? (
             sortedData.map((station, index) => (

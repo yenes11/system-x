@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef, FilterFn } from '@tanstack/react-table';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, UsersRound } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { getFabricSuppliers } from '@/lib/api-calls';
@@ -143,8 +143,11 @@ function DepartmentEmployeesTable() {
         title={t('delete_employee')}
       />
       <Card className="flex-[2] overflow-auto bg-nutural">
-        <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-2">
-          <CardTitle>{t('employees')}</CardTitle>
+        <CardHeader className="flex-row items-center justify-between border-b px-4 py-2">
+          <div className="flex items-center gap-2">
+            <UsersRound />
+            <CardTitle>{t('employees')}</CardTitle>
+          </div>
           <AddEmployeeSheet />
         </CardHeader>
         <CardContent className="p-0">

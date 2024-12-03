@@ -18,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
+import { useTranslations } from 'next-intl';
 
 interface NestedItem {
   name: string;
@@ -30,7 +31,8 @@ interface ComboboxNestedProps {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
-  childrenKey?: string; // Dinamik olarak alt elemanların property adı
+  childrenKey?: string;
+  placeholder?: string;
 }
 
 export function NestedSelect({
@@ -38,8 +40,10 @@ export function NestedSelect({
   value,
   onChange,
   disabled = false,
-  childrenKey = 'childs'
+  childrenKey = 'childs',
+  placeholder = 'Select an option'
 }: ComboboxNestedProps) {
+  const t = useTranslations();
   const [open, setOpen] = React.useState(false);
   const [expandedItems, setExpandedItems] = React.useState<
     Record<string, boolean>
@@ -76,7 +80,7 @@ export function NestedSelect({
     return items.map((item) => (
       <React.Fragment key={item.id}>
         <CommandItem
-          className="flex items-center space-x-2 py-2 pl-2 pr-4"
+          className="flex items-center space-x-2 py-1 pl-2 pr-4"
           onSelect={() => {
             onChange(item.id);
             setSelectedItemName(item.name);
@@ -111,7 +115,7 @@ export function NestedSelect({
           />
         </CommandItem>
         {item[childrenKey] && expandedItems[item.id] && (
-          <CommandGroup className="pl-6">
+          <CommandGroup className="pl-3">
             {renderNestedItems(item[childrenKey])}
           </CommandGroup>
         )}
@@ -131,14 +135,14 @@ export function NestedSelect({
           aria-expanded={open}
           className="w-full flex-1 justify-between self-stretch"
         >
-          {selectedItemName || 'Select an option...'}
+          {selectedItemName || placeholder}
           <ChevronsUpDown size={12} className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full flex-1 self-stretch p-0">
         <Command>
           <CommandInput
-            placeholder="Search..."
+            placeholder={`${t('search')}...`}
             className="h-9"
             value={searchQuery}
             onValueChange={(val) => setSearchQuery(val)}

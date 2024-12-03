@@ -2,19 +2,14 @@
 
 import { Department } from '@/lib/types';
 import { useCustomerDepartmentsSlice } from '@/store/customer-departments-slice';
-import { Pencil1Icon, Pencil2Icon } from '@radix-ui/react-icons';
 import {
   ChevronDown,
-  Dot,
   File,
-  Package,
-  Pencil,
-  PencilLine,
-  Plus,
-  Trash,
-  Trash2,
+  Workflow,
   Users,
-  Workflow
+  Plus,
+  Trash2,
+  PencilLine
 } from 'lucide-react';
 import React, { useState } from 'react';
 import ThemedTooltip from './ThemedTooltip';
@@ -26,17 +21,29 @@ interface TreeProps {
 }
 
 function Tree({ data, depth = 0 }: TreeProps) {
-  const t = useTranslations();
-  const [openDepartments, setOpenDepartments] = useState<{
-    [key: string]: boolean;
-  }>({});
+  return (
+    <div className="select-none">
+      {data.map((department) => (
+        <MemoizedTreeNode
+          key={department.id}
+          department={department}
+          depth={depth}
+        />
+      ))}
+    </div>
+  );
+}
 
-  const toggleDepartment = (id: string) => {
-    setOpenDepartments((prev) => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
+interface TreeNodeProps {
+  department: Department;
+  depth: number;
+}
+
+const TreeNode = ({ department, depth }: TreeNodeProps) => {
+  const t = useTranslations();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => setIsOpen((prev) => !prev);
 
   const selectDepartment = useCustomerDepartmentsSlice(
     (state) => state.selectDepartment
@@ -47,90 +54,82 @@ function Tree({ data, depth = 0 }: TreeProps) {
   const setIsAddSheetOpen = useCustomerDepartmentsSlice(
     (state) => state.setIsAddSheetOpen
   );
-
   const setEditSheet = useCustomerDepartmentsSlice(
     (state) => state.setEditSheet
   );
 
   return (
-    <div className="select-none">
-      {data.map((department) => (
-        <div key={department.id}>
-          <div
-            className="relative flex items-center gap-2 py-2"
-            style={{ paddingLeft: `${depth * 20}px` }}
-          >
-            <div className="flex h-8 w-8 items-center justify-center">
-              {department.childs?.length > 0 && (
-                <ChevronDown
-                  onClick={() => toggleDepartment(department.id)}
-                  className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 duration-300 hover:bg-muted ${
-                    openDepartments[department.id] ? 'rotate-180' : ''
-                  }`}
-                  size={18}
-                />
-              )}
-            </div>
-            {department.childs?.length > 0 ? (
-              <Workflow size={12} />
-            ) : (
-              <File size={12} />
-            )}
-            <div className="flex w-full items-center justify-between gap-6 text-nowrap">
-              {department.name}
-              <div className="flex items-center gap-2">
-                <ThemedTooltip text={t('display_employees')}>
-                  <Users
-                    onClick={() => {
-                      selectDepartment(department.employees, department.id);
-                    }}
-                    size={16}
-                    className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 duration-300 hover:bg-muted`}
-                  />
-                </ThemedTooltip>
-                <ThemedTooltip text={t('edit_department')}>
-                  <PencilLine
-                    onClick={() => {
-                      setEditSheet(department, true);
-                    }}
-                    size={16}
-                    className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 duration-300 hover:bg-muted`}
-                  />
-                </ThemedTooltip>
-                <ThemedTooltip text={t('delete_department')}>
-                  <Trash2
-                    // onClick={() => {
-                    //   setDeleteDialog({ id: department.id, open: true });
-                    // }}
-                    size={16}
-                    className={`-m-2 mr-1 box-content cursor-not-allowed rounded-full p-2 text-destructive/50 duration-300 hover:bg-muted`}
-                  />
-                </ThemedTooltip>
-                <ThemedTooltip text={t('add_sub_department')}>
-                  <Plus
-                    onClick={() => {
-                      setIsAddSheetOpen(true, department.id);
-                    }}
-                    className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 duration-300 hover:bg-muted`}
-                    size={16}
-                  />
-                </ThemedTooltip>
-              </div>
-            </div>
-          </div>
+    <div>
+      {/* Department Row */}
+      <div
+        className="relative flex items-center gap-2 py-2"
+        style={{ paddingLeft: `${depth * 20}px` }}
+      >
+        <div className="flex h-8 w-8 items-center justify-center">
           {department.childs?.length > 0 && (
-            <div
-              className={`${
-                openDepartments[department.id] ? 'block' : 'hidden'
+            <ChevronDown
+              onClick={toggle}
+              className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 hover:bg-muted ${
+                isOpen ? 'rotate-180' : ''
               }`}
-            >
-              <Tree depth={depth + 1} data={department.childs} />
-            </div>
+              size={18}
+            />
           )}
         </div>
-      ))}
+        {department.childs?.length > 0 ? (
+          <Workflow size={12} />
+        ) : (
+          <File size={12} />
+        )}
+        <div className="flex w-full items-center justify-between gap-6">
+          {department.name}
+          <div className="flex items-center gap-2">
+            <ThemedTooltip text={t('display_employees')}>
+              <Users
+                onClick={() => {
+                  selectDepartment(department.employees, department.id);
+                }}
+                size={16}
+                className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 hover:bg-muted`}
+              />
+            </ThemedTooltip>
+            <ThemedTooltip text={t('edit_department')}>
+              <PencilLine
+                onClick={() => {
+                  setEditSheet(department, true);
+                }}
+                size={16}
+                className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 hover:bg-muted`}
+              />
+            </ThemedTooltip>
+            <ThemedTooltip text={t('delete_department')}>
+              <Trash2
+                size={16}
+                className={`-m-2 mr-1 box-content cursor-not-allowed rounded-full p-2 text-destructive/50 hover:bg-muted`}
+              />
+            </ThemedTooltip>
+            <ThemedTooltip text={t('add_sub_department')}>
+              <Plus
+                onClick={() => {
+                  setIsAddSheetOpen(true, department.id);
+                }}
+                className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 hover:bg-muted`}
+                size={16}
+              />
+            </ThemedTooltip>
+          </div>
+        </div>
+      </div>
+
+      {/* Child Nodes */}
+      {isOpen && department.childs?.length > 0 && (
+        <Tree data={department.childs} depth={depth + 1} />
+      )}
     </div>
   );
-}
+};
+
+// Memoized TreeNode to prevent unnecessary re-renders
+const MemoizedTreeNode = React.memo(TreeNode);
 
 export default Tree;

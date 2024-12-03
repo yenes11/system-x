@@ -8,7 +8,7 @@ import Icon from '@/components/ui/icon';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollections } from '@/lib/api-calls';
 import { CollectionStatus } from '@/lib/types';
-import { SwatchBook } from 'lucide-react';
+import { Plus, PlusCircle, SwatchBook } from 'lucide-react';
 import { getMessages, getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import React from 'react';
@@ -52,9 +52,10 @@ async function CollectionLibraryPage({
           description=""
         />
         <Link href="/collection/new-collection">
-          <Button>{t('add_collection')}</Button>
+          <Button icon={<Plus className="mr-2 size-4" />}>
+            {t('add_collection')}
+          </Button>
         </Link>
-        {/* <AddCollectionDialog /> */}
       </div>
       <CollectionTable data={collections} />
     </div>

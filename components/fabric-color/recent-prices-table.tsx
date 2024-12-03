@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import api from '@/api';
 import { useTranslations } from 'next-intl';
 import AddPriceSheet from './add-price-sheet';
+import { Tag } from 'lucide-react';
 
 const recentPricesTableColumns = [
   {
@@ -60,8 +61,11 @@ function RecentPricesTable({ id }: { id: string }) {
 
   return (
     <Card className="overflow-hidden bg-nutural">
-      <CardHeader className="flex-row items-center justify-between border-b bg-muted/50 px-4 py-2">
-        <CardTitle>{t('recent_prices')}</CardTitle>
+      <CardHeader className="h-12 flex-row items-center justify-between border-b px-4 py-0">
+        <div className="flex items-center gap-2">
+          <Tag className="size-5" />
+          <CardTitle>{t('recent_prices')}</CardTitle>
+        </div>
         <AddPriceSheet />
       </CardHeader>
       <CardContent className="p-0">

@@ -14,7 +14,14 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import { PencilLine, Plus, Server } from 'lucide-react';
+import {
+  PencilLine,
+  Plus,
+  Server,
+  SquarePen,
+  Trash,
+  Trash2
+} from 'lucide-react';
 
 import AddFabricColorSheet from '@/components/fabric-color/add-fabric-color-sheet';
 import EditFabricSheet from '@/components/fabric/edit-fabric-sheet';
@@ -33,6 +40,15 @@ import { SearchBar } from '@/components/searchbar';
 import ThemedSelect from '@/components/themed-select';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import ActionsDropdown from '@/components/actions-dropdown';
 
 const getColumns = (
   setColorState: any,
@@ -80,7 +96,7 @@ const getColumns = (
                   });
                 }}
               >
-                <Icon currentColor icon="feather" size={16} />
+                <SquarePen className="size-4" />
               </Button>
             </ThemedTooltip>
             <ThemedTooltip text="add_color_to_fabric">
@@ -96,7 +112,7 @@ const getColumns = (
                 variant="ghost"
                 size="icon"
               >
-                <Icon currentColor icon="plus" size={16} />
+                <Plus className="size-4" />
               </Button>
             </ThemedTooltip>
           </div>

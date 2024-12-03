@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ListItem {
   title: string;
-  description: string;
+  description: any;
 }
 
 interface Props {
@@ -18,7 +18,7 @@ function DescriptionList({ listItems }: Props) {
             key={listItem.title}
             className="grid grid-cols-1 gap-1 px-6 py-3 even:bg-muted sm:grid-cols-3 sm:gap-4"
           >
-            <dt className="font-medium">{listItem.title}</dt>
+            <dt className=" text-muted-foreground">{listItem.title}</dt>
             <dd className="sm:col-span-2">{listItem.description}</dd>
           </div>
         ))}

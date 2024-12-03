@@ -179,7 +179,7 @@ function NewCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('name')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="AS-YA01" {...field} />
+                      <Input placeholder={t('name_placeholder')} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -192,7 +192,10 @@ function NewCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('description')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="AS-YA01" {...field} />
+                      <Input
+                        placeholder={t('description_placeholder')}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -205,7 +208,10 @@ function NewCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('customer_code')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="AS-YA01" {...field} />
+                      <Input
+                        placeholder={t('customer_code_placeholder')}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -218,7 +224,10 @@ function NewCollectionPage() {
                   <FormItem>
                     <FormLabel>{`${t('garment')}-1`}</FormLabel>
                     <FormControl>
-                      <Input placeholder="AS-YA01" {...field} />
+                      <Input
+                        placeholder={t('garment_placeholder')}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -231,7 +240,10 @@ function NewCollectionPage() {
                   <FormItem>
                     <FormLabel>{`${t('garment')}-2`}</FormLabel>
                     <FormControl>
-                      <Input placeholder="AS-YA01" {...field} />
+                      <Input
+                        placeholder={t('garment_placeholder')}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -244,7 +256,10 @@ function NewCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('designer')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="AS-YA01" {...field} />
+                      <Input
+                        placeholder={t('designer_placeholder')}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -258,7 +273,7 @@ function NewCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('buyer')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="AS-YA01" {...field} />
+                      <Input placeholder={t('buyer_placeholder')} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -327,6 +342,7 @@ function NewCollectionPage() {
                     <FormLabel>{t('customer_department')}</FormLabel>
                     <FormControl>
                       <NestedSelect
+                        placeholder={t('department_placeholder')}
                         disabled={!Boolean(selectedCustomerId)}
                         key={form.getValues('customerId')}
                         data={departments.data || []}
@@ -346,6 +362,7 @@ function NewCollectionPage() {
                     <FormLabel>{t('category')}</FormLabel>
                     <FormControl>
                       <NestedSelect
+                        placeholder={t('select_a_category')}
                         childrenKey="subCategories"
                         data={categories.data || []}
                         onChange={field.onChange}

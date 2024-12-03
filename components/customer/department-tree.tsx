@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { useTranslations } from 'next-intl';
 import { AddDepartmentSheet } from './add-department-sheet';
 import { Button } from '../ui/button';
-import { PlusIcon } from 'lucide-react';
+import { Network, PlusIcon } from 'lucide-react';
 import Tree from '../tree';
 import { Department } from '@/lib/types';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
@@ -50,8 +50,11 @@ function DepartmentTree({ data }: { data: Department[] }) {
         title={t('delete_department')}
       />
       <Card className="flex-1 overflow-auto bg-nutural">
-        <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-2">
-          <CardTitle>{t('departments')}</CardTitle>
+        <CardHeader className="flex-row items-center justify-between border-b px-4 py-2">
+          <div className="flex items-center gap-2">
+            <Network />
+            <CardTitle>{t('departments')}</CardTitle>
+          </div>
           <Button
             className="rounded-full bg-nutural"
             variant="outline"

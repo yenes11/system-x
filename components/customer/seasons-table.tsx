@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { useTranslations } from 'next-intl';
 import { DataTable } from '../ui/data-table';
 import { Button } from '../ui/button';
-import { Pencil, Plus, Trash2 } from 'lucide-react';
+import { Leaf, Pencil, Plus, Trash2 } from 'lucide-react';
 import { AddSeasonSheet } from './add-season-sheet';
 import { EditSeasonSheet } from './edit-season-sheet';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
@@ -88,8 +88,11 @@ function SeasonsTable({ data }: { data: any }) {
       />
       <Card className="flex-1 overflow-auto bg-transparent p-0">
         <CardContent className="p-0">
-          <CardHeader className="flex-row items-center justify-between bg-muted/50 px-4 py-2">
-            <CardTitle className="font-semibold">{t('seasons')}</CardTitle>
+          <CardHeader className="flex-row items-center justify-between border-b px-4 py-2">
+            <div className="flex items-center gap-2">
+              <Leaf />
+              <CardTitle className="font-semibold">{t('seasons')}</CardTitle>
+            </div>
             <AddSeasonSheet />
           </CardHeader>
 

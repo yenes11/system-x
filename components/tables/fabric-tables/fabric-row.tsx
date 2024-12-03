@@ -18,23 +18,6 @@ interface Props {
 
 function FabricRow({ data, row, expandedRows, toggleRow }: Props) {
   const t = useTranslations();
-  // const colors = useQuery({
-  //   queryKey: ['fabric-color', row.original.id],
-  //   queryFn: async () => {
-  //     const res = await api.get(`/Fabrics/${row.original.id}`);
-  //     const colors = res.data.colors;
-  //     colors.map((color: any) => {
-  //       const ingredients: any = {};
-  //       color.ingredients.forEach((ingredient: any) => {
-  //         ingredients[ingredient.name] = ingredient.percentage;
-  //       });
-  //       color.chartData = [ingredients];
-  //       return color;
-  //     });
-  //     return colors;
-  //   },
-  //   enabled: expandedRows.includes(row.original.id)
-  // });
 
   const colors = React.useMemo(() => {
     data.map((color: any) => {
@@ -58,14 +41,6 @@ function FabricRow({ data, row, expandedRows, toggleRow }: Props) {
         data-state={row.getIsSelected() && 'selected'}
       >
         {row.getVisibleCells().map((cell: any) => {
-          if (cell.column.id === 'fabricTypeName')
-            return (
-              <TableCell key={cell.id}>
-                <Badge className="border border-blue-300 bg-blue-500/30 text-blue-500 shadow-none dark:border-blue-400 dark:text-blue-300">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Badge>
-              </TableCell>
-            );
           return (
             <TableCell key={cell.id}>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -84,7 +59,7 @@ function FabricRow({ data, row, expandedRows, toggleRow }: Props) {
         ) : (
           <TableRow>
             <TableCell className="p-0" colSpan={6}>
-              <div className="grid grid-cols-1 sm:grid-cols-2">
+              <div className="grid grid-cols-1 divide-x divide-y divide-muted sm:grid-cols-2">
                 {colors?.map((color: any) => (
                   <FabricColorCard
                     key={color.id}

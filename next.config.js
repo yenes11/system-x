@@ -9,7 +9,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'fabric-color-images.s3.eu-central-1.amazonaws.com'
+        hostname: '*.amazonaws.com'
       }
     ]
   }

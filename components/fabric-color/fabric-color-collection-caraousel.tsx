@@ -18,6 +18,7 @@ import { SearchBar } from '../searchbar';
 import Empty from '../ui/empty';
 import Code from '../ui/code';
 import { ColorCollection } from '@/lib/types';
+import Image from 'next/image';
 
 function FabricColorCollectionCarousel({ data }: { data: ColorCollection[] }) {
   const t = useTranslations();
@@ -34,7 +35,7 @@ function FabricColorCollectionCarousel({ data }: { data: ColorCollection[] }) {
       <SearchBar
         value={searchKey}
         onChange={(e) => setSearchKey(e.target.value)}
-        className="mb-4 w-96 rounded-full bg-card"
+        className="mb-2 w-full bg-card sm:w-72"
         placeholder={t('search')}
       />
       <Carousel
@@ -50,17 +51,17 @@ function FabricColorCollectionCarousel({ data }: { data: ColorCollection[] }) {
             </div>
           ) : (
             filteredData.map((collection, index) => (
-              <CarouselItem
-                key={index}
-                className="shrink-0 grow-0 basis-full md:basis-1/2 lg:basis-1/5"
-              >
+              <CarouselItem key={index} className="">
                 <div className="p-1">
                   <Card className="overflow-hidden bg-cover bg-center p-0">
                     <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
                       <ThemedZoom>
-                        <img
+                        <Image
+                          width={256}
+                          height={256}
+                          alt={collection.collectionColorName}
                           src={collection.collectionImage}
-                          className="positio aspect-square w-full origin-top-left object-cover object-top"
+                          className="aspect-square w-full origin-top-left object-cover object-top"
                         />
                       </ThemedZoom>
                     </CardContent>
