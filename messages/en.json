@@ -265,5 +265,20 @@
   "department_placeholder": "Select a department",
   "costs": "Costs",
   "samples": "Samples",
-  "no_image_found": "There are currently no photos in your gallery. Please add a new photo to get started."
+  "no_image_found": "There are currently no photos in your gallery. Please add a new photo to get started.",
+  "size_and_barcode": "Size & Barcode",
+  "created": "Created",
+  "produced": "Produced",
+  "sent": "Sent",
+  "approved": "Approved",
+  "result": "Result",
+  "add_sample": "Add Sample",
+  "modelist": "Modelist",
+  "mantuamaker": "Mantuamaker",
+  "delete_sample": "Delete Sample",
+  "select_item": "Select an item",
+  "document": "Document",
+  "to_be_determined": "To be determined",
+  "edit_sample": "Edit Sample",
+  "sample_description": "Enter a description..."
 }

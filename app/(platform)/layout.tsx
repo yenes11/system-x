@@ -5,7 +5,7 @@ import Providers from '@/providers/query-provider';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Next Shadcn Dashboard Starter',
+  title: 'SystemX Dashboard',
   description: 'Basic dashboard with Next.js and Shadcn'
 };
 

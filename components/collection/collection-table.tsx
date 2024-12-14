@@ -31,6 +31,9 @@ import { SearchBar } from '../searchbar';
 import ThemedSelect from '../themed-select';
 import ThemedZoom from '../themed-zoom';
 import { Badge } from '../ui/badge';
+import { Gallery, Item } from 'react-photoswipe-gallery';
+import Image from 'next/image';
+import ImageZoom from '../image-zoom';
 
 const getColumns = (
   setColorState: any,
@@ -290,13 +293,22 @@ function CollectionTable({ data }: Props) {
                 <TableCell className="px-4 py-4" colSpan={columns.length}>
                   <div className="mb-4 flex">
                     <div className="flex-1 pr-2">
-                      <ThemedZoom>
+                      {/* <ThemedZoom>
                         <img
                           className="mr-2 aspect-square w-32 min-w-32 origin-top-left rounded object-cover object-top"
                           src={row.original.image}
                           alt={row.original.name}
                         />
-                      </ThemedZoom>
+                      </ThemedZoom> */}
+                      <ImageZoom>
+                        <Image
+                          width={128}
+                          height={128}
+                          className="mr-2 aspect-square w-32 min-w-32 origin-top-left rounded object-cover object-top"
+                          src={row.original.image}
+                          alt={row.original.name}
+                        />
+                      </ImageZoom>
                     </div>
                     <div className="flex flex-[3] flex-col">
                       <span className="text-xs text-muted-foreground">
@@ -313,16 +325,16 @@ function CollectionTable({ data }: Props) {
                       <span>{row.original.manufacturerCode}</span>
                     </div>
                     <div className="px-4">
-                      <Badge className="bg-theme-blue/20 border-theme-blue-foreground/25 text-theme-blue-foreground mb-2 mr-2">
+                      <Badge className="mb-2 mr-2 border-theme-blue-foreground/25 bg-theme-blue/20 text-theme-blue-foreground">
                         {row.original.categoryName}
                       </Badge>
-                      <Badge className="bg-theme-blue/20 border-theme-blue-foreground/25 text-theme-blue-foreground mb-2 mr-2">
+                      <Badge className="mb-2 mr-2 border-theme-blue-foreground/25 bg-theme-blue/20 text-theme-blue-foreground">
                         {row.original.customerDepartment}
                       </Badge>
-                      <Badge className="bg-theme-blue/20 border-theme-blue-foreground/25 text-theme-blue-foreground mb-2 mr-2">
+                      <Badge className="mb-2 mr-2 border-theme-blue-foreground/25 bg-theme-blue/20 text-theme-blue-foreground">
                         {row.original.customerSeasonName}
                       </Badge>
-                      <Badge className="bg-theme-blue/20 border-theme-blue-foreground/25 text-theme-blue-foreground mb-2 mr-2">
+                      <Badge className="mb-2 mr-2 border-theme-blue-foreground/25 bg-theme-blue/20 text-theme-blue-foreground">
                         {row.original.sizeTypeName}
                       </Badge>
                     </div>
@@ -382,7 +394,7 @@ function CollectionTable({ data }: Props) {
                       if (color.colorName === 'Taslak') return;
                       return (
                         <Badge
-                          className="bg-theme-teal/15 text-theme-teal-foreground border-theme-teal-foreground/30 rounded-md"
+                          className="rounded-md border-theme-teal-foreground/30 bg-theme-teal/15 text-theme-teal-foreground"
                           key={color.id}
                         >
                           {color.colorName}

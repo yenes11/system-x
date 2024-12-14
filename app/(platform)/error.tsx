@@ -19,6 +19,7 @@ function ErrorPage({ error }: Props) {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
       <h1 className="text-xl">{error.message}</h1>
+
       <div>
         <Button onClick={() => window.location.reload()} className="mr-4">
           {t('try_again')}

@@ -10,6 +10,7 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 import { type SelectProps } from '@radix-ui/react-select';
 
 import { cn } from '@/lib/utils';
+import Empty from './empty';
 
 const Select = SelectPrimitive.Root;
 
@@ -74,7 +75,7 @@ const SelectContent = React.forwardRef<
             'h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]'
         )}
       >
-        {children}
+        {children || <Empty className="py-4" />}
       </SelectPrimitive.Viewport>
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>

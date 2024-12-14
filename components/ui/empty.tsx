@@ -68,7 +68,9 @@ function Empty({
           </g>
         </svg>
       )}
-      <span className="mt-2 text-icon">{description || t('no_data')}</span>
+      <span className="mt-2 text-sm text-icon">
+        {description || t('no_data')}
+      </span>
     </div>
   );
 }

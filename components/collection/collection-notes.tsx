@@ -4,6 +4,7 @@ import api from '@/api';
 import { CollectionNote } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { NotebookTabs, Send } from 'lucide-react';
 import moment from 'moment';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -18,9 +19,7 @@ import {
   CardTitle
 } from '../ui/card';
 import Empty from '../ui/empty';
-import Icon from '../ui/icon';
 import { Textarea } from '../ui/textarea';
-import { NotebookTabs, NotepadText, Send } from 'lucide-react';
 
 interface Props {
   notes: CollectionNote[];

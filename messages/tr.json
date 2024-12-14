@@ -265,5 +265,20 @@
   "department_placeholder": "Bir departman seçiniz",
   "costs": "Maliyetler",
   "samples": "Numuneler",
-  "no_image_found": "Galerinizde şu anda herhangi bir fotoğraf bulunmamaktadır. Lütfen yeni bir fotoğraf ekleyerek başlayın."
+  "no_image_found": "Galerinizde şu anda herhangi bir fotoğraf bulunmamaktadır. Lütfen yeni bir fotoğraf ekleyerek başlayın.",
+  "size_and_barcode": "Beden & Barkod",
+  "created": "Oluşturuldu",
+  "produced": "Üretildi",
+  "sent": "Gönderildi",
+  "approved": "Onaylandı",
+  "result": "Sonuç",
+  "add_sample": "Numune Ekle",
+  "modelist": "Modelist",
+  "mantuamaker": "Mantuamaker",
+  "delete_sample": "Numuneyi Sil",
+  "select_item": "Bir öğe seçiniz",
+  "document": "Döküman",
+  "to_be_determined": "Belirlenecek",
+  "edit_sample": "Numune Düzenle",
+  "sample_description": "Açıklama giriniz..."
 }

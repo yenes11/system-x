@@ -1,6 +1,7 @@
 import FabricCarousel from '@/components/collection/fabric-carousel';
 import MaterialCarousel from '@/components/collection/material-carousel';
 import ProductStationsStepper from '@/components/collection/product-stations-stepper';
+import SamplesTable from '@/components/collection/samples-table';
 import DescriptionList from '@/components/description-list';
 import ThemedZoom from '@/components/themed-zoom';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -201,12 +202,18 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
           <TabsTrigger className="flex-1" value="costs">
             {t('costs')}
           </TabsTrigger>
+          <TabsTrigger className="flex-1" value="size-and-barcode">
+            {t('size_and_barcode')}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="product-stations">
           <ProductStationsStepper data={collectionDetails.productStations} />
         </TabsContent>
-        <TabsContent value="samples">empty</TabsContent>
+        <TabsContent value="samples">
+          <SamplesTable />
+        </TabsContent>
         <TabsContent value="costs">empty</TabsContent>
+        <TabsContent value="size-and-barcode">empty</TabsContent>
       </Tabs>
     </Fragment>
   );

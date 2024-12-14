@@ -2,6 +2,7 @@ import CollectionGallery from '@/components/collection/collection-gallery';
 import CollectionNotes from '@/components/collection/collection-notes';
 import ProductStationsStepper from '@/components/collection/product-stations-stepper';
 import DescriptionList from '@/components/description-list';
+import ImageZoom from '@/components/image-zoom';
 import ThemedZoom from '@/components/themed-zoom';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
@@ -12,6 +13,7 @@ import { SlidersVertical } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import { Fragment } from 'react';
+import { Gallery, Item } from 'react-photoswipe-gallery';
 // import CollectionCarousel from '@/components/fabric-color/collection-carousel';
 
 const collectionDetailItems = [
@@ -137,16 +139,13 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
         <CardHeader className="flex flex-row items-start bg-muted/50">
           <div className="flex h-full flex-col">
             <div className="flex h-full w-full justify-center p-0">
-              <ThemedZoom>
-                <Image
+              <ImageZoom>
+                <img
                   src={collectionDetails.image}
                   alt={collectionDetails.name}
-                  width={208}
-                  height={208}
-                  objectFit="cover"
                   className="h-52 w-52 rounded object-cover object-top"
                 />
-              </ThemedZoom>
+              </ImageZoom>
             </div>
           </div>
         </CardHeader>

@@ -8,27 +8,6 @@ const api = axios.create({
   baseURL
 });
 
-// api.interceptors.request.use(async (config) => {
-//   if (isServer) {
-//     const { cookies } = await import('next/headers');
-//     const token = cookies().get('session')?.value;
-//     const lang = cookies().get('lang')?.value || 'en-US';
-//     if (token) {
-//       config.headers['Authorization'] = `Bearer ${token}`;
-//       config.headers['Accept-Language'] = lang;
-//     }
-//   } else {
-//     const token = clientCookies.get('session');
-//     const lang = clientCookies.get('lang');
-//     if (token) {
-//       config.headers['Authorization'] = `Bearer ${token}`;
-//       config.headers['Accept-Language'] = lang;
-//     }
-//   }
-
-//   return config;
-// });
-
 api.interceptors.request.use(async (config) => {
   let token;
   let lang;

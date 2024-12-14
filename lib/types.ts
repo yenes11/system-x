@@ -323,3 +323,33 @@ export interface CollectionProductStation {
   productStationId: string;
   priority: number;
 }
+
+export const collectionSampleType = {
+  1: 'Selection Fit',
+  2: 'Revision Fit',
+  3: 'Production Fit',
+  4: 'Mockup Fit',
+  5: 'Shooting',
+  6: 'Field Check'
+};
+
+export const collectionSampleStatus = {
+  1: 'Created',
+  2: 'Produced',
+  3: 'Sent',
+  4: 'Approved',
+  5: 'Rejected'
+};
+
+export interface UserInfo {
+  id: string;
+  fullName: string;
+  email: string;
+  address: string;
+  indivicualPhone: string;
+  companyPhone: string | null;
+  familyMemberName: string;
+  familyMemberPhone: string;
+  role: number;
+  createdDate: string;
+}

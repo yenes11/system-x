@@ -11,13 +11,13 @@ import { cn } from '@/lib/utils';
 import React from 'react';
 
 interface Props {
-  triggerLabel: string;
+  triggerLabel?: string;
   title: string;
   children: React.ReactNode;
   triggerIcon?: React.ReactNode;
   headerIcon?: React.ReactNode;
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   footer?: React.ReactNode;
   contentClassName?: string;
 }
@@ -50,7 +50,7 @@ function ThemedDialog({
         )}
       >
         {/* Fixed Header */}
-        <DialogHeader className="sticky top-0 z-10 flex max-h-12 flex-row items-start bg-muted/50 px-6 py-4">
+        <DialogHeader className="sticky top-0 z-10 flex max-h-12 flex-row items-start border-b bg-muted/50 px-6 py-4">
           {headerIcon}
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
@@ -60,7 +60,7 @@ function ThemedDialog({
 
         {/* Footer (optional) */}
         {footer && (
-          <DialogFooter className="flex flex-row items-center border-t bg-muted/50 px-4 py-3">
+          <DialogFooter className="flex flex-row items-center border-t bg-muted/50 px-4 py-2">
             {footer}
           </DialogFooter>
         )}

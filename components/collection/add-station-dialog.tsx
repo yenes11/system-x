@@ -67,7 +67,9 @@ function AddStationDialog() {
       title={t('add_product_station')}
       footer={
         <div>
-          <Button onClick={onSubmit}>{t('save')}</Button>
+          <Button size="sm" onClick={onSubmit}>
+            {t('save')}
+          </Button>
         </div>
       }
     >

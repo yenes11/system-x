@@ -43,6 +43,8 @@ async function CollectionLibraryPage({
   });
   const t = await getTranslations();
 
+  console.log(collections);
+
   return (
     <div className="space-y-2">
       <div className="mb-4 flex justify-between">
