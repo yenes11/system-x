@@ -136,7 +136,7 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
         <Heading title={t('manage_collection')} icon={<SlidersVertical />} />
       </div>
       <Card className="mb-4 flex flex-col overflow-hidden sm:!flex-row">
-        <CardHeader className="flex flex-row items-start bg-muted/50">
+        <CardHeader className="flex flex-row items-start border-r ">
           <div className="flex h-full flex-col">
             <div className="flex h-full w-full justify-center p-0">
               <ImageZoom>

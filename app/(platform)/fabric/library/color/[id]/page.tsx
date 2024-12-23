@@ -83,7 +83,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
         <Heading title={t('fabric_color')} icon={<PaintBucket />} />
       </div>
       <div className="@container">
-        <Card className="mb-4 flex flex-col overflow-hidden @md:!flex-row">
+        <Card className="mb-4 flex flex-col divide-x overflow-hidden @md:!flex-row @md:divide-y-0">
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="flex h-full flex-col">
               <div className="flex h-full w-full items-center justify-center p-0">
@@ -105,34 +105,6 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
             </div>
           </CardHeader>
           <CardContent className="flex-1 p-0 text-sm">
-            {/* <div className="grid gap-3">
-            <ul className="grid gap-3">
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  {t('fabric_name')}
-                </span>
-                <span>{color.fabricName}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('name')}</span>
-                <span>{color.fabricColorName}</span>
-              </li>
-            </ul>
-            <ul className="grid gap-3">
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('grammage')}</span>
-                <span>{color.fabricGrammage}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('unit')}</span>
-                <span>{color.fabricUnitName}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('type')}</span>
-                <span>{color.fabricTypeName}</span>
-              </li>
-            </ul>
-          </div> */}
             <DescriptionList listItems={descriptionListItems as any} />
           </CardContent>
           <CardFooter className="flex w-full items-center justify-center bg-muted/50 p-0 @md:w-72">

@@ -50,7 +50,7 @@ function ThemedDialog({
         )}
       >
         {/* Fixed Header */}
-        <DialogHeader className="sticky top-0 z-10 flex max-h-12 flex-row items-start border-b bg-muted/50 px-6 py-4">
+        <DialogHeader className="sticky top-0 z-10 flex max-h-12 flex-row items-start border-b bg-muted/50 px-4 py-4">
           {headerIcon}
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

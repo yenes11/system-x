@@ -7,7 +7,7 @@ import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
 import { getCustomers } from '@/lib/api-calls';
 import { Currency, currencyEnums } from '@/types';
-import { UserRound, UsersRound } from 'lucide-react';
+import { UserCircle, UserRound, UsersRound } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import React from 'react';
@@ -28,7 +28,7 @@ async function CustomerManagementPage({
         <Heading
           title={t('customer')}
           description=""
-          icon={<Icon icon="users" currentColor size={32} />}
+          icon={<UserRound size={28} />}
         />
         <AddCustomerSheet />
       </div>

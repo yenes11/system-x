@@ -18,7 +18,15 @@ import {
   CarouselNext
 } from '../ui/carousel';
 import { useMemo, useState } from 'react';
-import { DeleteIcon, Euro, Pencil, Plus, Trash, Trash2 } from 'lucide-react';
+import {
+  CircleHelp,
+  DeleteIcon,
+  Euro,
+  Pencil,
+  Plus,
+  Trash,
+  Trash2
+} from 'lucide-react';
 import AddPriceToFabricSheet from '../suppliers/add-price-to-fabric-sheet';
 import RecentPricesDialog from '../suppliers/recent-prices-dialog';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
@@ -28,6 +36,8 @@ import { Fabric } from '@/lib/types';
 import { SearchBar } from '../searchbar';
 import ThemedZoom from '../themed-zoom';
 import AddFabricToCollectionSheet from './add-fabric-to-collection-sheet';
+import { QuestionMarkCircledIcon } from '@radix-ui/react-icons';
+import HelpDialog from './help-dialog';
 
 interface SupplierFabric {
   id: string;
@@ -50,6 +60,8 @@ function FabricCarousel({ data }: Props) {
     id: ''
   });
 
+  const [openHelp, setOpenHelp] = useState(false);
+
   const [searchKey, setSearchKey] = useState('');
 
   const filteredData = useMemo(() => {
@@ -70,6 +82,7 @@ function FabricCarousel({ data }: Props) {
         state={deleteState}
         setState={setDeleteState}
       />
+      <HelpDialog open={openHelp} setOpen={setOpenHelp} />
       {/* <EditFabricSheet state={editState} setState={setEditState} /> */}
       <div className="mb-4 flex justify-between gap-4">
         <SearchBar
@@ -144,6 +157,15 @@ function FabricCarousel({ data }: Props) {
                       >
                         {/* {t('edit')} */}
                         <Pencil size={16} />
+                      </Button>
+                      <Button
+                        className="flex-1 rounded-none"
+                        onClick={() => setOpenHelp(true)}
+                        variant="secondary"
+                        size="sm"
+                      >
+                        {/* {t('delete')} */}
+                        <CircleHelp size={16} />
                       </Button>
                     </div>
                   </CardFooter>

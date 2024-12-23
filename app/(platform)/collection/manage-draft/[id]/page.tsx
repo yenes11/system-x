@@ -2,77 +2,29 @@ import FabricCarousel from '@/components/collection/fabric-carousel';
 import MaterialCarousel from '@/components/collection/material-carousel';
 import ProductStationsStepper from '@/components/collection/product-stations-stepper';
 import SamplesTable from '@/components/collection/samples-table';
+import VerifyCollectionDialog from '@/components/collection/verify-collection-dialog';
 import DescriptionList from '@/components/description-list';
+import ThemedDialog from '@/components/themed-dialog';
 import ThemedZoom from '@/components/themed-zoom';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
-import Icon from '@/components/ui/icon';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollectionDraftDetails } from '@/lib/api-calls';
-import { BadgeCheck, Check, SquareBottomDashedScissors } from 'lucide-react';
+import { Dialog, DialogClose } from '@radix-ui/react-dialog';
+import {
+  BadgeCheck,
+  BadgeMinus,
+  CheckCircle,
+  SquareBottomDashedScissors
+} from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { Fragment } from 'react';
-// import CollectionCarousel from '@/components/fabric-color/collection-carousel';
-
-const collectionDraftItems = [
-  {
-    title: 'collection_name',
-    key: 'collectionName'
-  },
-  {
-    title: 'description',
-    key: 'description'
-  },
-  {
-    title: 'collection_color',
-    key: 'collectionColor'
-  },
-  {
-    title: 'customer_department',
-    key: 'customerDepartmentName'
-  },
-  {
-    title: 'category',
-    key: 'categoryName'
-  },
-  {
-    title: 'customer_season',
-    key: 'customerSeasonName'
-  },
-  {
-    title: 'buyer',
-    key: 'buyer'
-  },
-  {
-    title: 'size_type',
-    key: 'sizeTypeName'
-  },
-  {
-    title: 'garment_1',
-    key: 'garment1'
-  },
-  {
-    title: 'garment_2',
-    key: 'garment2'
-  },
-  {
-    title: 'designer',
-    key: 'designer'
-  },
-  {
-    title: 'customer_code',
-    key: 'customerCode'
-  },
-  {
-    title: 'manufacturer_code',
-    key: 'manufacturerCode'
-  }
-];
 
 async function ManageCollectionPage({ params }: { params: { id: string } }) {
   const t = await getTranslations();
   const collectionDetails = await getCollectionDraftDetails(params.id);
-
   const listItems = [
     {
       title: t('collection_name'),
@@ -130,18 +82,32 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
 
   return (
     <Fragment>
-      <div className="mb-4 flex justify-between">
+      <div className="mb-2 flex justify-between">
         <Heading
           title={t('manage_draft')}
           icon={<SquareBottomDashedScissors />}
         />
-        <div className="flex items-center gap-1 rounded  py-1">
-          <BadgeCheck className="size-5" />
-          Verified
-        </div>
+        {collectionDetails.identityDefined && (
+          <div className="flex items-center gap-1 text-green-500">
+            <BadgeCheck className="size-5" />
+            {t('verified')}
+          </div>
+        )}
       </div>
+      {!collectionDetails.identityDefined && (
+        <div className="mb-3 flex items-center gap-2 rounded-md border-l-destructive bg-destructive/15 px-4 py-2 text-destructive">
+          {/* <BadgeMinus className="mb-auto mt-[2.5px] size-5 text-destructive" /> */}
+          <div>
+            <span className="text-sm font-medium">{t('unverified')}</span>
+            <p className="mb-2 text-xs">{t('unverified_description')}</p>
+          </div>
+          <div className="ml-auto">
+            <VerifyCollectionDialog />
+          </div>
+        </div>
+      )}
       <div className="@container">
-        <Card className="mb-4 flex flex-col overflow-hidden @sm:!flex-row">
+        <Card className="mb-4 flex flex-col divide-y overflow-hidden @sm:!flex-row @sm:divide-x @sm:divide-y-0">
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="flex h-full flex-col">
               <div className="flex h-full w-full justify-center p-0">
@@ -156,19 +122,6 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
           </CardHeader>
           <CardContent className="flex-1 p-0 text-sm">
             <DescriptionList listItems={listItems} />
-            {/* <div className="grid gap-3">
-            <ul className="grid gap-3">
-              {collectionDraftItems.map((item) => (
-                <li
-                  key={item.key}
-                  className="flex items-center justify-between"
-                >
-                  <span className="text-muted-foreground">{t(item.title)}</span>
-                  <span>{(collectionDetails as any)[item.key] ?? `−`}</span>
-                </li>
-              ))}
-            </ul>
-          </div> */}
           </CardContent>
         </Card>
       </div>
@@ -202,18 +155,14 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
           <TabsTrigger className="flex-1" value="costs">
             {t('costs')}
           </TabsTrigger>
-          <TabsTrigger className="flex-1" value="size-and-barcode">
-            {t('size_and_barcode')}
-          </TabsTrigger>
         </TabsList>
         <TabsContent value="product-stations">
           <ProductStationsStepper data={collectionDetails.productStations} />
         </TabsContent>
         <TabsContent value="samples">
-          <SamplesTable />
+          <SamplesTable isVerified={collectionDetails.identityDefined} />
         </TabsContent>
         <TabsContent value="costs">empty</TabsContent>
-        <TabsContent value="size-and-barcode">empty</TabsContent>
       </Tabs>
     </Fragment>
   );

@@ -51,7 +51,7 @@ export const getCollectionDetails = async (id: string) => {
 export const getCollectionDraftDetails = async (id: string) => {
   try {
     const res = await api.get(
-      `/CollectionColors/GetCollectionDraftDetail/${id}`
+      `/CollectionColors/GetCollectionColorDetail/${id}`
     );
     return res.data as CollectionDraft;
   } catch (e) {

@@ -7,13 +7,26 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { useTranslations } from 'next-intl';
+import DescriptionList from '../description-list';
 
 function CustomerDetailsCard({ data }: any) {
   const t = useTranslations();
+  // const listItems = Object.entries(data).reduce<
+  //   Array<{ title: string; description: unknown }>
+  // >((acc, [key, value]) => {
+  //   if (typeof value === 'string') {
+  //     acc.push({
+  //       title: t(key),
+  //       description: value
+  //     });
+  //   }
+  //   return acc;
+  // }, []);
+
   return (
     <Card className="mb-4 overflow-hidden">
       <CardContent className="max-h-[70%] overflow-auto bg-nutural p-0">
-        <CardHeader className="flex flex-row items-start bg-muted/50 px-6 py-2">
+        <CardHeader className="flex flex-row items-start border-b bg-muted px-6 py-2">
           <div className="grid gap-0.5">
             <CardTitle className="group flex items-center gap-2 text-lg">
               {data?.name}
@@ -26,6 +39,7 @@ function CustomerDetailsCard({ data }: any) {
           </div>
         </CardHeader>
         <div className="px-6 py-3 text-sm">
+          {/* <DescriptionList listItems={listItems} /> */}
           <div className="grid gap-3">
             <ul className="grid gap-3">
               <li className="flex items-center justify-between">

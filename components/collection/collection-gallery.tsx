@@ -42,6 +42,7 @@ function CollectionGallery({ images }: Props) {
       <CardHeader className="h-16 flex-row items-center border-b px-4 py-0">
         <Input
           key={inputKey}
+          multiple
           onChange={(event) => {
             if (!event.target.files) {
               toast.error(t('error'), {
@@ -51,7 +52,10 @@ function CollectionGallery({ images }: Props) {
             }
             const formData = new FormData();
             formData.append('collectionId', params?.id as string);
-            formData.append('image', event.target.files[0]);
+            for (const file of Array.from(event.target.files)) {
+              console.log(file.name, 'filename');
+              formData.append('image', file);
+            }
             addImage.mutate(formData);
           }}
           type="file"

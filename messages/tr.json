@@ -280,5 +280,14 @@
   "document": "Döküman",
   "to_be_determined": "Belirlenecek",
   "edit_sample": "Numune Düzenle",
-  "sample_description": "Açıklama giriniz..."
+  "sample_description": "Açıklama giriniz...",
+  "variant": "Varyant",
+  "verify_collection": "Koleksiyonu Onayla",
+  "verify_collection_description": "Koleksiyonu onaylamak istediğinizden emin misiniz?",
+  "verify": "Onayla",
+  "confirm": "Onayla",
+  "unverified": "Onaylanmamış",
+  "unverified_description": "Koleksiyona kumaş, malzeme, ürün istasyonu, numune, maliyet ve beden & barkod eklemek için koleksiyonu onaylamanız gerekiyor.",
+  "verified": "Onaylandı",
+  "collection_verified": "Koleksiyon başarıyla onaylandı"
 }

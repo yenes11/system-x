@@ -65,6 +65,7 @@
     --background: 210 8% 5%; /*224 71.4% 4.1%;*/
     --foreground: 210 20% 98%;
     --card: 200 6.67% 8.82%;
+    /* --card: 239.83deg 5.42% 7.09%; */
     --card-foreground: 210 20% 98%;
     --popover: 210 8% 5%;
     --popover-foreground: 210 20% 98%;
@@ -80,7 +81,7 @@
     --accent-foreground: 210 20% 98%;
     --destructive: 352.1 95.3% 57.8%;
     --destructive-foreground: 210 20% 98%;
-    --border: 205.71 6.67% 20.59%; /*215 27.9% 16.9%;*/
+    --border: 205.71 6.67% 20.59%;
     --input: 205.71 6.67% 20.59%; /*215 27.9% 16.9%;*/
     --ring: 224.3 76.3% 48%; /*263.4 70% 50.4%;*/
     --chart-1: 220 70% 50%;
@@ -92,7 +93,7 @@
     --light: 200 6.67% 8.82%;
     --light-foreground: 205.71 6.67% 20.59%;
     --icon: 207.27 5.82% 62.94%;
-    --sidebar-background: 200 6.67% 8.82%; /*240 5.9% 10%;*/
+    --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;

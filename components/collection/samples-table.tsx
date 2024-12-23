@@ -156,7 +156,7 @@ const getSamplesTableColumns = (setEditState: any, setDeleteState: any) => [
   }
 ];
 
-function SamplesTable() {
+function SamplesTable({ isVerified }: { isVerified: boolean }) {
   const t = useTranslations();
   const params = useParams();
   const [editState, setEditState] = useState({

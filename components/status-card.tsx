@@ -13,7 +13,7 @@ function StatusCard({ title, value, icon }: Props) {
   return (
     <Card>
       <CardContent className="flex h-full items-center gap-4 p-4">
-        <span className="bg-theme-blue/10 rounded-lg p-4">
+        <span className="rounded-lg bg-theme-blue/10 p-4">
           {<Icon className="text-theme-blue-foreground" />}
         </span>
         <div>

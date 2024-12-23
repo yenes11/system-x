@@ -280,5 +280,14 @@
   "document": "Document",
   "to_be_determined": "To be determined",
   "edit_sample": "Edit Sample",
-  "sample_description": "Enter a description..."
+  "sample_description": "Enter a description...",
+  "variant": "Variant",
+  "verify_collection": "Verify Collection",
+  "verify_collection_description": "Are you sure you want to verify this collection?",
+  "verify": "Verify",
+  "confirm": "Confirm",
+  "unverified": "Unverified",
+  "unverified_description": "In order to add fabrics, materials, product stations, samples, costs and size and barcode, you need to verify the collection.",
+  "verified": "Verified",
+  "collection_verified": "Collection verified successfully"
 }

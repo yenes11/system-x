@@ -312,6 +312,7 @@ export interface CollectionDraft {
   designer?: string;
   image: string;
   customerCode: string;
+  identityDefined: boolean;
   manufacturerCode: string;
   status: keyof typeof CollectionStatus;
   productStations: ProductStation[];

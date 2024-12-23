@@ -56,7 +56,6 @@ function CustomerInfoDialog({ state, setState }: Props) {
           </DialogHeader>
           <CardContent className="px-6 py-2 text-sm">
             <div className="grid gap-3">
-              <div className="font-semibold">{t('customer_details')}</div>
               <ul className="grid gap-3">
                 <li className="flex flex-col items-start justify-between">
                   <span className="text-xs text-muted-foreground">

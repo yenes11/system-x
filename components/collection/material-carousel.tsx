@@ -104,7 +104,10 @@ function MaterialCarousel({ data }: Props) {
             </div>
           ) : (
             filteredData?.map((material, index: number) => (
-              <CarouselItem key={index} className="">
+              <CarouselItem
+                key={index}
+                // className="shrink-0 grow-0 basis-full md:basis-1/2 lg:basis-1/5"
+              >
                 <Card className="w-full overflow-hidden bg-cover bg-center p-0">
                   <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
                     <ThemedZoom>
