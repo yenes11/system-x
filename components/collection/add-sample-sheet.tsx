@@ -26,8 +26,8 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { useTranslations } from 'next-intl';
-import { collectionSampleType, UserInfo } from '@/lib/types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { collectionSampleType, User, UserInfo } from '@/lib/types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import api from '@/api';
 import { useParams, useRouter } from 'next/navigation';
 import moment from 'moment';
@@ -51,6 +51,8 @@ const MAX_FILE_SIZE = 5; // MB
 const formSchema = z.object({
   type: z.string().min(1),
   description: z.string().optional(),
+  mantuamakerId: z.string().min(1),
+  modelistId: z.string().min(1),
   document: z
     .any()
     .refine(
@@ -93,6 +95,22 @@ export const AddSampleSheet = () => {
       toast.success(t('item_added'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
       });
+    }
+  });
+
+  const mantuamakers = useQuery({
+    queryKey: ['mantuamakers'],
+    queryFn: async () => {
+      const response = await api.get('/Users/GetUsersByType/5');
+      return response.data as User[];
+    }
+  });
+
+  const modelists = useQuery({
+    queryKey: ['modelists'],
+    queryFn: async () => {
+      const response = await api.get('/Users/GetUsersByType/4');
+      return response.data as User[];
     }
   });
 
@@ -159,7 +177,7 @@ export const AddSampleSheet = () => {
             )}
           />
 
-          {/* <FormField
+          <FormField
             control={form.control}
             name="mantuamakerId"
             render={({ field }) => (
@@ -172,18 +190,23 @@ export const AddSampleSheet = () => {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Mantuamaker seçin" />
+                      <SelectValue placeholder={t('select_item')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
+                    {mantuamakers.data?.map((mantuamaker) => (
+                      <SelectItem key={mantuamaker.id} value={mantuamaker.id}>
+                        {mantuamaker.fullName}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
 
-          {/* <FormField
+          <FormField
             control={form.control}
             name="modelistId"
             render={({ field }) => (
@@ -196,16 +219,21 @@ export const AddSampleSheet = () => {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Modelist seçin" />
+                      <SelectValue placeholder={t('select_item')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
+                    {modelists.data?.map((modelist) => (
+                      <SelectItem key={modelist.id} value={modelist.id}>
+                        {modelist.fullName}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
 
           <FormField
             control={form.control}

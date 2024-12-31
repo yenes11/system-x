@@ -47,6 +47,7 @@ interface SupplierFabric {
   grammage: number;
   image: string;
   percent: number;
+  unitMeters: any;
 }
 
 interface Props {
@@ -60,7 +61,12 @@ function FabricCarousel({ data }: Props) {
     id: ''
   });
 
-  const [openHelp, setOpenHelp] = useState(false);
+  console.log(data, 'facir');
+
+  const [helpState, setHelpState] = useState({
+    open: false,
+    data: null
+  });
 
   const [searchKey, setSearchKey] = useState('');
 
@@ -82,7 +88,7 @@ function FabricCarousel({ data }: Props) {
         state={deleteState}
         setState={setDeleteState}
       />
-      <HelpDialog open={openHelp} setOpen={setOpenHelp} />
+      <HelpDialog state={helpState} setOpen={setHelpState} />
       {/* <EditFabricSheet state={editState} setState={setEditState} /> */}
       <div className="mb-4 flex justify-between gap-4">
         <SearchBar
@@ -160,7 +166,9 @@ function FabricCarousel({ data }: Props) {
                       </Button>
                       <Button
                         className="flex-1 rounded-none"
-                        onClick={() => setOpenHelp(true)}
+                        onClick={() =>
+                          setHelpState({ open: true, data: fabric.unitMeters })
+                        }
                         variant="secondary"
                         size="sm"
                       >

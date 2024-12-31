@@ -7,7 +7,7 @@ import { SidebarTrigger } from '../ui/sidebar';
 
 export default function Header() {
   return (
-    <header className="sticky inset-x-0 top-0 z-40 h-14 w-full border-b bg-sidebar dark:bg-card">
+    <header className="sticky inset-x-0 top-0 z-40 h-14 w-full border-b bg-sidebar dark:bg-sidebar">
       <nav className="flex items-center justify-between px-4 py-2 md:justify-end">
         <div className={cn('block md:!hidden')}>{/* <MobileSidebar /> */}</div>
         <SidebarTrigger className="mr-auto" />

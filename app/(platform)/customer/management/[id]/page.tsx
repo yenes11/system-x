@@ -6,6 +6,7 @@ import SeasonsTable from '@/components/customer/seasons-table';
 import WarehouseTable from '@/components/suppliers/warehouse-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCustomerDetails } from '@/lib/api-calls';
+import { Building2, Leaf, Network } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 async function CustomerPage({ params }: any) {
@@ -19,9 +20,18 @@ async function CustomerPage({ params }: any) {
 
       <Tabs defaultValue="seasons" className="mb-2">
         <TabsList>
-          <TabsTrigger value="seasons">{t('seasons')}</TabsTrigger>
-          <TabsTrigger value="warehouses">{t('warehouses')}</TabsTrigger>
-          <TabsTrigger value="departments">{t('departments')}</TabsTrigger>
+          <TabsTrigger value="seasons">
+            <Leaf className="mr-2 size-4" />
+            {t('seasons')}
+          </TabsTrigger>
+          <TabsTrigger value="warehouses">
+            <Building2 className="mr-2 size-4" />
+            {t('warehouses')}
+          </TabsTrigger>
+          <TabsTrigger value="departments">
+            <Network className="mr-2 size-4" />
+            {t('bussiness_unit')}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="seasons" className="">
           <SeasonsTable data={details?.seasons || []} />

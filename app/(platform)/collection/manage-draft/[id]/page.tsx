@@ -1,3 +1,4 @@
+import CostTable from '@/components/collection/cost-table';
 import FabricCarousel from '@/components/collection/fabric-carousel';
 import MaterialCarousel from '@/components/collection/material-carousel';
 import ProductStationsStepper from '@/components/collection/product-stations-stepper';
@@ -16,8 +17,11 @@ import { Dialog, DialogClose } from '@radix-ui/react-dialog';
 import {
   BadgeCheck,
   BadgeMinus,
+  Banknote,
   CheckCircle,
-  SquareBottomDashedScissors
+  Paperclip,
+  SquareBottomDashedScissors,
+  Waypoints
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { Fragment } from 'react';
@@ -99,10 +103,10 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
           {/* <BadgeMinus className="mb-auto mt-[2.5px] size-5 text-destructive" /> */}
           <div>
             <span className="text-sm font-medium">{t('unverified')}</span>
-            <p className="mb-2 text-xs">{t('unverified_description')}</p>
+            <p className="text-xs">{t('unverified_description')}</p>
           </div>
           <div className="ml-auto">
-            <VerifyCollectionDialog />
+            <VerifyCollectionDialog details={collectionDetails} />
           </div>
         </div>
       )}
@@ -144,15 +148,18 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
       </Tabs>
 
       <Tabs defaultValue="product-stations">
-        <TabsList className="mb-2 flex">
+        <TabsList className="mb-2">
           <TabsTrigger className="flex-1" value="product-stations">
+            <Waypoints className="mr-2 size-4" />
             {t('product_stations')}
           </TabsTrigger>
 
           <TabsTrigger className="flex-1" value="samples">
+            <Paperclip className="mr-2 size-4" />
             {t('samples')}
           </TabsTrigger>
           <TabsTrigger className="flex-1" value="costs">
+            <Banknote className="mr-2 size-4" />
             {t('costs')}
           </TabsTrigger>
         </TabsList>
@@ -162,7 +169,9 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
         <TabsContent value="samples">
           <SamplesTable isVerified={collectionDetails.identityDefined} />
         </TabsContent>
-        <TabsContent value="costs">empty</TabsContent>
+        <TabsContent value="costs">
+          <CostTable />
+        </TabsContent>
       </Tabs>
     </Fragment>
   );

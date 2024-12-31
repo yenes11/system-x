@@ -342,6 +342,11 @@ export const collectionSampleStatus = {
   5: 'Rejected'
 };
 
+export interface User {
+  id: string;
+  fullName: string;
+}
+
 export interface UserInfo {
   id: string;
   fullName: string;
@@ -354,3 +359,23 @@ export interface UserInfo {
   role: number;
   createdDate: string;
 }
+
+export interface CostItem extends BasicEntity {
+  type: number;
+  details: CostDetailItem[];
+}
+
+export interface CostDetailItem {
+  name: string;
+  unit: number;
+  price: number;
+  type: number;
+  currency: number;
+}
+
+export const CostType = {
+  1: 'draft_cost',
+  2: 'offered_cost',
+  3: 'approved_cost',
+  4: 'real_cost'
+} as const;

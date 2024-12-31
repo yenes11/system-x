@@ -53,7 +53,7 @@ function DepartmentTree({ data }: { data: Department[] }) {
         <CardHeader className="flex-row items-center justify-between border-b px-4 py-2">
           <div className="flex items-center gap-2">
             <Network />
-            <CardTitle>{t('departments')}</CardTitle>
+            <CardTitle>{t('bussiness_units')}</CardTitle>
           </div>
           <Button
             className="rounded-full bg-nutural"
@@ -61,7 +61,7 @@ function DepartmentTree({ data }: { data: Department[] }) {
             onClick={() => setIsAddSheetOpen(true, null)}
           >
             <PlusIcon size={16} className="mr-2" />
-            {t('add_department')}
+            {t('add_bussiness_unit')}
           </Button>
         </CardHeader>
         <CardContent className="px-4 py-2">

@@ -393,10 +393,7 @@ function SamplesTable({ isVerified }: { isVerified: boolean }) {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={table.getHeaderGroups().length}
-                    className="flex h-24 w-full items-center justify-center text-center"
-                  >
+                  <TableCell className="h-32" colSpan={6}>
                     <Empty className="w-full" />
                   </TableCell>
                 </TableRow>

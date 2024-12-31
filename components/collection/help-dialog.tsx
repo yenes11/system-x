@@ -3,19 +3,35 @@ import ThemedDialog from '../themed-dialog';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Edit } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 function HelpDialog({
-  open,
+  state,
   setOpen
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  state: any;
+  setOpen: Dispatch<SetStateAction<any>>;
 }) {
+  const t = useTranslations();
+
+  const [values, setValues] = React.useState({
+    draft: '',
+    approved: '',
+    system: ''
+  });
+
+  const setValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({
+      ...values,
+      [event.target.name]: event.target.value
+    });
+  };
+
   return (
     <ThemedDialog
       contentClassName="max-w-md"
       title="Help"
-      open={open}
+      open={state}
       setOpen={setOpen}
       footer={
         <div className="flex justify-end gap-2">
@@ -26,24 +42,37 @@ function HelpDialog({
         </div>
       }
     >
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-2">
-          <span className="mr-6">1</span>
-          <Input placeholder="Enter a description..." />
+      <div className="grid grid-cols-6 items-center gap-4">
+        <span className=" col-span-2 mr-6">{t('draft')}</span>
+        <div className="col-span-4 flex items-center gap-2">
+          <Input
+            name="draft"
+            onChange={setValue}
+            placeholder={t('enter_unit_value')}
+          />
           <Button variant="ghost" size="icon">
             <Edit size={16} />
           </Button>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="mr-6">1</span>
-          <Input placeholder="Enter a description..." />
+
+        <span className=" col-span-2 mr-6">{t('approved')}</span>
+        <div className="col-span-4 flex items-center gap-2">
+          <Input
+            name="approved"
+            onChange={setValue}
+            placeholder={t('enter_unit_value')}
+          />
           <Button variant="ghost" size="icon">
             <Edit size={16} />
           </Button>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="mr-6">1</span>
-          <Input placeholder="Enter a description..." />
+        <span className=" col-span-2 mr-6">{t('system_unit_meter')}</span>
+        <div className="col-span-4 flex items-center gap-2">
+          <Input
+            name="system"
+            onChange={setValue}
+            placeholder={t('enter_unit_value')}
+          />
           <Button variant="ghost" size="icon">
             <Edit size={16} />
           </Button>

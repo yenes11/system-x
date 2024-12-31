@@ -89,7 +89,7 @@ export function AddDepartmentSheet() {
       <SheetContent>
         <SheetHeader>
           <Building className="mr-2 h-4 w-4 text-muted-foreground" />
-          <SheetTitle>{t('add_department')}</SheetTitle>
+          <SheetTitle>{t('add_bussiness_unit')}</SheetTitle>
         </SheetHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -98,12 +98,9 @@ export function AddDepartmentSheet() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('department_name')}</FormLabel>
+                  <FormLabel>{t('name')}</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder={t('enter_department_name')}
-                      {...field}
-                    />
+                    <Input placeholder={t('enter_name')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

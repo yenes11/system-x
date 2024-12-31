@@ -9,11 +9,14 @@ import { useParams, useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import api from '@/api';
 import { toast } from 'sonner';
+import { CollectionDraft } from '@/lib/types';
 
-function VerifyCollectionDialog() {
+function VerifyCollectionDialog({ details }: { details: CollectionDraft }) {
   const t = useTranslations();
   const params = useParams();
   const router = useRouter();
+
+  console.log(details, 'details');
 
   const verifyCollection = useMutation({
     mutationFn: async () => {

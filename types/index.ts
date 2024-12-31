@@ -43,7 +43,7 @@ export const currencyEnums = {
 export const customerTypeEnums = {
   1: 'Production',
   2: 'Export'
-};
+} as const;
 
 export type Currency = keyof typeof currencyEnums;
 

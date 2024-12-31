@@ -5,8 +5,8 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  useReactTable,
-  getPaginationRowModel
+  getPaginationRowModel,
+  useReactTable
 } from '@tanstack/react-table';
 
 import {
@@ -17,34 +17,13 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { Input } from './input';
-import { Button } from './button';
-import { ScrollArea, ScrollBar } from './scroll-area';
-import Empty from './empty';
-import { useTranslations } from 'next-intl';
-import { cn } from '@/lib/utils';
-import { HTMLAttributes } from 'react';
-import { ClassValue } from 'class-variance-authority/types';
-import { SearchBar } from '../searchbar';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious
-} from './pagination';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PaginatedData } from '@/lib/types';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-  SelectTrigger
-} from './select';
+import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { SearchBar } from '../searchbar';
 import ServerPagination from '../server-pagination';
+import Empty from './empty';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
