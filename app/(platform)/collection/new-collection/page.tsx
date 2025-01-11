@@ -56,7 +56,7 @@ const formSchema = z.object({
   customerBuyerGroupId: z.string().uuid(),
   name: z.string(),
   description: z.string(),
-  customerCode: z.string(),
+  customerCode: z.string().optional(),
   garment1: z.string(),
   garment2: z.string(),
   designer: z.string(),
@@ -163,7 +163,7 @@ function NewCollectionPage() {
   };
 
   return (
-    <div>
+    <div className="">
       <Heading icon={<Layers />} title={t('add_collection')} description="" />
       <Card className="mt-4">
         <CardContent className="p-6">

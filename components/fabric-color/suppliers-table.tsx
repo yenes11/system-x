@@ -4,7 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { DataTable } from '../ui/data-table';
 import { useTranslations } from 'next-intl';
-import { Blocks } from 'lucide-react';
+import { Blocks, ExternalLink } from 'lucide-react';
+import Link from 'next/link';
 
 type Fabric = {
   id: string;
@@ -30,8 +31,17 @@ interface Props {
 
 const suppliersTableColumns = [
   {
-    accessorKey: 'name',
-    header: 'name'
+    header: 'name',
+    cell: ({ row }: { row: any }) => (
+      <Link
+        className="flex items-center hover:underline"
+        target="_blank"
+        href={`/supplier/${row.original.supplierId}`}
+      >
+        {row.original.name}
+        <ExternalLink className="ml-1 size-4" />
+      </Link>
+    )
   },
   {
     accessorKey: 'manufacturerCode',
@@ -54,6 +64,7 @@ const suppliersTableColumns = [
 
 function SuppliersTable({ data }: Props) {
   const t = useTranslations();
+
   return (
     <Card className="overflow-hidden bg-nutural">
       <CardHeader className="h-12 flex-row items-center gap-2 border-b px-4">

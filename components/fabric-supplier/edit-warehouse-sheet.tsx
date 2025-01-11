@@ -48,7 +48,7 @@ function EditWarehouseSheet({ state, setState }: Props) {
 
   const endpoint = path.startsWith('/customer/management')
     ? '/CustomerWarehouses'
-    : '/FabricSupplierWarehouses';
+    : '/supplierWarehouses';
 
   const addWarehouse = useMutation({
     mutationKey: ['edit-warehouse'],

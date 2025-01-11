@@ -134,7 +134,7 @@ function WarehouseTable({ data }: Props) {
 
   const endpoint = path.startsWith('/customer/management')
     ? '/CustomerWarehouses'
-    : '/FabricSupplierWarehouses';
+    : '/SupplierWarehouses';
 
   return (
     <>

@@ -25,7 +25,7 @@ import {
   SheetTitle
 } from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -54,6 +54,7 @@ interface Props {
 function AddPriceToFabricSheet({ state, setState }: Props) {
   const t = useTranslations();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
@@ -67,6 +68,9 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
     },
     onSuccess: async (res) => {
       router.refresh();
+      queryClient.invalidateQueries({
+        queryKey: ['recent-prices']
+      });
       setState({
         open: false,
         fabricColorId: ''
@@ -113,11 +117,11 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
               name="currency"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Currency</FormLabel>
+                  <FormLabel>{t('currency')}</FormLabel>
                   <Select onValueChange={(val) => field.onChange(Number(val))}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a currency type" />
+                        <SelectValue placeholder={t('select_option')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -136,7 +140,7 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>{t('price')}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="250"
@@ -149,8 +153,12 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
-              {t('submit')}
+            <Button
+              loading={addPrice.isPending}
+              className="w-full"
+              type="submit"
+            >
+              {addPrice.isPending ? t('submitting') : t('submit')}
             </Button>
           </form>
         </Form>

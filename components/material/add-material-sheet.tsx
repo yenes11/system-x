@@ -20,6 +20,7 @@ import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue
@@ -37,6 +38,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Icon from '../ui/icon';
+import ComboboxForm from '../ui/combobox-form';
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -44,7 +46,7 @@ const formSchema = z.object({
   attributes: z.array(
     z.object({
       attributeId: z.string().uuid(),
-      value: z.string()
+      value: z.string().min(1, { message: 'Required' })
     })
   )
 });
@@ -70,13 +72,14 @@ function AddMaterialSheet() {
     }
   });
 
+  console.log(materialTypes, 'materialTypes');
+
   const addMaterial = useMutation({
     mutationKey: ['add-material'],
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const res = await api.post('/Materials', values);
       return res;
     },
-    // mutationFn: addMaterialFn,
     onSuccess: (res) => {
       router.refresh();
       setOpen(false);
@@ -100,6 +103,11 @@ function AddMaterialSheet() {
     name: 'attributes',
     control: form.control
   });
+
+  const usedAttributes = fields.reduce((acc, field) => {
+    acc.push(field.attributeId);
+    return acc;
+  }, [] as string[]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     addMaterial.mutate(values);
@@ -151,14 +159,18 @@ function AddMaterialSheet() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {materialTypes.data?.map((materialType: BasicEntity) => (
-                        <SelectItem
-                          key={materialType.id}
-                          value={materialType.id}
-                        >
-                          {materialType.name}
-                        </SelectItem>
-                      ))}
+                      <SelectGroup>
+                        {materialTypes.data?.map(
+                          (materialType: BasicEntity) => (
+                            <SelectItem
+                              key={materialType.id}
+                              value={materialType.id}
+                            >
+                              {materialType.name}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectGroup>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -219,14 +231,17 @@ function AddMaterialSheet() {
                     </FormItem>
                   )}
                 />
-
-                <Button
-                  onClick={() => remove(index)}
-                  variant="destructive"
-                  className="mt-auto"
-                >
-                  <Icon icon="cross-circle" size={16} currentColor />
-                </Button>
+                <div>
+                  <FormLabel></FormLabel>
+                  <Button
+                    onClick={() => remove(index)}
+                    variant="destructive"
+                    className="mt-auto"
+                  >
+                    <Icon icon="cross-circle" size={16} currentColor />
+                  </Button>
+                  <FormMessage />
+                </div>
               </div>
             ))}
 

@@ -43,8 +43,8 @@ const formSchema = z.object({
   fullName: z.string().min(1),
   phone: z.string().refine(validator.isMobilePhone),
   email: z.string().email(),
-  customerEmployeeTypeId: z.string().uuid(),
-  customerDepartmentId: z.string().uuid()
+  customerEmployeeTypeId: z.string().uuid()
+  // customerDepartmentId: z.string().uuid()
 });
 
 const defaultValues = {
@@ -71,6 +71,8 @@ export function EditEmployeeSheet({ state, setState }: Props) {
   const _defaultValues = state.data || defaultValues;
 
   const { editData } = useCustomerDepartmentsSlice();
+
+  console.log(state, 'editData');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -116,6 +118,8 @@ export function EditEmployeeSheet({ state, setState }: Props) {
       });
     }
   });
+
+  console.log(form.formState.errors, form.getValues(), 'errors');
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     editEmployee.mutate(values);

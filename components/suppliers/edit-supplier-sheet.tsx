@@ -42,10 +42,9 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const endpoint =
-    pathname === '/fabric/supplier-management'
-      ? '/FabricSuppliers'
-      : '/MaterialSuppliers';
+  console.log(state, 'sss');
+
+  const endpoint = '/Suppliers';
 
   const editSupplier = useMutation({
     mutationKey: ['edit-supplier'],
@@ -77,7 +76,8 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     editSupplier.mutate({
       ...values,
-      id: state.data.id
+      id: state.data.id,
+      type: state.data.type
     });
   };
 

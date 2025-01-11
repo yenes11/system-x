@@ -49,6 +49,7 @@ const MAX_FILE_SIZE = 5; // MB
 const formSchema = z.object({
   material: z.string().uuid(),
   materialColorId: z.string().uuid(),
+  materialColorVariantId: z.string().uuid(),
   manufacturerCode: z.string(),
   image: z
     .any()
@@ -77,7 +78,8 @@ function AssignMaterialSheet() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
   });
-  const isFabricSelected = !!form.watch('material');
+  const isMaterialSelected = !!form.watch('material');
+  const isColorSelected = !!form.watch('materialColorId');
 
   const materials = useQuery({
     queryKey: ['materials'],
@@ -98,12 +100,22 @@ function AssignMaterialSheet() {
   //   enabled: isFabricSelected
   // });
 
-  const fabricDetails = useMemo(() => {
+  const materialDetails = useMemo(() => {
     const selectedMaterial = materials.data?.items?.find(
       (m: any) => m.id === form.watch('material')
     );
     return selectedMaterial?.colors;
   }, [materials.data, form.watch('material')]);
+
+  const variants = useMemo(() => {
+    const selectedColor = materialDetails?.find(
+      (m: any) => m.id === form.watch('materialColorId')
+    );
+    console.log(selectedColor, 'selectedColor');
+    return selectedColor?.variants;
+  }, [materials.data, form.watch('materialColorId')]);
+
+  console.log(materialDetails, 'fabric', variants);
 
   const assignMaterial = useMutation({
     mutationKey: ['assign-material'],
@@ -125,6 +137,10 @@ function AssignMaterialSheet() {
 
     formData.append('supplierId', supplierId);
     formData.append('materialColorId', values.materialColorId || '');
+    formData.append(
+      'materialColorVariantId',
+      values.materialColorVariantId || ''
+    );
     formData.append('manufacturerCode', values.manufacturerCode || '');
     formData.append('image', values.image);
 
@@ -185,7 +201,7 @@ function AssignMaterialSheet() {
                 <FormItem>
                   <FormLabel>{t('color')}</FormLabel>
                   <Select
-                    disabled={!isFabricSelected}
+                    disabled={!isMaterialSelected}
                     key={form.watch('material')}
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -199,9 +215,40 @@ function AssignMaterialSheet() {
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        {fabricDetails?.map((color: any) => (
+                        {materialDetails?.map((color: any) => (
                           <SelectItem key={color.id} value={color.id}>
                             {color.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="materialColorVariantId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('variant')}</FormLabel>
+                  <Select
+                    disabled={!isColorSelected}
+                    key={form.watch('materialColorId')}
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('select_a_variant')} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        {variants?.map((variant: any) => (
+                          <SelectItem key={variant.id} value={variant.id}>
+                            {variant.size}
                           </SelectItem>
                         ))}
                       </SelectGroup>

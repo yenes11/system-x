@@ -54,7 +54,7 @@ function CustomerInfoDialog({ state, setState }: Props) {
               </DialogTitle>
             </div>
           </DialogHeader>
-          <CardContent className="px-6 py-2 text-sm">
+          <CardContent className="px-6 pb-6 pt-2 text-sm">
             <div className="grid gap-3">
               <ul className="grid gap-3">
                 <li className="flex flex-col items-start justify-between">
@@ -105,11 +105,6 @@ function CustomerInfoDialog({ state, setState }: Props) {
               </ul>
             </div>
           </CardContent>
-          <DialogFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-            <div className="text-xs text-muted-foreground">
-              Updated <time dateTime="2023-11-23">November 23, 2023</time>
-            </div>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
       {/* <ThemedDialog

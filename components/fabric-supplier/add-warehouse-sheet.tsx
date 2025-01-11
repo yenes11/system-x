@@ -52,11 +52,11 @@ function AddWarehouseSheet() {
 
   const columnName = path.startsWith('/customer/management')
     ? 'customerId'
-    : 'fabricSupplierId';
+    : 'supplierId';
 
   const endpoint = path.startsWith('/customer/management')
     ? '/CustomerWarehouses'
-    : '/FabricSupplierWarehouses';
+    : '/SupplierWarehouses';
 
   const addWarehouse = useMutation({
     mutationKey: ['add-warehouse'],
@@ -88,7 +88,7 @@ function AddWarehouseSheet() {
 
   const onSubmit = (
     values: Partial<z.infer<typeof formSchema>> & {
-      fabricSupplierId?: string;
+      supplierId?: string;
       customerId?: string;
     }
   ) => {
@@ -119,7 +119,7 @@ function AddWarehouseSheet() {
                 <FormItem>
                   <FormLabel>{t('name')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="John Fabric" {...field} />
+                    <Input placeholder={t('name_placeholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

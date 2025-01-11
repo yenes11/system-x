@@ -41,6 +41,7 @@ import { CrossCircledIcon } from '@radix-ui/react-icons';
 import AddMaterialVariantSheet from './add-material-variant-sheet';
 import { useQuery } from '@tanstack/react-query';
 import api from '@/api';
+import EditMaterialColorSheet from './edit-material-color-sheet';
 
 type Fabric = {
   id: string;
@@ -157,6 +158,10 @@ function MaterialTable({ data }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [editMaterialColorState, setEditMaterialColorState] = useState({
+    open: false,
+    data: null
+  });
   const [expandedColorRows, setExpandedColorRows] = useState<string[]>([]);
   const [expandedVariantRows, setExpandedVariantRows] = useState<string[]>([]);
   const [materialColorState, setMaterialColorState] = useState<SheetState>({
@@ -273,12 +278,6 @@ function MaterialTable({ data }: Props) {
           onValueChange={(value) => handleSearchParams('type', value)}
           placeholder={t('select_a_type')}
         />
-        {/* {selectedUnit && (
-          <Badge className="flex items-center gap-2 border border-dashed border-muted-foreground/40 bg-transparent pl-4 pr-2 text-sm font-light">
-            {selectedUnit}
-            <CrossCircledIcon onClick={() => clearSearchParam('unit')} />
-          </Badge>
-        )} */}
       </div>
       <Table rounded transparent={false}>
         <TableHeader>
@@ -315,6 +314,7 @@ function MaterialTable({ data }: Props) {
                   toggleColorRow={toggleColorRow}
                   toggleVariantRow={toggleVariantRow}
                   setMaterialVariantState={setMaterialVariantState}
+                  setEditMaterialColorState={setEditMaterialColorState}
                 />
               ))
           ) : (
@@ -333,6 +333,10 @@ function MaterialTable({ data }: Props) {
           hasPrevious: data.hasPrevious,
           count: data.count
         }}
+      />
+      <EditMaterialColorSheet
+        state={editMaterialColorState}
+        setState={setEditMaterialColorState}
       />
       <AddMaterialColorSheet
         state={materialColorState}

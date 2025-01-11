@@ -64,7 +64,10 @@ function EditMaterialSheet({ state, setState }: EditMaterialSheetProps) {
 
   const editMaterial = useMutation({
     mutationKey: ['edit-material'],
-    mutationFn: editMaterialFn,
+    mutationFn: async (material) => {
+      const response = await api.put('/Materials', material);
+      return response;
+    },
     onSuccess: (res) => {
       router.refresh();
       setState({ open: false, data: null });
@@ -129,7 +132,7 @@ function EditMaterialSheet({ state, setState }: EditMaterialSheetProps) {
     editMaterial.mutate({
       ...values,
       id: state.data?.id
-    });
+    } as any);
   };
 
   return (

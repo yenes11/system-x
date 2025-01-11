@@ -62,8 +62,8 @@ function AddPriceSheet() {
     : 'fabricSupplierFabricColorId';
 
   const supplierColorsEndpoint = isMaterial
-    ? '/MaterialSuppliers/GetSuppliersForMaterialColor?MaterialColorId='
-    : '/FabricSuppliers/GetSuppliersForFabricColor?FabricColorId=';
+    ? '/Suppliers/GetSuppliersForMaterialColorVariant?MaterialColorVariantId='
+    : '/Suppliers/GetSuppliersForFabricColor?FabricColorId=';
 
   const addPriceEndpoint = isMaterial
     ? '/MaterialColorPrices'
@@ -80,8 +80,7 @@ function AddPriceSheet() {
     queryFn: async () => {
       const res = await api.get(`${supplierColorsEndpoint}${id}`);
       return res.data;
-    },
-    enabled: open
+    }
   });
 
   const addPrice = useMutation({
@@ -171,11 +170,8 @@ function AddPriceSheet() {
                     </FormControl>
                     <SelectContent>
                       {supplierColors.data?.map((item: any) => (
-                        <SelectItem
-                          key={item[idProperty]}
-                          value={item[idProperty]}
-                        >
-                          {item[nameProperty]}
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
                         </SelectItem>
                       ))}
                     </SelectContent>

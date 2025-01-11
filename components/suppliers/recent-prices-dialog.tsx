@@ -58,7 +58,7 @@ function RecentPricesDialog({ state, setState }: any) {
         setState((prev: any) => ({ ...prev, open: val }));
       }}
     >
-      <DialogContent className="text-start">
+      <DialogContent className="overflow-hidden p-0 text-start">
         {recentPrices.data && (
           <DataTable
             bordered={false}

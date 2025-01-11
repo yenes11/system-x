@@ -194,7 +194,7 @@
   "identity_unit": "Kimlik Birimi",
   "order_unit": "Sipariş Birimi",
   "variant_unit": "Varyant Birimi",
-  "material_type": "Material Type",
+  "material_type": "Malzeme Tipi",
   "select_material_type_placeholder": "Material tipi seçiniz",
   "select_attribute_placeholder": "Özellik seçiniz",
   "attribute": "Özellik",
@@ -304,5 +304,7 @@
   "enter_name": "İsim giriniz",
   "draft": "Taslak",
   "system_unit_meter": "Sistem Birimi",
-  "enter_unit_value": "Birim değeri giriniz"
+  "enter_unit_value": "Birim değeri giriniz",
+  "select_option": "Bir seçenek seçiniz",
+  "add_fabric_price": "Kumaş Fiyatı Ekle"
 }

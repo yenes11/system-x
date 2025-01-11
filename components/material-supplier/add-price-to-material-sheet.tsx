@@ -112,11 +112,11 @@ function AddPriceToMaterialSheet({ state, setState }: Props) {
               name="currency"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Currency</FormLabel>
+                  <FormLabel>{t('currency')}</FormLabel>
                   <Select onValueChange={(val) => field.onChange(Number(val))}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a currency type" />
+                        <SelectValue placeholder={t('select_currency')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -135,7 +135,7 @@ function AddPriceToMaterialSheet({ state, setState }: Props) {
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>{t('price')}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="250"

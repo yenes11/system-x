@@ -115,6 +115,19 @@ const getColumns = (
                 <Plus className="size-4" />
               </Button>
             </ThemedTooltip>
+            <ThemedTooltip text="delete_fabric">
+              <Button
+                disabled
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+              >
+                <Trash2 className="size-4 text-destructive" />
+              </Button>
+            </ThemedTooltip>
           </div>
         );
       }

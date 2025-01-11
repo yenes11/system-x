@@ -161,7 +161,7 @@
   "fabric_color": "Fabric Color",
   "material_color_details": "Material Color Details",
   "select_supplier": "Select supplier",
-  "select_currency": "Select currency",
+  "select_currency": "Select a currency",
   "add_price": "Add Price",
   "select_department_first": "To view employees, please select a department first.",
   "no_employees_in_department": "No employees in this department.",
@@ -304,5 +304,7 @@
   "enter_name": "Enter name",
   "draft": "Draft",
   "system_unit_meter": "System Unit Meter",
-  "enter_unit_value": "Enter unit value"
+  "enter_unit_value": "Enter unit value",
+  "select_option": "Select an option",
+  "add_fabric_price": "Add Fabric Price"
 }

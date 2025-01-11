@@ -31,7 +31,7 @@ function HelpDialog({
     <ThemedDialog
       contentClassName="max-w-md"
       title="Help"
-      open={state}
+      open={state.open}
       setOpen={setOpen}
       footer={
         <div className="flex justify-end gap-2">

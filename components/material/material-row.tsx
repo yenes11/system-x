@@ -12,6 +12,7 @@ import { useTranslations } from 'next-intl';
 import Icon from '../ui/icon';
 import ThemedTooltip from '../ThemedTooltip';
 import { Button } from '../ui/button';
+import { Edit } from 'lucide-react';
 
 interface Props {
   row: any;
@@ -20,6 +21,7 @@ interface Props {
   toggleColorRow: (id: string) => void;
   toggleVariantRow: (id: string) => void;
   colors: MaterialColor[];
+  setEditMaterialColorState: any;
   setMaterialVariantState: Dispatch<
     SetStateAction<{ id: string; open: boolean; variantUnit: string }>
   >;
@@ -42,6 +44,7 @@ function MaterialRow({
   toggleColorRow,
   toggleVariantRow,
   setMaterialVariantState,
+  setEditMaterialColorState,
   colors
 }: Props) {
   const t = useTranslations();
@@ -92,10 +95,15 @@ function MaterialRow({
                           variant="ghost"
                           size="icon"
                           onClick={(e) => {
+                            console.log(color, 'o satırs');
                             e.stopPropagation();
+                            setEditMaterialColorState({
+                              open: true,
+                              data: color
+                            });
                           }}
                         >
-                          <Icon currentColor icon="feather" size={16} />
+                          <Edit className="size-4" />
                         </Button>
                       </ThemedTooltip>
                       <ThemedTooltip text={'add_variant'}>

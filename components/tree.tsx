@@ -96,6 +96,7 @@ const TreeNode = ({ department, depth }: TreeNodeProps) => {
             <ThemedTooltip text={t('edit_department')}>
               <PencilLine
                 onClick={() => {
+                  console.log(department, 'department');
                   setEditSheet(department, true);
                 }}
                 size={16}
