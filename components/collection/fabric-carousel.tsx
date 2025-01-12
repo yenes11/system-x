@@ -37,7 +37,7 @@ import { SearchBar } from '../searchbar';
 import ThemedZoom from '../themed-zoom';
 import AddFabricToCollectionSheet from './add-fabric-to-collection-sheet';
 import { QuestionMarkCircledIcon } from '@radix-ui/react-icons';
-import HelpDialog from './help-dialog';
+import EditUnitMeterDialog from './edit-unit-meter-dialog';
 
 interface SupplierFabric {
   id: string;
@@ -88,7 +88,7 @@ function FabricCarousel({ data }: Props) {
         state={deleteState}
         setState={setDeleteState}
       />
-      <HelpDialog state={helpState} setOpen={setHelpState} />
+      <EditUnitMeterDialog state={helpState} setState={setHelpState} />
       {/* <EditFabricSheet state={editState} setState={setEditState} /> */}
       <div className="mb-4 flex justify-between gap-4">
         <SearchBar
