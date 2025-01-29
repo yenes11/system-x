@@ -3,6 +3,7 @@ import SuppliersTable from '@/components/suppliers/suppliers-table';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
 import { getSuppliers } from '@/lib/api-calls';
+import { Package2 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { Mate } from 'next/font/google';
 
@@ -25,10 +26,7 @@ async function SupplierPage({
     <div>
       <div className="space-y-2">
         <div className="mb-4 flex justify-between">
-          <Heading
-            title={t('suppliers')}
-            icon={<Icon icon="delivery-3" size={24} currentColor />}
-          />
+          <Heading title={t('suppliers')} icon={<Package2 size={24} />} />
           <AddSupplierSheet />
         </div>
         <SuppliersTable data={materialSuppliers} />

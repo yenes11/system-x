@@ -24,6 +24,10 @@ import {
   SidebarRail
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+import api from '@/api';
+import { URL_USER_INFO } from '@/constants/api-constants';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 // This is sample data.
 
@@ -85,6 +89,13 @@ const navItems = [
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: user } = useQuery({
+    queryKey: ['user-info'],
+    queryFn: () => api.get(URL_USER_INFO)
+  });
+
+  const company = user?.data?.company;
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -92,11 +103,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
+                  {company?.logo ? (
+                    <Avatar>
+                      <AvatarImage src={company.logo} alt="Company Logo" />
+                      <AvatarFallback>{company.name[0]}</AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <Command className="size-4" />
+                  )}
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">SystemX</span>
+                  <span className="truncate font-semibold">
+                    {company?.name}
+                  </span>
                   <span className="truncate text-xs">Enterprise</span>
                 </div>
               </Link>

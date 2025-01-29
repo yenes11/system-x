@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Pencil } from 'lucide-react';
+import { Pencil, SquarePen, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { PaginatedData, Supplier } from '@/lib/types';
@@ -15,6 +15,7 @@ import EditSupplierSheet from './edit-supplier-sheet';
 import ThemedSelect from '../themed-select';
 import { SearchBar } from '../searchbar';
 import { useDebouncedCallback } from 'use-debounce';
+import ConfirmDeleteDialog from '../confirm-delete-dialog';
 
 type Fabric = {
   id: string;
@@ -26,7 +27,8 @@ type Fabric = {
 
 const getColumns = (
   setSupplierSheetState: any,
-  pathname: string
+  pathname: string,
+  setDeleteState: any
 ): ColumnDef<Supplier>[] => {
   return [
     {
@@ -72,7 +74,7 @@ const getColumns = (
       cell: ({ row }) => {
         return (
           <div className="float-end flex gap-2">
-            <ThemedTooltip text={'edit_supplier'}>
+            <ThemedTooltip text={'edit'}>
               <Button
                 className="flex items-center justify-center rounded-full"
                 variant="ghost"
@@ -85,7 +87,23 @@ const getColumns = (
                   });
                 }}
               >
-                <Pencil size={16} />
+                <SquarePen size={16} />
+              </Button>
+            </ThemedTooltip>
+            <ThemedTooltip text={'delete'}>
+              <Button
+                className="flex items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeleteState({
+                    id: row.original.id,
+                    open: true
+                  });
+                }}
+              >
+                <Trash2 className="text-destructive" size={16} />
               </Button>
             </ThemedTooltip>
           </div>
@@ -106,6 +124,11 @@ function SuppliersTable({ data }: Props) {
   const router = useRouter();
 
   const [supplierSheetState, setSupplierSheetState] = useState({
+    id: '',
+    open: false
+  });
+
+  const [deleteState, setDeleteState] = useState({
     id: '',
     open: false
   });
@@ -134,7 +157,7 @@ function SuppliersTable({ data }: Props) {
   };
 
   const columns = useMemo(() => {
-    return getColumns(setSupplierSheetState, pathname);
+    return getColumns(setSupplierSheetState, pathname, setDeleteState);
   }, [pathname]);
 
   return (
@@ -158,6 +181,14 @@ function SuppliersTable({ data }: Props) {
       <EditSupplierSheet
         setState={setSupplierSheetState}
         state={supplierSheetState}
+      />
+
+      <ConfirmDeleteDialog
+        endpoint="/Suppliers"
+        mutationKey={['delete-supplier', deleteState.id]}
+        state={deleteState}
+        setState={setDeleteState}
+        title={t('delete_supplier')}
       />
     </>
   );

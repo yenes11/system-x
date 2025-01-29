@@ -12,7 +12,7 @@ import { useTranslations } from 'next-intl';
 import Icon from '../ui/icon';
 import ThemedTooltip from '../ThemedTooltip';
 import { Button } from '../ui/button';
-import { Edit } from 'lucide-react';
+import { Edit, Trash2 } from 'lucide-react';
 
 interface Props {
   row: any;
@@ -22,6 +22,7 @@ interface Props {
   toggleVariantRow: (id: string) => void;
   colors: MaterialColor[];
   setEditMaterialColorState: any;
+  setDeleteColorState: Dispatch<SetStateAction<{ id: string; open: boolean }>>;
   setMaterialVariantState: Dispatch<
     SetStateAction<{ id: string; open: boolean; variantUnit: string }>
   >;
@@ -45,9 +46,11 @@ function MaterialRow({
   toggleVariantRow,
   setMaterialVariantState,
   setEditMaterialColorState,
+  setDeleteColorState,
   colors
 }: Props) {
   const t = useTranslations();
+  console.log(colors, 'colors');
   return (
     <>
       <TableRow
@@ -121,6 +124,22 @@ function MaterialRow({
                           size="icon"
                         >
                           <Icon currentColor icon="plus" size={16} />
+                        </Button>
+                      </ThemedTooltip>
+                      <ThemedTooltip text={'delete'}>
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeleteColorState({
+                              open: true,
+                              id: color.id
+                            });
+                          }}
+                          className="flex items-center justify-center rounded-full"
+                          variant="ghost"
+                          size="icon"
+                        >
+                          <Trash2 className="size-4 text-destructive" />
                         </Button>
                       </ThemedTooltip>
                     </div>

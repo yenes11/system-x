@@ -59,7 +59,7 @@ function AddPriceSheet() {
     : 'fabricSupplierName';
   const idProperty = isMaterial
     ? 'materialSupplierMaterialColorId'
-    : 'fabricSupplierFabricColorId';
+    : 'supplierFabricColorId';
 
   const supplierColorsEndpoint = isMaterial
     ? '/Suppliers/GetSuppliersForMaterialColorVariant?MaterialColorVariantId='
@@ -76,7 +76,7 @@ function AddPriceSheet() {
   });
 
   const supplierColors = useQuery({
-    queryKey: ['fabric-supplier-colors', id],
+    queryKey: ['suppliers', id],
     queryFn: async () => {
       const res = await api.get(`${supplierColorsEndpoint}${id}`);
       return res.data;
@@ -86,7 +86,9 @@ function AddPriceSheet() {
   const addPrice = useMutation({
     mutationKey: ['add-fabric-price'],
     mutationFn: async (values: any) => {
-      const res = await api.post(addPriceEndpoint, values);
+      const res = await api.post(addPriceEndpoint, {
+        ...values
+      });
       return res;
     },
     onSuccess: (res) => {

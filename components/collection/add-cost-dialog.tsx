@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { CostType } from '@/lib/types';
+import { CostDetailItem, CostType } from '@/lib/types';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import {
@@ -49,19 +49,63 @@ function AddCostDialog() {
   const params = useParams();
   const [open, setOpen] = React.useState(false);
 
+  const [info, setInfo] = React.useState<any>({
+    name: '',
+    type: '',
+    collectionColorId: params.id
+  });
+
+  const [costs, setCosts] = React.useState<CostDetailItem[]>([]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
   });
 
-  const x = useQuery({
+  const costDetails = useQuery({
     queryKey: ['x'],
     queryFn: async () => {
       const response = await api.get(
         `/CollectionColors/GetCostInformationsForCreate/${params.id}`
       );
+
+      const tempCosts: CostDetailItem[] = [];
+
+      response.data?.fabrics?.forEach((item: any, index: number) => {
+        tempCosts.push({
+          name: item.name,
+          unit: 1,
+          price: 0,
+          currency: 1,
+          type: item.type
+        });
+      });
+
+      response.data?.materials?.forEach((item: any, index: number) => {
+        tempCosts.push({
+          name: item.name,
+          unit: 1,
+          price: 0,
+          currency: 1,
+          type: item.type
+        });
+      });
+
+      response.data?.productStations?.forEach((item: any, index: number) => {
+        tempCosts.push({
+          name: item.name,
+          unit: 1,
+          price: 0,
+          currency: 1,
+          type: item.type
+        });
+      });
+
+      setCosts(tempCosts);
       return response.data;
     }
   });
+
+  console.log(costDetails, 'xxxxxx');
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {};
 
@@ -101,7 +145,7 @@ function AddCostDialog() {
                   {t('product_stations')}
                 </span>
                 <div className="mt-4 grid grid-cols-3 gap-2">
-                  {x.data?.productStations.map((item: any) => (
+                  {costDetails.data?.productStations.map((item: any) => (
                     <React.Fragment key={item.name}>
                       <Label>{item.name}</Label>
                       <span>{item.amount}</span>
@@ -114,7 +158,7 @@ function AddCostDialog() {
                   {t('fabric')}
                 </span>
                 <div className="grid grid-cols-3 items-center gap-2">
-                  {x.data?.fabrics.map((item: any) => (
+                  {costDetails.data?.fabrics.map((item: any) => (
                     <React.Fragment key={item.name}>
                       <Label>
                         {item.name}-{item.color}-{item.grammage}
@@ -140,7 +184,7 @@ function AddCostDialog() {
                   {t('material')}
                 </span>
                 <div className="mt-4 grid grid-cols-3 items-center gap-2">
-                  {x.data?.materials.map((item: any) => (
+                  {costDetails.data?.materials.map((item: any) => (
                     <React.Fragment key={item.name}>
                       <Label>{item.name}</Label>
                       <span>{item.amount}</span>

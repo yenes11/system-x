@@ -306,5 +306,13 @@
   "system_unit_meter": "System Unit Meter",
   "enter_unit_value": "Enter unit value",
   "select_option": "Select an option",
-  "add_fabric_price": "Add Fabric Price"
+  "add_fabric_price": "Add Fabric Price",
+  "delete_fabric": "Delete Fabric",
+  "cannot_delete_fabric": "This fabric has colors assigned to it. You cannot delete it",
+  "delete_fabric_color": "Delete Fabric Color",
+  "delete_material": "Delete Material",
+  "delete_material_color": "Delete Material Color",
+  "delete_material_variant_color": "Delete Material Variant Color",
+  "delete_supplier": "Delete Supplier",
+  "place_order": "Place Order"
 }

@@ -49,10 +49,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import ActionsDropdown from '@/components/actions-dropdown';
+import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
+import { cn } from '@/lib/utils';
 
 const getColumns = (
   setColorState: any,
-  setEditFabricState: any
+  setEditFabricState: any,
+  setDeleteFabricState: any
 ): ColumnDef<FabricWithColors>[] => {
   return [
     {
@@ -82,7 +85,7 @@ const getColumns = (
       },
       cell: ({ row }) => {
         return (
-          <div className="float-end flex gap-2">
+          <div className="float-end -mr-3 flex gap-2">
             <ThemedTooltip text="edit_fabric">
               <Button
                 className="flex items-center justify-center rounded-full"
@@ -115,17 +118,32 @@ const getColumns = (
                 <Plus className="size-4" />
               </Button>
             </ThemedTooltip>
-            <ThemedTooltip text="delete_fabric">
+            <ThemedTooltip
+              text={
+                row.original.colors.length === 0
+                  ? 'delete_fabric'
+                  : 'cannot_delete_fabric'
+              }
+            >
               <Button
-                disabled
                 onClick={(e) => {
                   e.stopPropagation();
+                  if (row.original.colors.length > 0) return;
+                  setDeleteFabricState({
+                    open: true,
+                    id: row.original.id
+                  });
                 }}
                 className="flex items-center justify-center rounded-full"
                 variant="ghost"
                 size="icon"
               >
-                <Trash2 className="size-4 text-destructive" />
+                <Trash2
+                  className={cn(
+                    'size-4 text-destructive',
+                    row.original.colors.length > 0 && 'text-destructive/50'
+                  )}
+                />
               </Button>
             </ThemedTooltip>
           </div>
@@ -164,13 +182,24 @@ function FabricTable({ data }: Props) {
     open: false
   });
 
+  const [deleteFabricState, setDeleteFabricState] = useState({
+    id: '',
+    open: false
+  });
+
+  console.log(deleteFabricState, 'deleteFabricState');
+
   // const data = useQuery({
   //   queryKey: ['fabrics'],
   //   queryFn: getFabrics
   // });
 
   const columns = useMemo(() => {
-    return getColumns(setFabricColorState, setEditFabricState);
+    return getColumns(
+      setFabricColorState,
+      setEditFabricState,
+      setDeleteFabricState
+    );
   }, []);
 
   const table = useReactTable({
@@ -223,12 +252,6 @@ function FabricTable({ data }: Props) {
           className="w-64"
           placeholder={t('search_fabric')}
         />
-        {/* <SearchBar
-          type="number"
-          onChange={(e) => handleGrammageSearch(e.target.value)}
-          className="w-64"
-          placeholder={t('search_grammage')}
-        /> */}
       </div>
       <Table transparent={false} rounded>
         <TableHeader>
@@ -290,6 +313,13 @@ function FabricTable({ data }: Props) {
         setState={setFabricColorState}
       />
       <EditFabricSheet state={editFabricState} setState={setEditFabricState} />
+      <ConfirmDeleteDialog
+        endpoint={`/Fabrics`}
+        setState={setDeleteFabricState}
+        state={deleteFabricState}
+        mutationKey={['delete-fabric', deleteFabricState.id]}
+        title={t('delete_fabric')}
+      />
     </>
   );
 }

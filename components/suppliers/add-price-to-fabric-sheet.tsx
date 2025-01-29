@@ -118,7 +118,10 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('currency')}</FormLabel>
-                  <Select onValueChange={(val) => field.onChange(Number(val))}>
+                  <Select
+                    defaultValue="2"
+                    onValueChange={(val) => field.onChange(Number(val))}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={t('select_option')} />
@@ -126,8 +129,8 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value={'1'}>TRY</SelectItem>
-                        <SelectItem value={'2'}>USD</SelectItem>
+                        <SelectItem value="2">TRY</SelectItem>
+                        <SelectItem value="1">USD</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>

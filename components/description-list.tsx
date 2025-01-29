@@ -17,7 +17,7 @@ function DescriptionList({ listItems }: Props) {
         {listItems.map((listItem) => (
           <div
             key={listItem.title}
-            className="grid grid-cols-1 gap-1 px-6 py-3 even:bg-muted sm:grid-cols-3 sm:gap-4"
+            className="grid grid-cols-1 gap-1 px-6 py-3 even:bg-muted sm:grid-cols-3 sm:gap-4 dark:even:bg-background"
           >
             <dt className="text-muted-foreground">{listItem.title}</dt>
             <dd className="sm:col-span-2">{listItem.description || EMPTY}</dd>

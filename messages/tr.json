@@ -306,5 +306,13 @@
   "system_unit_meter": "Sistem Birimi",
   "enter_unit_value": "Birim değeri giriniz",
   "select_option": "Bir seçenek seçiniz",
-  "add_fabric_price": "Kumaş Fiyatı Ekle"
+  "add_fabric_price": "Kumaş Fiyatı Ekle",
+  "delete_fabric": "Kumaşı Sil",
+  "cannot_delete_fabric": "Kumaşta renk olduğu için kumaş silinemez",
+  "delete_fabric_color": "Kumaş Rengini Sil",
+  "delete_material": "Malzemeyi Sil",
+  "delete_material_color": "Malzeme Rengini Sil",
+  "delete_material_variant_color": "Malzeme Varyant Rengini Sil",
+  "delete_supplier": "Tedarikçiyi Sil",
+  "place_order": "Sipariş oluştur"
 }

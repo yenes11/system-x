@@ -27,8 +27,8 @@ function makeQueryClient() {
       mutations: {
         onError: (error: Error) => {
           const axiosError = error as AxiosError;
-          const responseData = axiosError.response?.data as { Title: string };
-          const errorMessage = responseData.Title || t('unknown_error');
+          const responseData = axiosError.response?.data as { detail: string };
+          const errorMessage = responseData.detail || t('unknown_error');
           toast.error(t('error'), {
             description: errorMessage
           });

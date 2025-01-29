@@ -14,7 +14,15 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import { PencilLine, Plus, PlusCircle, Server } from 'lucide-react';
+import {
+  Pencil,
+  PencilLine,
+  Plus,
+  PlusCircle,
+  Server,
+  SquarePen,
+  Trash2
+} from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -42,6 +50,7 @@ import AddMaterialVariantSheet from './add-material-variant-sheet';
 import { useQuery } from '@tanstack/react-query';
 import api from '@/api';
 import EditMaterialColorSheet from './edit-material-color-sheet';
+import ConfirmDeleteDialog from '../confirm-delete-dialog';
 
 type Fabric = {
   id: string;
@@ -53,7 +62,8 @@ type Fabric = {
 
 const getColumns = (
   setColorState: any,
-  setEditFabricState: any
+  setEditState: any,
+  setDeleteState: any
 ): ColumnDef<IMaterial>[] => {
   return [
     {
@@ -100,20 +110,20 @@ const getColumns = (
       cell: ({ row }) => {
         return (
           <div className="float-end flex gap-2">
-            <ThemedTooltip text={'edit_material'}>
+            <ThemedTooltip text={'edit'}>
               <Button
                 className="flex items-center justify-center rounded-full"
                 variant="ghost"
                 size="icon"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setEditFabricState({
+                  setEditState({
                     data: row.original,
                     open: true
                   });
                 }}
               >
-                <Icon currentColor icon="feather" size={16} />
+                <SquarePen size={16} />
               </Button>
             </ThemedTooltip>
             <ThemedTooltip text={'add_color_to_material'}>
@@ -129,7 +139,23 @@ const getColumns = (
                 variant="ghost"
                 size="icon"
               >
-                <Icon currentColor icon="plus" size={16} />
+                <Plus strokeWidth={2.5} size={18} />
+              </Button>
+            </ThemedTooltip>
+            <ThemedTooltip text={'delete'}>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeleteState({
+                    id: row.original.id,
+                    open: true
+                  });
+                }}
+                className="items-center justify-center rounded-full"
+                variant="ghost"
+                size="icon"
+              >
+                <Trash2 className="text-destructive" size={16} />
               </Button>
             </ThemedTooltip>
           </div>
@@ -182,6 +208,16 @@ function MaterialTable({ data }: Props) {
     open: false
   });
 
+  const [deleteState, setDeleteState] = useState({
+    id: '',
+    open: false
+  });
+
+  const [deleteColorState, setDeleteColorState] = useState({
+    id: '',
+    open: false
+  });
+
   const materialTypes = useQuery({
     queryKey: ['material-types'],
     queryFn: async () => {
@@ -198,7 +234,11 @@ function MaterialTable({ data }: Props) {
   });
 
   const columns = useMemo(() => {
-    return getColumns(setMaterialColorState, setEditMaterialState);
+    return getColumns(
+      setMaterialColorState,
+      setEditMaterialState,
+      setDeleteState
+    );
   }, []);
 
   const table = useReactTable({
@@ -315,6 +355,7 @@ function MaterialTable({ data }: Props) {
                   toggleVariantRow={toggleVariantRow}
                   setMaterialVariantState={setMaterialVariantState}
                   setEditMaterialColorState={setEditMaterialColorState}
+                  setDeleteColorState={setDeleteColorState}
                 />
               ))
           ) : (
@@ -349,6 +390,20 @@ function MaterialTable({ data }: Props) {
       <AddMaterialVariantSheet
         state={materialVariantState}
         setState={setMaterialVariantState}
+      />
+      <ConfirmDeleteDialog
+        state={deleteState}
+        setState={setDeleteState}
+        endpoint="/Materials"
+        mutationKey={['materials', deleteState.id]}
+        title={t('delete_material')}
+      />
+      <ConfirmDeleteDialog
+        state={deleteColorState}
+        setState={setDeleteColorState}
+        endpoint="/MaterialColors"
+        mutationKey={['material-colors', deleteColorState.id]}
+        title={t('delete_material_color')}
       />
     </>
   );
