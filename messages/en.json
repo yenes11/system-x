@@ -313,6 +313,10 @@
   "delete_material": "Delete Material",
   "delete_material_color": "Delete Material Color",
   "delete_material_variant_color": "Delete Material Variant Color",
+  "delete_supplier_warning": "A supplier can only be deleted if no orders have been created from them. Otherwise, the supplier cannot be deleted. If there are no orders, the supplier and its associated fabrics, materials, and warehouses will be deleted.",
   "delete_supplier": "Delete Supplier",
-  "place_order": "Place Order"
+  "place_order": "Place Order",
+  "edit_fabric_color": "Edit Fabric Color",
+  "color_has_variant": "Cannot delete because the material color has a variant",
+  "material_has_color": "Cannot delete because the material has a color"
 }

@@ -27,6 +27,7 @@ interface Props {
   endpoint: string;
   title: string;
   onSuccessMessage?: string;
+  submessage?: string;
 }
 
 export default function ConfirmDeleteDialog({
@@ -35,7 +36,8 @@ export default function ConfirmDeleteDialog({
   mutationKey,
   endpoint,
   title,
-  onSuccessMessage
+  onSuccessMessage,
+  submessage
 }: Props) {
   const t = useTranslations();
   const router = useRouter();
@@ -75,7 +77,7 @@ export default function ConfirmDeleteDialog({
             {title}
           </DialogTitle>
           <DialogDescription className="p-4 text-start">
-            {t('confirm_delete')}
+            {submessage || t('confirm_delete')}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex flex-row items-center border-t bg-muted/50 px-4 py-2">

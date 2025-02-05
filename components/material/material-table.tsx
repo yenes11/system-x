@@ -51,6 +51,7 @@ import { useQuery } from '@tanstack/react-query';
 import api from '@/api';
 import EditMaterialColorSheet from './edit-material-color-sheet';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import clsx from 'clsx';
 
 type Fabric = {
   id: string;
@@ -142,10 +143,17 @@ const getColumns = (
                 <Plus strokeWidth={2.5} size={18} />
               </Button>
             </ThemedTooltip>
-            <ThemedTooltip text={'delete'}>
+            <ThemedTooltip
+              text={
+                row.original.colors.length === 0
+                  ? 'delete'
+                  : 'material_has_color'
+              }
+            >
               <Button
                 onClick={(e) => {
                   e.stopPropagation();
+                  if (row.original.colors.length > 0) return;
                   setDeleteState({
                     id: row.original.id,
                     open: true
@@ -155,7 +163,13 @@ const getColumns = (
                 variant="ghost"
                 size="icon"
               >
-                <Trash2 className="text-destructive" size={16} />
+                <Trash2
+                  className={clsx(
+                    'text-destructive',
+                    row.original.colors.length > 0 && 'text-destructive/50'
+                  )}
+                  size={16}
+                />
               </Button>
             </ThemedTooltip>
           </div>

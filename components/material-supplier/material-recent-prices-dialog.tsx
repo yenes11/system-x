@@ -39,7 +39,6 @@ const recentPricesTableColumns = [
 
 function MaterialRecentPricesDialog({ state, setState }: any) {
   const t = useTranslations();
-  console.log(state, 'material state');
   const recentPrices = useQuery({
     queryKey: ['material-recent-prices', state.materialColorId],
     queryFn: async () => {

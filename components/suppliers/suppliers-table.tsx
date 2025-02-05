@@ -185,6 +185,7 @@ function SuppliersTable({ data }: Props) {
 
       <ConfirmDeleteDialog
         endpoint="/Suppliers"
+        submessage={t('delete_supplier_warning')}
         mutationKey={['delete-supplier', deleteState.id]}
         state={deleteState}
         setState={setDeleteState}

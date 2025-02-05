@@ -25,7 +25,7 @@ import {
   SheetTitle
 } from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -54,6 +54,7 @@ interface Props {
 function AddPriceToMaterialSheet({ state, setState }: Props) {
   const t = useTranslations();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
@@ -67,6 +68,9 @@ function AddPriceToMaterialSheet({ state, setState }: Props) {
     },
     onSuccess: async (res) => {
       router.refresh();
+      queryClient.invalidateQueries({
+        queryKey: ['material-recent-prices']
+      });
       form.reset({
         currency: null as any,
         price: null as any
@@ -121,8 +125,8 @@ function AddPriceToMaterialSheet({ state, setState }: Props) {
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value={'1'}>TRY</SelectItem>
-                        <SelectItem value={'2'}>USD</SelectItem>
+                        <SelectItem value="2">TRY</SelectItem>
+                        <SelectItem value="1">USD</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>

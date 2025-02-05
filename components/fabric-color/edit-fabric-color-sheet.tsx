@@ -98,8 +98,8 @@ function EditFabricColorSheet({ state, setState }: Props) {
     }
   }, [state.data]);
 
-  const addFabricColor = useMutation({
-    mutationKey: ['add-fabric'],
+  const editFabricColor = useMutation({
+    mutationKey: ['edit-fabric-color'],
     mutationFn: async (formData: any) => {
       const res = await api.put('/FabricColors', formData);
       return res;
@@ -132,12 +132,12 @@ function EditFabricColorSheet({ state, setState }: Props) {
       );
     }
 
-    addFabricColor.mutate(formData);
+    editFabricColor.mutate(formData);
   };
 
   return (
     <ThemedSheet
-      title={t('add_fabric_color')}
+      title={t('edit_fabric_color')}
       open={state.open}
       setOpen={(val: any) => setState((prev: any) => ({ ...prev, open: val }))}
     >
@@ -166,7 +166,6 @@ function EditFabricColorSheet({ state, setState }: Props) {
                   <Input
                     className="p-0"
                     type="file"
-                    value={value}
                     {...fieldProps}
                     accept="image/*"
                     onChange={(event) =>
@@ -254,12 +253,12 @@ function EditFabricColorSheet({ state, setState }: Props) {
             {t('add_ingredient')}
           </Button>
           <Button
-            loading={addFabricColor.isPending}
+            loading={editFabricColor.isPending}
             disabled={totalIngredientsPercentage !== 100}
             className="w-full"
             type="submit"
           >
-            {addFabricColor.isPending ? t('submitting') : t('submit')}
+            {editFabricColor.isPending ? t('submitting') : t('submit')}
           </Button>
         </form>
       </Form>

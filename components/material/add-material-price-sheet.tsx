@@ -20,7 +20,7 @@ import {
 import { currencyEnums } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useParams, usePathname, useRouter } from 'next/navigation';
@@ -50,6 +50,7 @@ function AddPriceSheet() {
   const params = useParams();
   const path = usePathname();
   const t = useTranslations();
+  const queryClient = useQueryClient();
   const id = (params?.id as string) || '';
 
   const nameProperty = 'materialSupplierName';

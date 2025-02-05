@@ -314,5 +314,9 @@
   "delete_material_color": "Malzeme Rengini Sil",
   "delete_material_variant_color": "Malzeme Varyant Rengini Sil",
   "delete_supplier": "Tedarikçiyi Sil",
-  "place_order": "Sipariş oluştur"
+  "delete_supplier_warning": "Tedarikçinin silinebilmesi için tedarikçiden herhangi bir sipariş oluşturulmamış olması gerekmektedir. Aksi takdirde tedarikçi silinemez. Eğer sipariş yoksa tedarikçi ve ona bağlı kumaşlar, materyaller, depolar silinecektir.",
+  "place_order": "Sipariş oluştur",
+  "edit_fabric_color": "Kumaş Rengi Düzenle",
+  "color_has_variant": "Malzeme renginin varyantı olduğu için silinemez",
+  "material_has_color": "Malzemenin rengi olduğu için silinemez"
 }

@@ -13,6 +13,7 @@ import Icon from '../ui/icon';
 import ThemedTooltip from '../ThemedTooltip';
 import { Button } from '../ui/button';
 import { Edit, Trash2 } from 'lucide-react';
+import clsx from 'clsx';
 
 interface Props {
   row: any;
@@ -126,10 +127,17 @@ function MaterialRow({
                           <Icon currentColor icon="plus" size={16} />
                         </Button>
                       </ThemedTooltip>
-                      <ThemedTooltip text={'delete'}>
+                      <ThemedTooltip
+                        text={
+                          color.variants.length === 0
+                            ? 'delete'
+                            : 'color_has_variant'
+                        }
+                      >
                         <Button
                           onClick={(e) => {
                             e.stopPropagation();
+                            if (color.variants.length > 0) return;
                             setDeleteColorState({
                               open: true,
                               id: color.id
@@ -139,7 +147,12 @@ function MaterialRow({
                           variant="ghost"
                           size="icon"
                         >
-                          <Trash2 className="size-4 text-destructive" />
+                          <Trash2
+                            className={clsx(
+                              'size-4 text-destructive',
+                              color.variants.length > 0 && 'text-destructive/50'
+                            )}
+                          />
                         </Button>
                       </ThemedTooltip>
                     </div>
