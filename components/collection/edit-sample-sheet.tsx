@@ -216,7 +216,7 @@ export const EditSampleSheet = ({
     <ThemedSheet
       title={t('edit_sample')}
       open={state.open}
-      setOpen={(val) => {
+      setOpen={(val: any) => {
         setState((prev: any) => ({
           ...prev,
           open: val

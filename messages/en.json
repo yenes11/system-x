@@ -147,6 +147,7 @@
   "material_carousel_empty_description": "This supplier's chart is empty. You can use the Add Material button to add a fabric to this supplier's chart.",
   "warehouse_table_empty_description": "This supplier has no warehouse. You can use the Add Warehouse button to add a warehouse to this supplier.",
   "material_table_empty_description": "This material has no color. You can use the + button at the end of the row to add a color to this material.",
+  "material_variant_empty_description": "This material color does not have a variant yet. Click the + button at the end of the row to add a variant.",
   "search_fabric_color_code": "Search fabric, color, code",
   "search_material_color_code": "Search material, color, code",
   "select_a_fabric_color": "Select a fabric color",
@@ -205,7 +206,7 @@
   "FabricSupplier": "Fabric",
   "MaterialSupplier": "Material",
   "collection_details": "Collection Details",
-  "department": "department",
+  "department": "Department",
   "category": "Category",
   "season": "Season",
   "buyer": "Buyer",
@@ -318,5 +319,11 @@
   "place_order": "Place Order",
   "edit_fabric_color": "Edit Fabric Color",
   "color_has_variant": "Cannot delete because the material color has a variant",
-  "material_has_color": "Cannot delete because the material has a color"
+  "material_has_color": "Cannot delete because the material has a color",
+  "delete_image": "Delete Image",
+  "selection_id": "Selection ID",
+  "enter_id": "Enter an ID",
+  "edit_material_color": "Edit Material Color",
+  "delete_collection": "Delete Colection",
+  "delete_collection_message": "If any of the collection's colors have at least 1 order, the collection cannot be deleted. Otherwise, the collection and everything associated with it will be deleted."
 }

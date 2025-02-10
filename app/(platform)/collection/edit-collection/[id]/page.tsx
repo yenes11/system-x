@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,7 +27,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { BasicEntity } from '@/lib/types';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 import moment from 'moment';
 import { toast } from 'sonner';
@@ -74,9 +74,10 @@ const formSchema = z.object({
     )
 });
 
-function NewCollectionPage() {
+function EditCollectionPage() {
   const t = useTranslations();
   const router = useRouter();
+  const params = useParams();
 
   const [formResetKey, setFormResetKey] = useState(0);
 
@@ -85,6 +86,22 @@ function NewCollectionPage() {
   });
 
   const selectedCustomerId = form.watch('customerId');
+
+  const collection = useQuery({
+    queryKey: ['collection', params.id],
+    queryFn: async () => {
+      const request = await api.get(`/Collections/${params.id}`);
+      return request.data;
+    }
+  });
+
+  React.useEffect(() => {
+    if (collection.data) {
+      form.reset({
+        ...collection.data
+      });
+    }
+  }, [collection.data]);
 
   const addCollection = useMutation({
     mutationFn: async (formData: FormData) => {
@@ -375,37 +392,6 @@ function NewCollectionPage() {
                 )}
               />
 
-              {/* <FormField
-                control={form.control}
-                name="categoryId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('category')}</FormLabel>
-                    <Select
-                      onValueChange={(val) => {
-                        field.onChange(val);
-                      }}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={t('select_category_placeholder')}
-                          />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {categories.data?.map((category: any) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
               <FormField
                 control={form.control}
                 name="customerSeasonId"
@@ -614,527 +600,4 @@ function NewCollectionPage() {
   );
 }
 
-export default NewCollectionPage;
-
-{
-  /* <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8">
-          <div className="flex">
-            <div className="flex-1">
-              <h2>Basics</h2>
-              <p className="text-sm text-muted-foreground">
-                Please enter basic information for the collection
-              </p>
-            </div>
-            <div className="flex-[2] space-y-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('name')}</FormLabel>
-                    <FormControl>
-                      <Input placeholder={t('name_placeholder')} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('description')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t('description_placeholder')}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="customerCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('customer_code')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t('customer_code_placeholder')}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          <div className="mt-6 flex border-t pt-6">
-            <div className="flex-1">
-              <h2>Basics</h2>
-              <p className="text-sm text-muted-foreground">
-                Please enter basic information for the collection
-              </p>
-            </div>
-            <div className="flex-[2] space-y-6">
-              <FormField
-                control={form.control}
-                name="selectionId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('selection_id')}</FormLabel>
-                    <FormControl>
-                      <Input placeholder={t('enter_id')} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="garment1"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{`${t('garment')}-1`}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t('garment_placeholder')}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="garment2"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{`${t('garment')}-2`}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t('garment_placeholder')}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="designer"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('designer')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t('designer_placeholder')}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="buyer"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('buyer')}</FormLabel>
-                    <FormControl>
-                      <Input placeholder={t('buyer_placeholder')} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field: { onChange, value, ...fieldProps } }) => (
-                  <FormItem>
-                    <FormLabel>{t('image')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        {...fieldProps}
-                        accept="image/*"
-                        className="px-0 py-0"
-                        onChange={(event) =>
-                          onChange(event.target.files && event.target.files[0])
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-          <FormField
-            control={form.control}
-            name="selectionId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('selection_id')}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t('enter_id')} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="garment1"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{`${t('garment')}-1`}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t('garment_placeholder')} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="garment2"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{`${t('garment')}-2`}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t('garment_placeholder')} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="designer"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('designer')}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t('designer_placeholder')} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="buyer"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('buyer')}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t('buyer_placeholder')} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="image"
-            render={({ field: { onChange, value, ...fieldProps } }) => (
-              <FormItem>
-                <FormLabel>{t('image')}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="file"
-                    {...fieldProps}
-                    accept="image/*"
-                    className="px-0 py-0"
-                    onChange={(event) =>
-                      onChange(event.target.files && event.target.files[0])
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="customerId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('customer')}</FormLabel>
-                <Select
-                  onValueChange={(val) => {
-                    field.onChange(val);
-                    form.resetField('customerDepartmentId');
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t('select_customer_placeholder')}
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {customers.data?.map((customer) => (
-                      <SelectItem key={customer.id} value={customer.id}>
-                        {customer.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="customerDepartmentId"
-            render={({ field }) => (
-              <FormItem key={form.getValues('customerId')}>
-                <FormLabel>{t('customer_department')}</FormLabel>
-                <FormControl>
-                  <NestedSelect
-                    placeholder={t('department_placeholder')}
-                    disabled={!Boolean(selectedCustomerId)}
-                    key={form.getValues('customerId')}
-                    data={departments.data || []}
-                    onChange={field.onChange}
-                    value={field.value}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="categoryId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('category')}</FormLabel>
-                <FormControl>
-                  <NestedSelect
-                    placeholder={t('select_a_category')}
-                    childrenKey="subCategories"
-                    data={categories.data || []}
-                    onChange={field.onChange}
-                    value={field.value}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="customerSeasonId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('customer_season')}</FormLabel>
-                <Select
-                  disabled={!Boolean(selectedCustomerId)}
-                  onValueChange={(val) => {
-                    field.onChange(val);
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t('select_season_placeholder')}
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {seasons.data?.map((season: any) => (
-                      <SelectItem key={season.id} value={season.id}>
-                        {season.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="sizeTypeId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('size_type')}</FormLabel>
-                <Select
-                  onValueChange={(val) => {
-                    field.onChange(val);
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t('select_size_type_placeholder')}
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {sizeTypes.data?.map((sizeType: any) => (
-                      <SelectItem key={sizeType.id} value={sizeType.id}>
-                        {sizeType.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="customerReceiverId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('customer_reciever')}</FormLabel>
-                <Select
-                  disabled={!Boolean(selectedCustomerId)}
-                  onValueChange={(val) => {
-                    field.onChange(val);
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t('select_customer_reciever_placeholder')}
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {selectOptions.data?.receivers.map((sizeType: any) => (
-                      <SelectItem key={sizeType.id} value={sizeType.id}>
-                        {sizeType.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="customerProjectId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('customer_project')}</FormLabel>
-                <Select
-                  disabled={!Boolean(selectedCustomerId)}
-                  onValueChange={(val) => {
-                    field.onChange(val);
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t('select_customer_project_placeholder')}
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {selectOptions.data?.projects.map((sizeType: any) => (
-                      <SelectItem key={sizeType.id} value={sizeType.id}>
-                        {sizeType.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="customerSubProjectId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('customer_sub_project')}</FormLabel>
-                <Select
-                  disabled={!Boolean(selectedCustomerId)}
-                  onValueChange={(val) => {
-                    field.onChange(val);
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t(
-                          'select_customer_subproject_placeholder'
-                        )}
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {selectOptions.data?.subProjects.map((sizeType: any) => (
-                      <SelectItem key={sizeType.id} value={sizeType.id}>
-                        {sizeType.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="customerBuyerGroupId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('customer_buyer_group')}</FormLabel>
-                <Select
-                  disabled={!Boolean(selectedCustomerId)}
-                  onValueChange={(val) => {
-                    field.onChange(val);
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t('select_group_placeholder')}
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {selectOptions.data?.buyerGroups.map((sizeType: any) => (
-                      <SelectItem key={sizeType.id} value={sizeType.id}>
-                        {sizeType.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button className="mt-auto w-full" type="submit">
-            {t('submit')}
-          </Button>
-        </form>
-      </Form> */
-}
+export default EditCollectionPage;

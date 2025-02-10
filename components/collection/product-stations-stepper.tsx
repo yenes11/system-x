@@ -33,11 +33,11 @@ function ProductStationsStepper({ data, editable = false }: Props) {
         <CardTitle className="mr-auto text-lg">
           {t('product_stations')}
         </CardTitle>
-        {data.length > 0 && editable ? (
+        {/* {data.length > 0 && editable ? (
           <Button disabled>{t('edit')}</Button>
-        ) : data.length === 0 && editable ? (
-          <AddStationDialog />
-        ) : null}
+        ) : data.length === 0 && editable ? ( */}
+        <AddStationDialog data={sortedData} />
+        {/* ) : null} */}
       </CardHeader>
       <CardContent className="pb-20 pt-16 @container">
         <div className="flex flex-col gap-2 px-20 text-sm text-card-foreground @sm:!flex-row @sm:items-center">

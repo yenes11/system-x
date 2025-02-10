@@ -100,7 +100,6 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
       </div>
       {!collectionDetails.identityDefined && (
         <div className="mb-3 flex items-center gap-2 rounded-md border-l-destructive bg-destructive/15 px-4 py-2 text-destructive">
-          {/* <BadgeMinus className="mb-auto mt-[2.5px] size-5 text-destructive" /> */}
           <div>
             <span className="text-sm font-medium">{t('unverified')}</span>
             <p className="text-xs">{t('unverified_description')}</p>

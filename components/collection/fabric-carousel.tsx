@@ -38,6 +38,7 @@ import ThemedZoom from '../themed-zoom';
 import AddFabricToCollectionSheet from './add-fabric-to-collection-sheet';
 import { QuestionMarkCircledIcon } from '@radix-ui/react-icons';
 import EditUnitMeterDialog from './edit-unit-meter-dialog';
+import EditCollectionFabricSheet from './edit-collection-fabric';
 
 interface SupplierFabric {
   id: string;
@@ -61,7 +62,11 @@ function FabricCarousel({ data }: Props) {
     id: ''
   });
 
-  console.log(data, 'facir');
+  const [editState, setEditState] = useState({
+    open: false,
+    id: '',
+    percent: 0
+  });
 
   const [helpState, setHelpState] = useState({
     open: false,
@@ -83,11 +88,12 @@ function FabricCarousel({ data }: Props) {
     <>
       <ConfirmDeleteDialog
         title={t('delete')}
-        endpoint="/SupplierFabricColors"
-        mutationKey={['delete-supplier-fabric-color']}
+        endpoint="/CollectionColorFabrics"
+        mutationKey={['delete-collection-fabric-color']}
         state={deleteState}
         setState={setDeleteState}
       />
+      <EditCollectionFabricSheet setState={setEditState} state={editState} />
       <EditUnitMeterDialog state={helpState} setState={setHelpState} />
       {/* <EditFabricSheet state={editState} setState={setEditState} /> */}
       <div className="mb-4 flex justify-between gap-4">
@@ -153,13 +159,13 @@ function FabricCarousel({ data }: Props) {
                         variant="secondary"
                         className="flex-1 rounded-none"
                         size="sm"
-                        // onClick={() => {
-                        //   setEditState({
-                        //     id: fabric.id,
-                        //     manufacturerCode: fabric.manufacturerCode,
-                        //     open: true
-                        //   });
-                        // }}
+                        onClick={() => {
+                          setEditState({
+                            id: fabric.id,
+                            percent: fabric.percent,
+                            open: true
+                          });
+                        }}
                       >
                         {/* {t('edit')} */}
                         <Pencil size={16} />

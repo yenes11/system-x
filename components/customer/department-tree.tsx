@@ -56,11 +56,11 @@ function DepartmentTree({ data }: { data: Department[] }) {
             <CardTitle>{t('bussiness_units')}</CardTitle>
           </div>
           <Button
-            className="rounded-full bg-nutural"
             variant="outline"
+            size="sm"
             onClick={() => setIsAddSheetOpen(true, null)}
           >
-            <PlusIcon size={16} className="mr-2" />
+            <PlusIcon size={12} className="mr-2" />
             {t('add_bussiness_unit')}
           </Button>
         </CardHeader>

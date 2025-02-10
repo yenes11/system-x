@@ -18,6 +18,7 @@ interface Props {
 function MaterialColorCard({ id, size, img }: Props) {
   const t = useTranslations();
 
+  const [editOpen, setEditOpen] = React.useState(false);
   const [deleteState, setDeleteState] = React.useState({
     open: false,
     id: ''
@@ -41,15 +42,7 @@ function MaterialColorCard({ id, size, img }: Props) {
             onClick={(event) => {
               event.preventDefault();
               event.nativeEvent.stopImmediatePropagation();
-              // setEditState({
-              //   open: true,
-              //   data: {
-              //     id,
-              //     name,
-              //     img,
-              //     ingredients
-              //   }
-              // });
+              setEditOpen(true);
             }}
             variant="outline"
             size="icon"
@@ -79,7 +72,15 @@ function MaterialColorCard({ id, size, img }: Props) {
         mutationKey={['delete-material-variant', id]}
         title={t('delete_material_variant_color')}
       />
-      {/* <EditMaterialVariantSheet */}
+      <EditMaterialVariantSheet
+        state={{
+          open: editOpen,
+          id,
+          img,
+          size
+        }}
+        setState={setEditOpen}
+      />
     </React.Fragment>
   );
 }

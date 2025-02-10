@@ -146,6 +146,7 @@
 
   "warehouse_table_empty_description": "Tedarikçinin henüz bir deposu yok. Eklemek için Depo Ekle butonunu kullanabilirsiniz.",
   "material_table_empty_description": "Bu malzeme için henüz bir renk yok. Malzeme rengi eklemek için satırın sonundaki + butonuna tıklayınız.",
+  "material_variant_empty_description": "Bu malzeme renginin henüz bir varyantı yok. Varyant eklemek için satırın sonundaki + buttonuna tıklayınız.",
   "search_fabric_color_code": "Kumaş, renk, kod ara",
   "search_material_color_code": "Malzeme, renk, kod ara",
   "select_a_fabric_color": "Bir kumaş rengi seçiniz",
@@ -318,5 +319,11 @@
   "place_order": "Sipariş oluştur",
   "edit_fabric_color": "Kumaş Rengi Düzenle",
   "color_has_variant": "Malzeme renginin varyantı olduğu için silinemez",
-  "material_has_color": "Malzemenin rengi olduğu için silinemez"
+  "material_has_color": "Malzemenin rengi olduğu için silinemez",
+  "delete_image": "Resmi Sil",
+  "selection_id": "Seçim ID'si",
+  "enter_id": "Bir ID giriniz",
+  "edit_material_color": "Malzeme Rengi Güncelle",
+  "delete_collection": "Koleysiyonu Sil",
+  "delete_collection_message": "Koleksiyonun renklerinin herhangi birinin en az 1 siparişi varsa koleksiyon silinemez. Aksi taktirde, koleksiyon ve ona bağlı her şey silinir."
 }

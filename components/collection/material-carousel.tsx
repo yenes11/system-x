@@ -19,6 +19,7 @@ import {
 } from '../ui/carousel';
 import Empty from '../ui/empty';
 import AddMaterialToCollectionSheet from './add-material-to-collection-sheet';
+import EditCollectionMaterialSheet from './edit-collection-material-sheet';
 
 interface SupplierFabric {
   id: string;
@@ -55,6 +56,11 @@ interface Props {
 
 function MaterialCarousel({ data }: Props) {
   const t = useTranslations();
+  const [editState, setEditState] = useState({
+    open: false,
+    id: '',
+    amount: 0
+  });
   const [deleteState, setDeleteState] = useState({
     open: false,
     id: ''
@@ -77,11 +83,12 @@ function MaterialCarousel({ data }: Props) {
     <>
       <ConfirmDeleteDialog
         title={t('delete')}
-        endpoint="/SupplierFabricColors"
-        mutationKey={['delete-collection']}
+        endpoint="/CollectionColorMaterials"
+        mutationKey={['delete-collection-material-variant']}
         state={deleteState}
         setState={setDeleteState}
       />
+      <EditCollectionMaterialSheet state={editState} setState={setEditState} />
       <div className="mb-4 flex justify-between gap-4">
         <SearchBar
           value={searchKey}
@@ -137,20 +144,6 @@ function MaterialCarousel({ data }: Props) {
                       ))}
                     </ul>
 
-                    {/* <div className="my-2 flex w-full flex-col px-5">
-                      <div className="flex w-full justify-between">
-                        <span className="text-xs text-muted-foreground">
-                          {t('size')}
-                        </span>
-                        <span className="text-xs">{material.size}</span>
-                      </div>
-                      <div className="flex w-full justify-between">
-                        <span className="text-xs text-muted-foreground">
-                          {t('amount')}
-                        </span>
-                        <span className="text-xs">{material.amount}</span>
-                      </div>
-                    </div> */}
                     <div className="my-2 flex flex-wrap justify-center gap-2">
                       {material.attributes.map((attr) => (
                         <Badge
@@ -181,13 +174,13 @@ function MaterialCarousel({ data }: Props) {
                         variant="secondary"
                         className="flex-1 rounded-none"
                         size="sm"
-                        // onClick={() => {
-                        //   setEditState({
-                        //     id: fabric.id,
-                        //     manufacturerCode: fabric.manufacturerCode,
-                        //     open: true
-                        //   });
-                        // }}
+                        onClick={() => {
+                          setEditState({
+                            open: true,
+                            id: material.id,
+                            amount: material.amount
+                          });
+                        }}
                       >
                         {/* {t('edit')} */}
                         <Pencil size={16} />

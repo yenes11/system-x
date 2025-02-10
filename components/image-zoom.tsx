@@ -3,7 +3,8 @@
 import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cn } from '@/lib/utils';
-import { Cross2Icon } from '@radix-ui/react-icons';
+import { Cross2Icon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { ZoomIn } from 'lucide-react';
 
 const Dialog = DialogPrimitive.Root;
 
@@ -41,7 +42,7 @@ const DialogContent = React.forwardRef<
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          'z-50 flex w-auto max-w-lg items-center justify-center gap-4 bg-transparent p-0 shadow-lg duration-200 focus-visible:outline-none focus-visible:ring-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg',
+          'z-50 flex w-auto max-w-max items-center justify-center gap-4 !bg-blue-200 bg-transparent !p-0 shadow-lg duration-200 focus-visible:outline-none focus-visible:ring-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
           className
         )}
         {...props}
@@ -111,13 +112,17 @@ DialogDescription.displayName = DialogPrimitive.Description.displayName;
 const ImageZoom = ({ children }: any) => {
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
-        <img
-          className="max-h-full max-w-full"
-          src={children.props.src}
-          alt=""
-        />
+      <DialogTrigger asChild>
+        <div className="group relative cursor-pointer self-start">
+          <div className="absolute hidden h-full w-full items-center justify-center bg-black/50 group-hover:flex">
+            <ZoomIn size={32} />
+          </div>
+          {children}
+        </div>
+      </DialogTrigger>
+      <DialogContent className="">
+        <DialogTitle className="hidden">zoomed image</DialogTitle>
+        <img className="max-h-[85vh]" src={children.props.src} alt="" />
       </DialogContent>
     </Dialog>
   );

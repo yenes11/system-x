@@ -1,17 +1,21 @@
 import CollectionGallery from '@/components/collection/collection-gallery';
 import CollectionNotes from '@/components/collection/collection-notes';
+import DeleteCollectionDialog from '@/components/collection/delete-collection-dialog';
 import ProductStationsStepper from '@/components/collection/product-stations-stepper';
+import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import DescriptionList from '@/components/description-list';
 import ImageZoom from '@/components/image-zoom';
 import ThemedZoom from '@/components/themed-zoom';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollectionDetails } from '@/lib/api-calls';
-import { SlidersVertical } from 'lucide-react';
+import { Images, NotebookTabs, SlidersVertical, Waypoints } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Fragment } from 'react';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 // import CollectionCarousel from '@/components/fabric-color/collection-carousel';
@@ -134,6 +138,10 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
     <Fragment>
       <div className="mb-4 flex justify-between">
         <Heading title={t('manage_collection')} icon={<SlidersVertical />} />
+        <Link href={`/collection/edit-collection/${params.id}`}>
+          <Button>{t('edit')}</Button>
+        </Link>
+        <DeleteCollectionDialog id={params.id} />
       </div>
       <Card className="mb-4 flex flex-col overflow-hidden sm:!flex-row">
         <CardHeader className="flex flex-row items-start border-r ">
@@ -151,31 +159,21 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
         </CardHeader>
         <CardContent className="flex-1 p-0 text-sm">
           <DescriptionList listItems={collectionDetailItems as any} />
-          {/* <div className="grid gap-3">
-            <ul className="grid gap-3">
-              {collectionDetailItems.map((item) => (
-                <li
-                  key={item.key}
-                  className="flex items-center justify-between"
-                >
-                  <span className="text-muted-foreground">{t(item.title)}</span>
-                  <span>{(collectionDetails as any)[item.key] ?? `−`}</span>
-                </li>
-              ))}
-            </ul>
-          </div> */}
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="product-stations" className="space-y-4">
-        <TabsList className="flex">
-          <TabsTrigger className="flex-1" value="product-stations">
+      <Tabs defaultValue="product-stations" className="">
+        <TabsList className="">
+          <TabsTrigger className="" value="product-stations">
+            <Waypoints className="mr-2 size-4" />
             {t('product_stations')}
           </TabsTrigger>
-          <TabsTrigger className="flex-1" value="notes">
+          <TabsTrigger className="" value="notes">
+            <NotebookTabs className="mr-2 size-4" />
             {t('notes')}
           </TabsTrigger>
-          <TabsTrigger className="flex-1" value="gallery">
+          <TabsTrigger className="" value="gallery">
+            <Images className="mr-2 size-4" />
             {t('gallery')}
           </TabsTrigger>
         </TabsList>

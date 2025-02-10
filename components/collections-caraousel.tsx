@@ -168,7 +168,6 @@ function CollectionsCarousel({ data }: { data: ICollection[] }) {
                       <span className="text-xs text-muted-foreground">
                         {t('status')}
                       </span>
-
                       <div className="flex items-center gap-2">
                         <span className="relative flex size-2">
                           <span

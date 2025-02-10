@@ -17,7 +17,9 @@ interface Props {
   triggerIcon?: React.ReactNode;
   triggerLabel?: string;
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen:
+    | React.Dispatch<React.SetStateAction<boolean>>
+    | ((value: boolean) => void);
   triggerClassName?: string;
 }
 

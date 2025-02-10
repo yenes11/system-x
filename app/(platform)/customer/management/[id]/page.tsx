@@ -44,7 +44,7 @@ async function CustomerPage({ params }: any) {
           className="mb-4 flex gap-4 md:flex-col lg:flex-row"
         >
           <DepartmentTree data={details?.departments || []} />
-          <DepartmentEmployeesTable />
+          <DepartmentEmployeesTable departments={details?.departments || []} />
         </TabsContent>
       </Tabs>
     </div>

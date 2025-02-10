@@ -11,14 +11,10 @@ import {
   DialogTitle
 } from '@/components/ui/dialog';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
-import moment from 'moment';
 import { toast } from 'sonner';
-import { BadgeCheck } from 'lucide-react';
-import { AxiosError } from 'axios';
-import ThemedDialog from './themed-dialog';
 
 interface Props {
   state: any;
@@ -41,7 +37,6 @@ export default function ConfirmDeleteDialog({
 }: Props) {
   const t = useTranslations();
   const router = useRouter();
-  const path = usePathname();
   const queryClient = useQueryClient();
 
   const confirmDelete = useMutation({
@@ -53,10 +48,10 @@ export default function ConfirmDeleteDialog({
     onSuccess: (res) => {
       router.refresh();
       queryClient.invalidateQueries(mutationKey as any);
-      setState({
-        id: '',
+      setState((prev: any) => ({
+        ...prev,
         open: false
-      });
+      }));
 
       toast.success(t('item_deleted'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
@@ -64,13 +59,12 @@ export default function ConfirmDeleteDialog({
     }
   });
 
+  const onOpenChange = (val: boolean) => {
+    setState((prev: any) => ({ ...prev, open: val }));
+  };
+
   return (
-    <Dialog
-      open={state.open}
-      onOpenChange={(val) => {
-        setState((prev: any) => ({ ...prev, open: val }));
-      }}
-    >
+    <Dialog open={state.open} onOpenChange={onOpenChange}>
       <DialogContent className="p-0 sm:max-w-[425px]">
         <DialogHeader className="">
           <DialogTitle className="border-b bg-muted/50 p-4 text-start">

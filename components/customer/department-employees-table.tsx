@@ -4,20 +4,17 @@ import { ColumnDef, FilterFn } from '@tanstack/react-table';
 import { Pencil, Trash2, UsersRound } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { getFabricSuppliers } from '@/lib/api-calls';
-import { useQuery } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import React, { useMemo, useState } from 'react';
-import { DataTable } from '../ui/data-table';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Department, Employee } from '@/lib/types';
 import { useCustomerDepartmentsSlice } from '@/store/customer-departments-slice';
-import { AddEmployeeSheet } from './add-employee-sheet';
-import { Employee } from '@/lib/types';
-import { EditEmployeeSheet } from './edit-employee-sheet';
+import { useTranslations } from 'next-intl';
+import React, { useEffect, useMemo, useState } from 'react';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
-import { Badge } from '../ui/badge';
 import ThemedTooltip from '../ThemedTooltip';
+import { Badge } from '../ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { DataTable } from '../ui/data-table';
+import { AddEmployeeSheet } from './add-employee-sheet';
+import { EditEmployeeSheet } from './edit-employee-sheet';
 
 type Fabric = {
   id: string;
@@ -106,9 +103,13 @@ const getColumns = (
   ] as ColumnDef<Employee>[];
 };
 
-function DepartmentEmployeesTable() {
+function DepartmentEmployeesTable({
+  departments
+}: {
+  departments: Department[];
+}) {
   const t = useTranslations();
-  const { selectedEmployees, selectedDepartmentId } =
+  const { selectedEmployees, selectedDepartmentId, selectDepartment } =
     useCustomerDepartmentsSlice();
   const [supplierSheetState, setSupplierSheetState] = useState({
     id: '',
@@ -127,6 +128,16 @@ function DepartmentEmployeesTable() {
     open: false,
     id: ''
   });
+
+  useEffect(() => {
+    const selectedDepartment = departments.find(
+      (d) => d.id === selectedDepartmentId
+    );
+    selectDepartment(
+      selectedDepartment?.employees || [],
+      selectedDepartmentId || ''
+    );
+  }, [departments]);
 
   const columns = useMemo(() => {
     return getColumns(setEditState, setDeleteState);

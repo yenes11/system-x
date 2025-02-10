@@ -43,19 +43,24 @@ const formSchema = z.object({
   size: z.string().min(2).max(50),
   image: z
     .any()
-    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 1MB.`)
     .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      (file) => (!file ? true : file?.size <= MAX_FILE_SIZE),
+      `Max image size is 5MB.`
+    )
+    .refine(
+      (file) => (!file ? true : ACCEPTED_IMAGE_TYPES.includes(file?.type)),
       'Only .jpg, .jpeg, .png and .webp formats are supported.'
-    ),
-  materialColorId: z.string().uuid()
-  // IngredientId: z.string().uuid(),
-  // IngredientPercentage: z.number().max(100)
+    )
 });
 
 interface Props {
-  state: any;
-  setState: any;
+  state: {
+    open: boolean;
+    id: string;
+    size: string;
+    img: string;
+  };
+  setState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function EditMaterialVariantSheet({ state, setState }: Props) {
@@ -66,20 +71,19 @@ function EditMaterialVariantSheet({ state, setState }: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       size: '',
-      materialColorId: '',
       image: null
     }
   });
 
-  const addMaterialVariant = useMutation({
-    mutationKey: ['add-material-variant'],
+  const editMaterialVariant = useMutation({
+    mutationKey: ['edit-material-variant'],
     mutationFn: async (formData: any) => {
-      const res = await api.post('/MaterialColorVariants', formData);
+      const res = await api.put('/MaterialColorVariants', formData);
       return res;
     },
     onSuccess: (res) => {
       router.refresh();
-      setState({ id: '', open: false });
+      setState(false);
       toast({
         title: res.statusText,
         description: new Date().toString()
@@ -91,21 +95,18 @@ function EditMaterialVariantSheet({ state, setState }: Props) {
 
   useEffect(() => {
     if (state.open) {
-      form.reset({
-        materialColorId: state.id,
-        image: null,
-        size: ''
-      });
+      form.reset();
     }
   }, [state.id]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const formData = new FormData();
     formData.append('Size', values.size);
-    formData.append('MaterialColorId', values.materialColorId);
+    formData.append('Id', state.id);
+    // formData.append('MaterialColorId', values.materialColorId);
     formData.append('Image', values.image);
 
-    addMaterialVariant.mutate(formData);
+    editMaterialVariant.mutate(formData);
   };
 
   return (
@@ -121,12 +122,7 @@ function EditMaterialVariantSheet({ state, setState }: Props) {
             name="size"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  {t('size')}
-                  <span className="ml-2 text-xs text-slate-400">
-                    **{state.variantUnit}**
-                  </span>
-                </FormLabel>
+                <FormLabel>{t('size')}</FormLabel>
                 <FormControl>
                   <Input placeholder={t('enter_size')} {...field} />
                 </FormControl>
@@ -157,11 +153,11 @@ function EditMaterialVariantSheet({ state, setState }: Props) {
           />
 
           <Button
-            loading={addMaterialVariant.isPending}
+            loading={editMaterialVariant.isPending}
             className="w-full"
             type="submit"
           >
-            {addMaterialVariant.isPending ? t('submitting') : t('submit')}
+            {editMaterialVariant.isPending ? t('submitting') : t('submit')}
           </Button>
         </form>
       </Form>

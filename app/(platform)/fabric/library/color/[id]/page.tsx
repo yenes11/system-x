@@ -25,10 +25,13 @@ import { getFabricColorDetail } from '@/lib/api-calls';
 import {
   Blocks,
   Info,
+  Package,
   PackageCheck,
   PaintBucket,
   ReceiptText,
-  ShoppingBasket
+  ShoppingBasket,
+  ShoppingCart,
+  Tag
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
@@ -160,76 +163,28 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
             </div>
           </CardContent>
         </Card>
-
-        {/* <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t('stock_in_hand')}
-            </CardTitle>
-            <Icon icon="archive" size={22} />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stockInHandCount}</div>
-          </CardContent>
-        </Card> */}
-        {/* <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t('upcoming_orders')}
-            </CardTitle>
-            <Icon icon="basket" size={22} />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{activeOrderCount}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t('reserved_stock')}
-            </CardTitle>
-            <Icon icon="notification" size={22} />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {color.fabricColorReservedAmount}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              {t('summary')}
-              <Popover>
-                <PopoverTrigger className="h4 flex w-4 items-center">
-                  <Icon icon="information-2" size={14} />
-                </PopoverTrigger>
-                <PopoverContent className="w-80">
-                  <p className="text-sm text-muted-foreground">
-                    {t('stock_in_hand')} ({stockInHandCount}) +{' '}
-                    {t('incoming_stock')} ({activeOrderCount}) -{' '}
-                    {t('reserved_stock')} ({color.fabricColorReservedAmount}) ={' '}
-                    {summary} {color.fabricUnitName}
-                  </p>
-                </PopoverContent>
-              </Popover>
-            </CardTitle>
-            <Icon icon="scroll" size={22} />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary}</div>
-          </CardContent>
-        </Card> */}
       </div>
       {color?.collectionColors.length > 0 && (
         <FabricColorCollectionCarousel data={color.collectionColors} />
       )}
       <Tabs defaultValue="suppliers" className="">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="suppliers">{t('suppliers')}</TabsTrigger>
-          <TabsTrigger value="prices">{t('recent_prices')}</TabsTrigger>
-          <TabsTrigger value="stocks">{t('stocks')}</TabsTrigger>
-          <TabsTrigger value="orders">{t('orders')}</TabsTrigger>
+        <TabsList className="">
+          <TabsTrigger value="suppliers">
+            <Blocks className="mr-2 size-5" />
+            {t('suppliers')}
+          </TabsTrigger>
+          <TabsTrigger value="prices">
+            <Tag className="mr-2 size-5" />
+            {t('recent_prices')}
+          </TabsTrigger>
+          <TabsTrigger value="stocks">
+            <Package className="mr-2 size-5" />
+            {t('stocks')}
+          </TabsTrigger>
+          <TabsTrigger value="orders">
+            <ShoppingCart className="mr-2 size-5" />
+            {t('orders')}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="suppliers">
           <SuppliersTable data={color.suppliers} />

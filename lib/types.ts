@@ -246,7 +246,7 @@ export interface Attribute {
 export interface CollectionMaterial {
   id: string;
   materialColorVariantId: string;
-  amount: string;
+  amount: number;
   size: string;
   image: string;
   name: string;

@@ -1,38 +1,50 @@
 'use client';
 
 import api from '@/api';
-import { BasicEntity } from '@/lib/types';
+import { BasicEntity, ProductStation } from '@/lib/types';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
 import ThemedDialog from '../themed-dialog';
 import { Button } from '../ui/button';
 import Icon from '../ui/icon';
 import TransferList from './transfer-list';
 
-function AddStationDialog() {
+function AddStationDialog({ data }: { data: ProductStation[] }) {
   const t = useTranslations();
   const params = useParams();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [state, setState] = useState<BasicEntity[]>([]);
   const [allStations, setAllStations] = useState<BasicEntity[]>([]);
-  const [selectedStations, setSelectedStations] = useState<BasicEntity[]>([]);
+  const [selectedStations, setSelectedStations] = useState<BasicEntity[]>(
+    data || []
+  );
 
   const productStations = useQuery({
     queryKey: ['product-stations'],
     queryFn: async () => {
       const res = await api.get('/ProductStations');
-      console.log(res.data, 'sssss');
-      setAllStations(res.data);
       return res.data;
     }
   });
+
+  React.useEffect(() => {
+    if (data && productStations.data) {
+      const stations = productStations.data.filter((s: ProductStation) => {
+        return data.every((d) => d.id !== s.id);
+      });
+      setAllStations(stations);
+    } else {
+      setAllStations(productStations.data);
+    }
+  }, [productStations.data, data]);
+
+  console.log(productStations.data, 'daaaa');
 
   const addProductStation = useMutation({
     mutationFn: async (data: any) => {
@@ -63,7 +75,7 @@ function AddStationDialog() {
     <ThemedDialog
       open={open}
       setOpen={setOpen}
-      triggerLabel={t('add')}
+      triggerLabel={t('edit')}
       title={t('add_product_station')}
       footer={
         <div>

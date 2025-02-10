@@ -338,8 +338,9 @@ function CollectionTable({ data }: Props) {
                         {row.original.sizeTypeName}
                       </Badge>
                     </div>
-                    <div className="flex flex-[2] flex-col items-end justify-between gap-2">
+                    <div className="flex flex-[2] flex-col items-end  gap-2">
                       <Button
+                        className="w-56"
                         onClick={() =>
                           router.push(
                             `/collection/manage-collection/${row.original.id}`
@@ -350,6 +351,7 @@ function CollectionTable({ data }: Props) {
                         {t('manage_collection')}
                       </Button>
                       <Button
+                        className="w-56"
                         onClick={() =>
                           router.push(
                             `/collection/manage-draft/${row.original.draftColor.id}`

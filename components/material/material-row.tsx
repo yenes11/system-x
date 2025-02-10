@@ -160,7 +160,8 @@ function MaterialRow({
                   {expandedVariantRows.includes(color.id) &&
                     (color.variants.length === 0 ? (
                       <Empty
-                        description={t('material_table_empty_description')}
+                        className="my-6"
+                        description={t('material_variant_empty_description')}
                       />
                     ) : (
                       <div className="grid grid-cols-1 sm:grid-cols-2">

@@ -143,8 +143,8 @@ export function AddEmployeeSheet() {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>
-        <Button className="rounded-full bg-nutural" variant="outline">
-          <PlusIcon size={16} className="mr-2" />
+        <Button size="sm" variant="outline">
+          <PlusIcon size={12} className="mr-2" />
           {t('add_employee')}
         </Button>
       </SheetTrigger>
