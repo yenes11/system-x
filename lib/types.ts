@@ -379,3 +379,52 @@ export const CostType = {
   3: 'approved_cost',
   4: 'real_cost'
 } as const;
+
+export const OrderStatus = {
+  1: 'new',
+  2: 'planning',
+  3: 'planned',
+  4: 'in_product_stations',
+  5: 'final_qc',
+  6: 'sent',
+  7: 'completed'
+} as const;
+
+export interface MaterialOrder {
+  id: string;
+  supplier: {
+    name: string;
+    phone: string;
+    authorizedPersonFullName: string;
+    manufacturerCode: string;
+    image: string;
+  };
+  material: {
+    name: string;
+    color: string;
+    size: string;
+    type: string;
+    orderUnit: string;
+    image: string;
+  };
+  user: {
+    fullName: string;
+    role: number;
+  };
+  orderAmount: number;
+  status: number;
+  estimatedArrivalDate: string;
+  orderPlacedDate: string;
+  arrivalDate: string | null;
+  unitPrice: number;
+  currency: number;
+  createdDate: string;
+  stocks: {
+    id: string;
+    barcode: string;
+    acceptedUser: string | null;
+    incomingAmount: number;
+    remainingAmount: number;
+    returnStatus: boolean;
+  }[];
+}

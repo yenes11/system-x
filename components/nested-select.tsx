@@ -109,7 +109,7 @@ export function NestedSelect({
           </span>
           <Check
             className={cn(
-              'ml-auto shrink-0',
+              'ml-auto size-4 shrink-0',
               value === item.id ? 'opacity-100' : 'opacity-0'
             )}
           />

@@ -6,7 +6,9 @@ import { DataTable } from '../ui/data-table';
 import { Badge } from '../ui/badge';
 import { Currency, currencyEnums, Status, statusEnums } from '@/types';
 import { useTranslations } from 'next-intl';
-import { ShoppingBasket, ShoppingCart } from 'lucide-react';
+import { ArrowRight, ShoppingBasket, ShoppingCart } from 'lucide-react';
+import PlaceOrderSheet from '../place-order-sheet';
+import Link from 'next/link';
 // import AddOrderSheet from './add-order-sheet';
 
 const statusClasses = {
@@ -52,17 +54,30 @@ const activeOrdersTableColumns = [
         {currencyEnums[row.getValue('currency') as Currency]}
       </Badge>
     )
+  },
+  {
+    header: '',
+    id: 'details',
+    cell: ({ row }: { row: any }) => (
+      <Link
+        href={`/material/order/${row.original.materialColorVariantOrderId}`}
+        className=""
+      >
+        <ArrowRight size={14} />
+      </Link>
+    )
   }
 ];
 
 function ActiveOrdersTable({ color }: { color: any }) {
   const t = useTranslations();
+
   return (
     <Card className="overflow-auto bg-nutural">
       <CardHeader className="h-12 flex-row items-center gap-2 border-b px-4 py-0">
         <ShoppingCart className="size-5" />
         <CardTitle>{t('active_orders')}</CardTitle>
-        {/* <AddOrderSheet />  */}
+        <PlaceOrderSheet />
       </CardHeader>
       <CardContent className="p-0">
         <DataTable

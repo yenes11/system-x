@@ -57,8 +57,6 @@ function RecentPricesTable({ id }: { id: string }) {
     }
   });
 
-  console.log(data, 'recent');
-
   return (
     <Card className="overflow-hidden bg-nutural">
       <CardHeader className="h-12 flex-row items-center justify-between border-b px-4 py-0">

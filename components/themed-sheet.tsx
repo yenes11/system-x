@@ -21,6 +21,7 @@ interface Props {
     | React.Dispatch<React.SetStateAction<boolean>>
     | ((value: boolean) => void);
   triggerClassName?: string;
+  trigger?: React.ReactNode;
 }
 
 function ThemedSheet({
@@ -31,18 +32,29 @@ function ThemedSheet({
   triggerLabel,
   open,
   setOpen,
-  triggerClassName
+  triggerClassName,
+  trigger
 }: Props) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      {triggerLabel && (
+      {trigger ? (
+        <SheetTrigger asChild>{trigger}</SheetTrigger>
+      ) : triggerLabel ? (
         <SheetTrigger asChild>
           <Button className={triggerClassName}>
             {triggerIcon}
             {triggerLabel}
           </Button>
         </SheetTrigger>
-      )}
+      ) : null}
+      {/* {triggerLabel && (
+        <SheetTrigger asChild>
+          <Button className={triggerClassName}>
+            {triggerIcon}
+            {triggerLabel}
+          </Button>
+        </SheetTrigger>
+      )} */}
       <SheetContent>
         <SheetHeader>
           {headerIcon}

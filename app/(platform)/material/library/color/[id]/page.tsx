@@ -1,20 +1,14 @@
-import api from '@/api';
 import DescriptionList from '@/components/description-list';
 import ActiveOrdersTable from '@/components/fabric-color/active-orders-table';
 import RecentPricesTable from '@/components/fabric-color/recent-prices-table';
+import ReservedStockStatusCard from '@/components/fabric-color/reserved-stock-status-card';
 import StocksTable from '@/components/fabric-color/stocks-table';
 import SuppliersTable from '@/components/fabric-color/suppliers-table';
+import ImageZoom from '@/components/image-zoom';
 import MaterialCollectionsCarousel from '@/components/material/material-collections-caraousel';
 import StatusCard from '@/components/status-card';
 import ThemedZoom from '@/components/themed-zoom';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import {
   Popover,
@@ -22,23 +16,19 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { URL_MATERIAL_COLOR } from '@/constants/api-constants';
 import { getMaterialVariant } from '@/lib/api-calls';
-import { MaterialColor, MaterialUnit } from '@/lib/types';
 import {
   Blocks,
-  ConciergeBell,
-  CopyIcon,
   Info,
-  Layers,
+  Package,
   PackageCheck,
   PaintBucket,
   ReceiptText,
-  ScrollText,
-  ShoppingBasket
+  ShoppingBasket,
+  ShoppingCart,
+  Tag
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-// import CollectionCarousel from '@/components/fabric-color/collection-carousel';
 
 async function ColorDetailsPage({ params }: { params: { id: string } }) {
   const color = await getMaterialVariant(params.id);
@@ -92,47 +82,15 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
         <Card className="mb-4 flex flex-col overflow-hidden @sm:!flex-row">
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="flex h-full flex-col">
-              <ThemedZoom>
+              <ImageZoom>
                 <img
                   src={color.image}
                   className="h-52 w-52 rounded object-cover object-top"
                 />
-              </ThemedZoom>
+              </ImageZoom>
             </div>
           </CardHeader>
           <CardContent className="flex-1 p-0 text-sm">
-            {/* <div className="grid gap-3">
-            <ul className="grid gap-3">
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('name')}</span>
-                <span>{color.materialName}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('size')}</span>
-                <span>{color.size}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('type')}</span>
-                <span>{color.type.name}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  {t('identity_unit')}
-                </span>
-                <span>{color.type.identityUnit}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('order_unit')}</span>
-                <span>{color.type.orderUnit}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  {t('variant_unit')}
-                </span>
-                <span>{color.type.variantUnit}</span>
-              </li>
-            </ul>
-          </div> */}
             <DescriptionList listItems={listItems} />
           </CardContent>
         </Card>
@@ -148,10 +106,15 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
           value={activeOrderCount}
           icon={ShoppingBasket}
         />
-        <StatusCard
+        {/* <StatusCard
           title={t('reserved_stock')}
           value={color.reservedAmount}
           icon={Blocks}
+        /> */}
+
+        <ReservedStockStatusCard
+          unit={color.size}
+          value={color.reservedAmount}
         />
 
         <Card>
@@ -180,74 +143,29 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
             </div>
           </CardContent>
         </Card>
-
-        {/* <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t('stock_in_hand')}
-            </CardTitle>
-            <Layers />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stockInHandCount}</div>
-          </CardContent>
-        </Card> */}
-        {/* <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t('upcoming_orders')}
-            </CardTitle>
-            <Blocks />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{activeOrderCount}</div>
-          </CardContent>
-        </Card> */}
-        {/* <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t('reserved_stock')}
-            </CardTitle>
-            <ConciergeBell />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{color.reservedAmount}</div>
-          </CardContent>
-        </Card> */}
-        {/* <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium">
-              {t('summary')}
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Info size={14} />
-                </PopoverTrigger>
-                <PopoverContent className="w-80">
-                  <p className="text-sm text-muted-foreground">
-                    {t('stock_in_hand')} ({stockInHandCount}) +{' '}
-                    {t('incoming_stock')} ({activeOrderCount}) -{' '}
-                    {t('reserved_stock')} ({color.reservedAmount}) = {summary}{' '}
-                  </p>
-                </PopoverContent>
-              </Popover>
-            </CardTitle>
-            <ScrollText />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary}</div>
-          </CardContent>
-        </Card> */}
       </div>
       {color?.collectionColors?.length > 0 && (
         <MaterialCollectionsCarousel data={color.collectionColors} />
       )}
 
       <Tabs defaultValue="suppliers" className="">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="suppliers">{t('suppliers')}</TabsTrigger>
-          <TabsTrigger value="prices">{t('recent_prices')}</TabsTrigger>
-          <TabsTrigger value="stocks">{t('stocks')}</TabsTrigger>
-          <TabsTrigger value="orders">{t('orders')}</TabsTrigger>
+        <TabsList>
+          <TabsTrigger value="suppliers">
+            <Blocks className="mr-2 size-4" />
+            {t('suppliers')}
+          </TabsTrigger>
+          <TabsTrigger value="prices">
+            <Tag className="mr-2 size-4" />
+            {t('recent_prices')}
+          </TabsTrigger>
+          <TabsTrigger value="stocks">
+            <Package className="mr-2 size-4" />
+            {t('stocks')}
+          </TabsTrigger>
+          <TabsTrigger value="orders">
+            <ShoppingCart className="mr-2 size-4" />
+            {t('orders')}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="suppliers">
           <SuppliersTable data={color.suppliers} />

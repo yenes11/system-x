@@ -50,10 +50,10 @@ const formSchema = z.object({
   categoryId: z.string().uuid(),
   customerSeasonId: z.string().uuid(),
   sizeTypeId: z.string().uuid(),
-  customerReceiverId: z.string().uuid(),
-  customerProjectId: z.string().uuid(),
-  customerSubProjectId: z.string().uuid(),
-  customerBuyerGroupId: z.string().uuid(),
+  customerReceiverId: z.string().uuid().optional(),
+  customerProjectId: z.string().uuid().optional(),
+  customerSubProjectId: z.string().uuid().optional(),
+  customerBuyerGroupId: z.string().uuid().optional(),
   name: z.string(),
   description: z.string(),
   customerCode: z.string().optional(),
@@ -123,6 +123,8 @@ function NewCollectionPage() {
     }
   });
 
+  console.log(categories.data, 'cccc');
+
   const departments = useQuery({
     queryKey: ['departments', selectedCustomerId],
     queryFn: async () => {
@@ -132,7 +134,7 @@ function NewCollectionPage() {
     enabled: !!form.getValues('customerId')
   });
 
-  console.log(categories.data, 'dddd');
+  console.log(departments.data, 'ddddd');
 
   const seasons = useQuery({
     queryKey: ['seasons', selectedCustomerId],
@@ -157,7 +159,9 @@ function NewCollectionPage() {
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) => {
-      formData.append(key, value);
+      if (value) {
+        formData.append(key, value);
+      }
     });
 
     addCollection.mutate(formData);
@@ -283,6 +287,20 @@ function NewCollectionPage() {
 
               <FormField
                 control={form.control}
+                name="selectionId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('selection_id')}</FormLabel>
+                    <FormControl>
+                      <Input placeholder={t('enter_id')} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="image"
                 render={({ field: { onChange, value, ...fieldProps } }) => (
                   <FormItem>
@@ -345,6 +363,7 @@ function NewCollectionPage() {
                       <NestedSelect
                         placeholder={t('department_placeholder')}
                         disabled={!Boolean(selectedCustomerId)}
+                        childrenKey="children"
                         key={form.getValues('customerId')}
                         data={departments.data || []}
                         onChange={field.onChange}
@@ -364,7 +383,7 @@ function NewCollectionPage() {
                     <FormControl>
                       <NestedSelect
                         placeholder={t('select_a_category')}
-                        childrenKey="subCategories"
+                        childrenKey="children"
                         data={categories.data || []}
                         onChange={field.onChange}
                         value={field.value}

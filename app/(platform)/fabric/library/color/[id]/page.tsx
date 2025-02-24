@@ -4,8 +4,10 @@ import ActiveOrdersTable from '@/components/fabric-color/active-orders-table';
 import FabricColorCollectionCarousel from '@/components/fabric-color/fabric-color-collection-caraousel';
 import IngredientsChart from '@/components/fabric-color/ingredients-chart';
 import RecentPricesTable from '@/components/fabric-color/recent-prices-table';
+import ReservedStockStatusCard from '@/components/fabric-color/reserved-stock-status-card';
 import StocksTable from '@/components/fabric-color/stocks-table';
 import SuppliersTable from '@/components/fabric-color/suppliers-table';
+import ImageZoom from '@/components/image-zoom';
 import StatusCard from '@/components/status-card';
 import ThemedZoom from '@/components/themed-zoom';
 import {
@@ -90,7 +92,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="flex h-full flex-col">
               <div className="flex h-full w-full items-center justify-center p-0">
-                <ThemedZoom>
+                <ImageZoom>
                   <Image
                     width={208}
                     height={208}
@@ -99,7 +101,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
                     objectFit="cover"
                     className="h-52 w-52 rounded"
                   />
-                </ThemedZoom>
+                </ImageZoom>
                 {/* <img
                     src={color.fabricColorImage}
                     className="h-52 w-52 rounded object-cover"
@@ -126,16 +128,15 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
           value={activeOrderCount}
           icon={ShoppingBasket}
         />
-        <StatusCard
+        {/* <StatusCard
           title={t('reserved_stock')}
           value={color.fabricColorReservedAmount}
           icon={Blocks}
-        />
-        {/* <StatusCard
-          title={t('summary')}
-          value={summary}
-          icon={<ReceiptText />}
         /> */}
+        <ReservedStockStatusCard
+          unit={color.fabricUnitName}
+          value={color.fabricColorReservedAmount}
+        />
 
         <Card>
           <CardContent className="flex h-full items-center gap-4 p-4">
