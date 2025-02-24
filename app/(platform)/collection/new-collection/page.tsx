@@ -143,6 +143,7 @@ function NewCollectionPage() {
       return res.data;
     }
   });
+
   const selectOptions = useQuery({
     queryKey: ['select-options', selectedCustomerId],
     queryFn: async () => {
@@ -152,8 +153,6 @@ function NewCollectionPage() {
       return res.data;
     }
   });
-
-  console.log(sizeTypes.data, 'deps');
 
   const onSubmit = (values: Partial<z.infer<typeof formSchema>>) => {
     const formData = new FormData();

@@ -20,7 +20,7 @@ import {
 import { currencyEnums } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useParams, usePathname, useRouter } from 'next/navigation';
@@ -51,6 +51,7 @@ function AddPriceSheet() {
   const path = usePathname();
   const t = useTranslations();
   const id = (params?.id as string) || '';
+  const queryClient = useQueryClient();
 
   const isMaterial = path.startsWith('/material');
 
@@ -58,7 +59,7 @@ function AddPriceSheet() {
     ? 'materialSupplierName'
     : 'fabricSupplierName';
   const idProperty = isMaterial
-    ? 'materialSupplierMaterialColorId'
+    ? 'supplierMaterialColorVariantId'
     : 'supplierFabricColorId';
 
   const supplierColorsEndpoint = isMaterial
@@ -66,8 +67,12 @@ function AddPriceSheet() {
     : '/Suppliers/GetSuppliersForFabricColor?FabricColorId=';
 
   const addPriceEndpoint = isMaterial
-    ? '/MaterialColorPrices'
+    ? '/MaterialColorVariantPrices'
     : '/FabricColorPrices';
+
+  const supplierElementPropertyName = isMaterial
+    ? 'supplierMaterialColorVariantId'
+    : 'supplierFabricColorId';
 
   const formSchema = z.object({
     [idProperty]: z.string().uuid(),
@@ -83,6 +88,8 @@ function AddPriceSheet() {
     }
   });
 
+  console.log(supplierColors.data, 'suppliersssss');
+
   const addPrice = useMutation({
     mutationKey: ['add-fabric-price'],
     mutationFn: async (values: any) => {
@@ -95,6 +102,9 @@ function AddPriceSheet() {
       router.refresh();
       setOpen(false);
       form.reset();
+      queryClient.invalidateQueries({
+        queryKey: ['recent-prices']
+      });
       toast.success(t('item_added'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
       });
@@ -172,7 +182,10 @@ function AddPriceSheet() {
                     </FormControl>
                     <SelectContent>
                       {supplierColors.data?.map((item: any) => (
-                        <SelectItem key={item.id} value={item.id}>
+                        <SelectItem
+                          key={item.id}
+                          value={item[supplierElementPropertyName]}
+                        >
                           {item.name}
                         </SelectItem>
                       ))}

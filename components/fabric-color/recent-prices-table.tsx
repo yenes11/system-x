@@ -10,6 +10,7 @@ import api from '@/api';
 import { useTranslations } from 'next-intl';
 import AddPriceSheet from './add-price-sheet';
 import { Tag } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 const recentPricesTableColumns = [
   {
@@ -49,10 +50,16 @@ const recentPricesTableColumns = [
 
 function RecentPricesTable({ id }: { id: string }) {
   const t = useTranslations();
+  const path = usePathname();
+  const isMaterial = path.startsWith('/material');
+  const endpoint = isMaterial
+    ? 'MaterialColorVariantPrices?Size=5&MaterialColorVariantId='
+    : 'FabricColorPrices?Size=5&FabricColorId=';
+
   const { data } = useQuery({
     queryKey: ['recent-prices', id],
     queryFn: async () => {
-      const res = await api.get(`FabricColorPrices?Size=5&FabricColorId=${id}`);
+      const res = await api.get(`${endpoint}${id}`);
       return res.data;
     }
   });
