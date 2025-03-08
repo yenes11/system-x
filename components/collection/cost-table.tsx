@@ -120,7 +120,7 @@ function CostTable() {
   });
   const [editState, setEditState] = React.useState({ open: false, data: null });
   const costs = useQuery({
-    queryKey: ['costs'],
+    queryKey: ['costs', params.id],
     queryFn: async () => {
       const response = await api.get(
         `/CollectionColorCosts?PageIndex=0&PageSize=10&CollectionColorId=${params.id}`

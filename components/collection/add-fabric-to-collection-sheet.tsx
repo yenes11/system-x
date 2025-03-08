@@ -141,6 +141,7 @@ function AddFabricToCollectionSheet() {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="fabricColorId"
@@ -154,14 +155,25 @@ function AddFabricToCollectionSheet() {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-auto ps-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_img]:shrink-0">
                       <SelectValue placeholder={t('select_a_fabric_color')} />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="[&_*[role=option]>span]:end-2 [&_*[role=option]>span]:start-auto [&_*[role=option]]:pe-8 [&_*[role=option]]:ps-2">
                     {fabricDetails.data?.colors?.map((color: any) => (
                       <SelectItem key={color.id} value={color.id}>
-                        {color.name}
+                        <span className="flex items-center gap-2">
+                          <img
+                            className="size-14 rounded-sm"
+                            src={color.image}
+                            alt={color.name}
+                          />
+                          <span>
+                            <span className="block font-medium">
+                              {color.name}
+                            </span>
+                          </span>
+                        </span>
                       </SelectItem>
                     ))}
                   </SelectContent>

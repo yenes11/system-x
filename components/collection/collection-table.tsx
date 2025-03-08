@@ -34,6 +34,7 @@ import { Badge } from '../ui/badge';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 import Image from 'next/image';
 import ImageZoom from '../image-zoom';
+import Link from 'next/link';
 
 const getColumns = (
   setColorState: any,
@@ -395,12 +396,14 @@ function CollectionTable({ data }: Props) {
                     {row.original.colors.map((color: any) => {
                       if (color.colorName === 'Taslak') return;
                       return (
-                        <Badge
-                          className="rounded-md border-theme-teal-foreground/30 bg-theme-teal/15 text-theme-teal-foreground"
+                        <Link
+                          href={`/collection/manage-color/${color.id}`}
                           key={color.id}
                         >
-                          {color.colorName}
-                        </Badge>
+                          <Badge className="rounded-md border-theme-teal-foreground/30 bg-theme-teal/15 text-theme-teal-foreground">
+                            {color.colorName}
+                          </Badge>
+                        </Link>
                       );
                     })}
                   </div>

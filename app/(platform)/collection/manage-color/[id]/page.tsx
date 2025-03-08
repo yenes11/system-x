@@ -13,14 +13,21 @@ import { getCollectionDraftDetails } from '@/lib/api-calls';
 import {
   BadgeCheck,
   Banknote,
+  Barcode,
   Paperclip,
+  QrCode,
+  ShoppingCart,
   SquareBottomDashedScissors,
   Waypoints
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { Fragment } from 'react';
 
-async function ManageCollectionPage({ params }: { params: { id: string } }) {
+async function ManageCollectionColorPage({
+  params
+}: {
+  params: { id: string };
+}) {
   const t = await getTranslations();
   const collectionDetails = await getCollectionDraftDetails(params.id);
   const listItems = [
@@ -82,7 +89,7 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
     <Fragment>
       <div className="mb-2 flex justify-between">
         <Heading
-          title={t('manage_draft')}
+          title={t('manage_color')}
           icon={<SquareBottomDashedScissors />}
         />
         {collectionDetails.identityDefined && (
@@ -155,6 +162,14 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
             <Banknote className="mr-2 size-4" />
             {t('costs')}
           </TabsTrigger>
+          <TabsTrigger className="flex-1" value="size-and-barcode">
+            <QrCode className="mr-2 size-4" />
+            {t('size_and_barcode')}
+          </TabsTrigger>
+          <TabsTrigger className="flex-1" value="orders">
+            <ShoppingCart className="mr-2 size-4" />
+            {t('orders')}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="product-stations">
           <ProductStationsStepper data={collectionDetails.productStations} />
@@ -170,4 +185,4 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
   );
 }
 
-export default ManageCollectionPage;
+export default ManageCollectionColorPage;

@@ -351,5 +351,12 @@
   "order_creator": "Order Creator",
   "arrival_date": "Arrival Date",
   "order_placed_date": "Order Placed Date",
-  "general_info": "General Information"
+  "general_info": "General Information",
+  "colors": "Colors",
+  "identity_defined": "Identity Defined",
+  "add_color": "Add Color",
+  "add_color_to_collection": "Add Color to Collection",
+  "delete_color": "Delete Color",
+  "delete_color_message": "If any of the color's orders exist, the color cannot be deleted. Otherwise, all data associated with the color will be deleted.",
+  "manage_color": "Manage Color"
 }

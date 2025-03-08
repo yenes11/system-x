@@ -59,7 +59,7 @@ function AddMaterialToCollectionSheet() {
   const isMaterialColorSelected = !!form.watch('materialColor');
 
   const materials = useQuery({
-    queryKey: ['materials'],
+    queryKey: ['materials', params.id],
     queryFn: async () => {
       const res = await api.get(
         getMaterialUrl({ pageIndex: 0, pageSize: 99999 })
@@ -106,6 +106,8 @@ function AddMaterialToCollectionSheet() {
   const onSubmit = async (values: Partial<z.infer<typeof formSchema>>) => {
     assignMaterialToCollection.mutate(values);
   };
+
+  console.log(selectedColor?.variants, 'vvv');
 
   return (
     <ThemedSheet
@@ -191,14 +193,25 @@ function AddMaterialToCollectionSheet() {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-auto ps-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_img]:shrink-0">
                       <SelectValue placeholder={t('select_a_variant')} />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
-                    {selectedColor?.variants?.map((color: any) => (
-                      <SelectItem key={color.id} value={color.id}>
-                        {color.size}
+                  <SelectContent className="[&_*[role=option]>span]:end-2 [&_*[role=option]>span]:start-auto [&_*[role=option]]:pe-8 [&_*[role=option]]:ps-2">
+                    {selectedColor?.variants?.map((variant: any) => (
+                      <SelectItem key={variant.id} value={variant.id}>
+                        <span className="flex items-center gap-2">
+                          <img
+                            className="size-14 rounded-sm"
+                            src={variant.image}
+                            alt={variant.size}
+                          />
+                          <span>
+                            <span className="block font-medium">
+                              {variant.size}
+                            </span>
+                          </span>
+                        </span>
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -351,5 +351,12 @@
   "order_creator": "Siparişi Oluşturan",
   "arrival_date": "Varış Tarihi",
   "order_placed_date": "Sipariş Oluşturma Tarihi",
-  "general_info": "Genel Bilgiler"
+  "general_info": "Genel Bilgiler",
+  "colors": "Renkler",
+  "identity_defined": "Kimlik Tanımlandı",
+  "add_color": "Renk Ekle",
+  "add_color_to_collection": "Koleksiyona Renk Ekle",
+  "delete_color": "Rengi Sil",
+  "delete_color_message": "Rengin herhangi bir siparişi varsa renk silinemez. Aksi taktirde renge bağlı tüm veriler silinecektir.",
+  "manage_color": "Rengi Yönet"
 }

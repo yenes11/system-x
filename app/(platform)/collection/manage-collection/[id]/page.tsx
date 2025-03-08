@@ -1,3 +1,4 @@
+import CollectionColorsTable from '@/components/collection/collection-colors-table';
 import CollectionGallery from '@/components/collection/collection-gallery';
 import CollectionNotes from '@/components/collection/collection-notes';
 import DeleteCollectionDialog from '@/components/collection/delete-collection-dialog';
@@ -12,7 +13,14 @@ import { Heading } from '@/components/ui/heading';
 import Icon from '@/components/ui/icon';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollectionDetails } from '@/lib/api-calls';
-import { Images, NotebookTabs, SlidersVertical, Waypoints } from 'lucide-react';
+import {
+  Images,
+  NotebookTabs,
+  SlidersVertical,
+  SquarePen,
+  SwatchBook,
+  Waypoints
+} from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -138,8 +146,14 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
     <Fragment>
       <div className="mb-4 flex justify-between">
         <Heading title={t('manage_collection')} icon={<SlidersVertical />} />
-        <Link href={`/collection/edit-collection/${params.id}`}>
-          <Button>{t('edit')}</Button>
+        <Link
+          className="ml-auto mr-4"
+          href={`/collection/edit-collection/${params.id}`}
+        >
+          <Button>
+            <SquarePen className="mr-2 size-4" />
+            {t('edit')}
+          </Button>
         </Link>
         <DeleteCollectionDialog id={params.id} />
       </div>
@@ -162,31 +176,38 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="product-stations" className="">
-        <TabsList className="">
-          <TabsTrigger className="" value="product-stations">
+      <Tabs defaultValue="colors">
+        <TabsList>
+          <TabsTrigger value="colors">
+            <SwatchBook className="mr-2 size-4" />
+            {t('colors')}
+          </TabsTrigger>
+          <TabsTrigger value="product-stations">
             <Waypoints className="mr-2 size-4" />
             {t('product_stations')}
           </TabsTrigger>
-          <TabsTrigger className="" value="notes">
+          <TabsTrigger value="notes">
             <NotebookTabs className="mr-2 size-4" />
             {t('notes')}
           </TabsTrigger>
-          <TabsTrigger className="" value="gallery">
+          <TabsTrigger value="gallery">
             <Images className="mr-2 size-4" />
             {t('gallery')}
           </TabsTrigger>
         </TabsList>
+        <TabsContent value="colors">
+          <CollectionColorsTable />
+        </TabsContent>
         <TabsContent value="product-stations" className="space-y-4">
           <ProductStationsStepper
             editable
             data={collectionDetails.productStations}
           />
         </TabsContent>
-        <TabsContent value="notes" className="">
+        <TabsContent value="notes">
           <CollectionNotes notes={collectionDetails.collectionNotes} />
         </TabsContent>
-        <TabsContent value="gallery" className="">
+        <TabsContent value="gallery">
           <CollectionGallery images={collectionDetails.collectionGalleries} />
         </TabsContent>
       </Tabs>
