@@ -302,9 +302,14 @@ function CollectionTable({ data }: Props) {
                         />
                       </ThemedZoom> */}
                       <ImageZoom>
-                        <Image
+                        {/* <Image
                           width={128}
                           height={128}
+                          className="mr-2 aspect-square w-32 min-w-32 origin-top-left rounded object-cover object-top"
+                          src={row.original.image}
+                          alt={row.original.name}
+                        /> */}
+                        <img
                           className="mr-2 aspect-square w-32 min-w-32 origin-top-left rounded object-cover object-top"
                           src={row.original.image}
                           alt={row.original.name}
