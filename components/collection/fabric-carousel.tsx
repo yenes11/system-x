@@ -1,44 +1,25 @@
 'use client';
 
+import { CircleHelp, Pencil, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
+import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import ImageZoom from '../image-zoom';
+import { SearchBar } from '../searchbar';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter
-} from '../ui/card';
+import { Card, CardContent, CardFooter } from '../ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
-  CarouselNext
+  CarouselNext,
+  CarouselPrevious
 } from '../ui/carousel';
-import { useMemo, useState } from 'react';
-import {
-  CircleHelp,
-  DeleteIcon,
-  Euro,
-  Pencil,
-  Plus,
-  Trash,
-  Trash2
-} from 'lucide-react';
-import AddPriceToFabricSheet from '../suppliers/add-price-to-fabric-sheet';
-import RecentPricesDialog from '../suppliers/recent-prices-dialog';
-import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import Empty from '../ui/empty';
-import { Input } from '../ui/input';
-import { Fabric } from '@/lib/types';
-import { SearchBar } from '../searchbar';
-import ThemedZoom from '../themed-zoom';
 import AddFabricToCollectionSheet from './add-fabric-to-collection-sheet';
-import { QuestionMarkCircledIcon } from '@radix-ui/react-icons';
-import EditUnitMeterDialog from './edit-unit-meter-dialog';
 import EditCollectionFabricSheet from './edit-collection-fabric';
+import EditUnitMeterDialog from './edit-unit-meter-dialog';
 
 interface SupplierFabric {
   id: string;
@@ -122,12 +103,12 @@ function FabricCarousel({ data }: Props) {
               <CarouselItem key={index} className="lg:w-64">
                 <Card className="overflow-hidden bg-cover bg-center p-0">
                   <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                    <ThemedZoom>
+                    <ImageZoom>
                       <img
                         src={fabric.image}
                         className="aspect-square w-full origin-top-left object-cover object-top"
                       />
-                    </ThemedZoom>
+                    </ImageZoom>
                   </CardContent>
                   <CardFooter className="flex flex-col items-center justify-center gap-0 p-2 px-0 pb-0 text-sm">
                     <span>{fabric.fabricName}</span>

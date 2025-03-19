@@ -358,5 +358,18 @@
   "add_color_to_collection": "Koleksiyona Renk Ekle",
   "delete_color": "Rengi Sil",
   "delete_color_message": "Rengin herhangi bir siparişi varsa renk silinemez. Aksi taktirde renge bağlı tüm veriler silinecektir.",
-  "manage_color": "Rengi Yönet"
+  "manage_color": "Rengi Yönet",
+  "identity_required_message": "Bu işlemi yapmak için kimliği onaylamalısınız",
+  "add_size": "Boyut Ekle",
+  "edit_collection": "Koleksiyonu Düzenle",
+  "order_placed": "Sipariş verildi",
+  "to_be_continue": "Devam edecek",
+  "in_stock": "Mevcut",
+  "out_of_stock": "Stokta yok",
+  "returned": "İade edildi",
+  "return_status": "İade Durumu",
+  "incoming_amount": "Gelecek Miktar",
+  "material_stock_table_empty_message": "Bu siparişe henüz materyal ulaşmadı. Siparişin durumu hakkında bilgi almak için {name} ile iletişime geçiniz.",
+  "delete_order": "Siparişi Sil",
+  "delete_order_message": "Siparişin herhangi bir bölümü ulaştıysa silinemez"
 }

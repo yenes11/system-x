@@ -4,8 +4,8 @@ import { Euro, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import ImageZoom from '../image-zoom';
 import { SearchBar } from '../searchbar';
-import ThemedZoom from '../themed-zoom';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import {
@@ -130,12 +130,12 @@ function MaterialCarousel({ data }: Props) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                    <ThemedZoom>
+                    <ImageZoom>
                       <img
                         src={material.supplierImage || material.originalImage}
                         className="aspect-square w-full origin-top-left object-cover object-top"
                       />
-                    </ThemedZoom>
+                    </ImageZoom>
                   </CardContent>
                   <CardFooter className="flex flex-col items-center justify-center gap-2 p-2 px-0 pb-0">
                     {/* <span className="text-xs text-muted-foreground">Code</span> */}

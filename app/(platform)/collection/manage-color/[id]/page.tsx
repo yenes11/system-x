@@ -1,25 +1,14 @@
-import CostTable from '@/components/collection/cost-table';
 import FabricCarousel from '@/components/collection/fabric-carousel';
+import ManageColorTabs from '@/components/collection/manage-color-tabs';
 import MaterialCarousel from '@/components/collection/material-carousel';
-import ProductStationsStepper from '@/components/collection/product-stations-stepper';
-import SamplesTable from '@/components/collection/samples-table';
 import VerifyCollectionDialog from '@/components/collection/verify-collection-dialog';
 import DescriptionList from '@/components/description-list';
-import ThemedZoom from '@/components/themed-zoom';
+import ImageZoom from '@/components/image-zoom';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollectionDraftDetails } from '@/lib/api-calls';
-import {
-  BadgeCheck,
-  Banknote,
-  Barcode,
-  Paperclip,
-  QrCode,
-  ShoppingCart,
-  SquareBottomDashedScissors,
-  Waypoints
-} from 'lucide-react';
+import { BadgeCheck, SquareBottomDashedScissors } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { Fragment } from 'react';
 
@@ -115,12 +104,12 @@ async function ManageCollectionColorPage({
           <CardHeader className="flex flex-row items-start bg-muted/50">
             <div className="flex h-full flex-col">
               <div className="flex h-full w-full justify-center p-0">
-                <ThemedZoom>
+                <ImageZoom>
                   <img
                     src={collectionDetails.image}
                     className="h-52 w-52 rounded object-cover object-top"
                   />
-                </ThemedZoom>
+                </ImageZoom>
               </div>
             </div>
           </CardHeader>
@@ -147,40 +136,7 @@ async function ManageCollectionColorPage({
         </TabsContent>
       </Tabs>
 
-      <Tabs defaultValue="product-stations">
-        <TabsList className="mb-2">
-          <TabsTrigger className="flex-1" value="product-stations">
-            <Waypoints className="mr-2 size-4" />
-            {t('product_stations')}
-          </TabsTrigger>
-
-          <TabsTrigger className="flex-1" value="samples">
-            <Paperclip className="mr-2 size-4" />
-            {t('samples')}
-          </TabsTrigger>
-          <TabsTrigger className="flex-1" value="costs">
-            <Banknote className="mr-2 size-4" />
-            {t('costs')}
-          </TabsTrigger>
-          <TabsTrigger className="flex-1" value="size-and-barcode">
-            <QrCode className="mr-2 size-4" />
-            {t('size_and_barcode')}
-          </TabsTrigger>
-          <TabsTrigger className="flex-1" value="orders">
-            <ShoppingCart className="mr-2 size-4" />
-            {t('orders')}
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="product-stations">
-          <ProductStationsStepper data={collectionDetails.productStations} />
-        </TabsContent>
-        <TabsContent value="samples">
-          <SamplesTable isVerified={collectionDetails.identityDefined} />
-        </TabsContent>
-        <TabsContent value="costs">
-          <CostTable />
-        </TabsContent>
-      </Tabs>
+      <ManageColorTabs details={collectionDetails} />
     </Fragment>
   );
 }

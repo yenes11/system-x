@@ -1,8 +1,8 @@
 import React from 'react';
-import ThemedSheet from './themed-sheet';
+import ThemedSheet from '../themed-sheet';
 import { z } from 'zod';
 import { useTranslations } from 'next-intl';
-import { CalendarIcon, Plus } from 'lucide-react';
+import { CalendarIcon, Key, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -13,9 +13,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from './ui/form';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+} from '../ui/form';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   Select,
@@ -23,28 +23,39 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue
-} from './ui/select';
+} from '../ui/select';
 import { getSuppliers } from '@/lib/api-calls';
 import { currencyEnums } from '@/types';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { Calendar } from './ui/calendar';
+import { Calendar } from '../ui/calendar';
 import api from '@/api';
 import moment from 'moment';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 const formSchema = z.object({
-  supplierId: z.string().uuid(),
-  orderAmount: z.number().min(1),
-  placedDate: z.string().datetime(),
-  estimatedArrivalDate: z.string().datetime(),
+  // supplierId: z.string().uuid(),
+  // orderAmount: z.number().min(1),
+  arrivalDate: z.string().datetime().optional(),
   unitPrice: z.number().min(1),
-  currency: z.number().min(1)
+  currency: z.string().min(1),
+  status: z.string().min(1)
 });
 
-function PlaceOrderSheet() {
+interface Props {
+  state: any;
+  setState: any;
+}
+
+const OrderStatus = {
+  1: 'order_placed',
+  2: 'to_be_continue',
+  3: 'completed'
+} as const;
+
+function EditOrderSheet({ state, setState }: Props) {
   const t = useTranslations();
   const path = usePathname();
   const params = useParams();
@@ -57,24 +68,28 @@ function PlaceOrderSheet() {
     : '/MaterialColorVariantOrders';
   const propertyName = isFabric ? 'fabricColorId' : 'materialColorVariantId';
 
-  const suppliers = useQuery({
-    queryKey: ['suppliers', isFabric],
-    queryFn: () => getSuppliers({ name: '', pageIndex: 0, pageSize: 9999 }),
-    select: (data) => {
-      if (isFabric) {
-        return data.items.filter((i) => i.type === 1 || i.type === 2);
-      }
-      return data.items.filter((i) => i.type === 1 || i.type === 3);
-    }
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema)
   });
 
-  console.log(suppliers.data, 'sssd');
+  React.useEffect(() => {
+    if (state.data) {
+      form.reset({
+        status: state.data.status.toString(),
+        currency: state.data.currency.toString(),
+        unitPrice: state.data.unitPrice,
+        arrivalDate: state.data.estimatedArrivalDate
+      });
+    }
+  }, [state]);
 
-  const placeOrder = useMutation({
+  const updateOrder = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const response = await api.post(createURL, {
+      const response = await api.put(createURL, {
         ...values,
-        [propertyName]: params.id
+        currency: Number(values.currency),
+        status: Number(values.status),
+        id: state.data?.id
       });
       return response;
     },
@@ -89,18 +104,19 @@ function PlaceOrderSheet() {
     }
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
-  });
-
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    placeOrder.mutate(values);
+    updateOrder.mutate(values);
   };
 
   return (
     <ThemedSheet
-      open={open}
-      setOpen={setOpen}
+      open={state.open}
+      setOpen={(value: boolean) =>
+        setState((prev: any) => ({
+          ...prev,
+          open: value
+        }))
+      }
       title={t('place_order')}
       trigger={
         <Button variant="outline" size="sm" className="ml-auto">
@@ -110,7 +126,7 @@ function PlaceOrderSheet() {
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
+          {/* <FormField
             control={form.control}
             name="orderAmount"
             render={({ field }) => (
@@ -127,7 +143,7 @@ function PlaceOrderSheet() {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}
@@ -150,11 +166,35 @@ function PlaceOrderSheet() {
 
           <FormField
             control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('status')}</FormLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('select_item')} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {Object.entries(OrderStatus).map(([key, value]) => (
+                      <SelectItem key={key} value={key}>
+                        {t(value)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="currency"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('currency')}</FormLabel>
-                <Select onValueChange={(val) => field.onChange(Number(val))}>
+                <Select value={field.value} onValueChange={field.onChange}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder={t('select_item')} />
@@ -170,7 +210,7 @@ function PlaceOrderSheet() {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="supplierId"
             render={({ field }) => (
@@ -193,49 +233,11 @@ function PlaceOrderSheet() {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}
-            name="placedDate"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>{t('placed_date')}</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={'outline'}
-                        className={cn(
-                          'bg-background pl-3 text-left font-normal active:hover:scale-100',
-                          !field.value && 'text-muted-foreground'
-                        )}
-                      >
-                        {field.value ? (
-                          moment(field.value).format('DD/MM/YYYY')
-                        ) : (
-                          <span>{t('pick_date')}</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-full p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value ? new Date(field.value) : undefined}
-                      onSelect={(val) => field.onChange(val?.toISOString())}
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="estimatedArrivalDate"
+            name="arrivalDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>{t('estimated_arrival_date')}</FormLabel>
@@ -272,11 +274,11 @@ function PlaceOrderSheet() {
           />
 
           <Button
-            loading={placeOrder.isPending}
+            loading={updateOrder.isPending}
             className="w-full"
             type="submit"
           >
-            {placeOrder.isPending ? t('submitting') : t('submit')}
+            {updateOrder.isPending ? t('submitting') : t('submit')}
           </Button>
         </form>
       </Form>
@@ -284,4 +286,4 @@ function PlaceOrderSheet() {
   );
 }
 
-export default PlaceOrderSheet;
+export default EditOrderSheet;

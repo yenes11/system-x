@@ -1,6 +1,15 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import { CollectionStatus, ICollection, ICollectionStatus } from '@/lib/types';
+import { cn } from '@/lib/utils';
+import { CaretSortIcon } from '@radix-ui/react-icons';
+import { CheckIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
+import ImageZoom from './image-zoom';
+import { SearchBar } from './searchbar';
+import { Button } from './ui/button';
+import { Card, CardContent, CardFooter } from './ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -8,42 +17,16 @@ import {
   CarouselNext,
   CarouselPrevious
 } from './ui/carousel';
-import { Card, CardContent, CardFooter } from './ui/card';
-import { Input } from './ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from './ui/dropdown-menu';
-import { CheckIcon, Copy, ListFilter } from 'lucide-react';
-import { Button } from './ui/button';
-import { useTranslations } from 'next-intl';
-import {
-  CollectionStatus,
-  CollectionStatusColor,
-  ICollection,
-  ICollectionStatus
-} from '@/lib/types';
-import { Badge } from './ui/badge';
-import Empty from './ui/empty';
-import { PopoverTrigger, Popover, PopoverContent } from './ui/popover';
-import { CaretSortIcon } from '@radix-ui/react-icons';
-import { cn } from '@/lib/utils';
+import Code from './ui/code';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList
 } from './ui/command';
-import { SearchBar } from './searchbar';
-import { toast } from './ui/use-toast';
-import ThemedZoom from './themed-zoom';
-import Code from './ui/code';
+import Empty from './ui/empty';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
 const statusOptions = [
   { value: '0', label: 'all' },
@@ -151,12 +134,12 @@ function CollectionsCarousel({ data }: { data: ICollection[] }) {
                 <div className="p-1">
                   <Card className="overflow-hidden bg-cover bg-center p-0">
                     <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                      <ThemedZoom>
+                      <ImageZoom>
                         <img
                           src={collection.image}
                           className="aspect-square w-full origin-top-left object-cover object-top"
                         />
-                      </ThemedZoom>
+                      </ImageZoom>
                     </CardContent>
                     <CardFooter className="flex flex-col items-start p-2">
                       <span className="text-xs text-muted-foreground">

@@ -1,34 +1,32 @@
 'use client';
 
+import { Euro, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
+import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import ImageZoom from '../image-zoom';
+import { SearchBar } from '../searchbar';
+import AddPriceToFabricSheet from '../suppliers/add-price-to-fabric-sheet';
+import RecentPricesDialog from '../suppliers/recent-prices-dialog';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
-  CardFooter
+  CardFooter,
+  CardHeader,
+  CardTitle
 } from '../ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
-  CarouselNext
+  CarouselNext,
+  CarouselPrevious
 } from '../ui/carousel';
-import { useMemo, useState } from 'react';
-import { DeleteIcon, Euro, Pencil, Plus, Trash, Trash2 } from 'lucide-react';
-import EditFabricSheet from './edit-fabric-sheet';
-import AddPriceToFabricSheet from '../suppliers/add-price-to-fabric-sheet';
-import RecentPricesDialog from '../suppliers/recent-prices-dialog';
-import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import Empty from '../ui/empty';
-import { Input } from '../ui/input';
-import { Fabric } from '@/lib/types';
-import { SearchBar } from '../searchbar';
 import AssignFabricSheet from './assign-fabric-sheet';
-import ThemedZoom from '../themed-zoom';
+import EditFabricSheet from './edit-fabric-sheet';
 
 interface SupplierFabric {
   id: string;
@@ -129,12 +127,12 @@ function FabricCarousel({ data }: Props) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                    <ThemedZoom>
+                    <ImageZoom>
                       <img
                         src={fabric.supplierImage || fabric.originalImage}
                         className="aspect-square w-full origin-top-left object-cover object-top"
                       />
-                    </ThemedZoom>
+                    </ImageZoom>
                   </CardContent>
                   <CardFooter className="flex flex-col items-center justify-center gap-2 p-2 px-0 pb-0">
                     {/* <span className="text-xs text-muted-foreground">Code</span> */}

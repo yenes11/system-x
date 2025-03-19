@@ -35,6 +35,7 @@ import { NestedSelect } from '@/components/nested-select';
 import { Heading } from '@/components/ui/heading';
 import { Layers } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { TreeSelect } from '@/components/tree-select';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -133,8 +134,6 @@ function NewCollectionPage() {
     },
     enabled: !!form.getValues('customerId')
   });
-
-  console.log(departments.data, 'ddddd');
 
   const seasons = useQuery({
     queryKey: ['seasons', selectedCustomerId],
@@ -359,14 +358,13 @@ function NewCollectionPage() {
                   <FormItem key={form.getValues('customerId')}>
                     <FormLabel>{t('customer_department')}</FormLabel>
                     <FormControl>
-                      <NestedSelect
+                      <TreeSelect
                         placeholder={t('department_placeholder')}
-                        disabled={!Boolean(selectedCustomerId)}
-                        childrenKey="children"
-                        key={form.getValues('customerId')}
                         data={departments.data || []}
                         onChange={field.onChange}
                         value={field.value}
+                        key={form.getValues('customerId')}
+                        disabled={!Boolean(selectedCustomerId)}
                       />
                     </FormControl>
                     <FormMessage />
@@ -380,13 +378,19 @@ function NewCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('category')}</FormLabel>
                     <FormControl>
-                      <NestedSelect
+                      <TreeSelect
+                        placeholder={t('select_a_category')}
+                        data={categories.data || []}
+                        onChange={field.onChange}
+                        value={field.value}
+                      />
+                      {/* <NestedSelect
                         placeholder={t('select_a_category')}
                         childrenKey="children"
                         data={categories.data || []}
                         onChange={field.onChange}
                         value={field.value}
-                      />
+                      /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -5,8 +5,8 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import ImageZoom from '../image-zoom';
 import { SearchBar } from '../searchbar';
-import ThemedZoom from '../themed-zoom';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardFooter } from '../ui/card';
@@ -117,12 +117,12 @@ function MaterialCarousel({ data }: Props) {
               >
                 <Card className="w-full overflow-hidden bg-cover bg-center p-0">
                   <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                    <ThemedZoom>
+                    <ImageZoom>
                       <img
                         src={material.image}
                         className="aspect-square w-full origin-top-left object-cover object-top"
                       />
-                    </ThemedZoom>
+                    </ImageZoom>
                   </CardContent>
                   <CardFooter className="flex w-full flex-col items-stretch gap-0 p-2 px-0 pb-0 text-sm">
                     {/* <span>{material.name}</span>

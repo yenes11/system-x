@@ -31,13 +31,8 @@ export default function UserAuthForm() {
   const t = useTranslations();
   const callbackUrl = searchParams.get('callbackUrl');
   const [loading, setLoading] = useState(false);
-  const defaultValues = {
-    email: 'anil.keskin@test.com',
-    password: '1234'
-  };
   const form = useForm<UserFormValue>({
-    resolver: zodResolver(formSchema),
-    defaultValues
+    resolver: zodResolver(formSchema)
   });
 
   const onSubmit = async (data: UserFormValue) => {

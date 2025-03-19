@@ -5,7 +5,10 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Code from '@/components/ui/code';
 import { Heading } from '@/components/ui/heading';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getMaterialOrderDetails } from '@/lib/api-calls';
+import {
+  getFabricOrderDetails,
+  getMaterialOrderDetails
+} from '@/lib/api-calls';
 import { currencyEnums } from '@/types';
 import { ShoppingCart } from 'lucide-react';
 import moment from 'moment';
@@ -18,15 +21,13 @@ const OrderStatus = {
   3: 'completed'
 } as const;
 
-async function MaterialOrderDetailsPage({
-  params
-}: {
-  params: { id: string };
-}) {
+async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
   const t = await getTranslations();
-  const details = await getMaterialOrderDetails(params.id);
+  const details = await getFabricOrderDetails(params.id);
 
-  const material = details?.material;
+  console.log(details);
+
+  const fabric = details?.fabric;
   const supplier = details?.supplier;
 
   return (
@@ -59,7 +60,7 @@ async function MaterialOrderDetailsPage({
               >
                 <ImageZoom>
                   <img
-                    src={details.material.image}
+                    src={fabric.image}
                     className="h-52 w-52 rounded object-cover object-top"
                   />
                 </ImageZoom>
@@ -86,14 +87,14 @@ async function MaterialOrderDetailsPage({
                 <div className="grid grid-cols-1 gap-1 px-6 py-3 sm:grid-cols-3 sm:gap-4">
                   <dt className="text-muted-foreground">{t('material')}</dt>
                   <dd className="sm:col-span-2">
-                    {material.name} - {material.color} - {material.size}
+                    {fabric.name} - {fabric.color}
                   </dd>
                 </div>
 
                 <div className="grid grid-cols-1 gap-1 px-6 py-3 sm:grid-cols-3 sm:gap-4">
                   <dt className="text-muted-foreground">{t('amount')}</dt>
                   <dd className="sm:col-span-2">
-                    {details.orderAmount + material.orderUnit}
+                    {details.orderAmount + fabric.unit}
                   </dd>
                 </div>
 
@@ -196,11 +197,11 @@ async function MaterialOrderDetailsPage({
       </div>
       <MaterialStockTable
         supplierName={supplier.name}
-        orderUnit={material.orderUnit}
+        orderUnit={fabric.unit}
         data={details.stocks}
       />
     </div>
   );
 }
 
-export default MaterialOrderDetailsPage;
+export default FabricOrderDetailsPage;

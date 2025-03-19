@@ -253,7 +253,7 @@ function EditCustomerSheet({ state, setState }: Props) {
               )}
             />
             <Button className="w-full" type="submit">
-              Submit
+              {editCustomer.isPending ? t('submitting') : t('submit')}
             </Button>
           </form>
         </Form>

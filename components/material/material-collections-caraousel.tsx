@@ -11,10 +11,10 @@ import {
 import { MaterialCollection } from '@/lib/types';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
-import Empty from '../ui/empty';
-import ThemedZoom from '../themed-zoom';
+import ImageZoom from '../image-zoom';
 import { SearchBar } from '../searchbar';
 import Code from '../ui/code';
+import Empty from '../ui/empty';
 
 const statusOptions = [
   { value: '0', label: 'all' },
@@ -136,12 +136,12 @@ function MaterialCollectionsCarousel({ data }: { data: MaterialCollection[] }) {
                 <div className="p-1">
                   <Card className="overflow-hidden bg-cover bg-center p-0">
                     <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                      <ThemedZoom>
+                      <ImageZoom>
                         <img
                           src={collection.collectionImage}
                           className="aspect-square w-full origin-top-left object-cover object-top"
                         />
-                      </ThemedZoom>
+                      </ImageZoom>
                     </CardContent>
                     <CardFooter className="flex flex-col items-start p-2">
                       <span className="text-xs text-muted-foreground">

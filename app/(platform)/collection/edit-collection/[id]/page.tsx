@@ -35,6 +35,7 @@ import { NestedSelect } from '@/components/nested-select';
 import { Heading } from '@/components/ui/heading';
 import { Layers } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { TreeSelect } from '@/components/tree-select';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -95,11 +96,17 @@ function EditCollectionPage() {
     }
   });
 
+  console.log(collection.data, 'ccccc');
+
   React.useEffect(() => {
     if (collection.data) {
       form.reset({
         ...collection.data
       });
+
+      const customer = customers.data?.find(
+        (c) => c.name === collection.data?.customer
+      );
     }
   }, [collection.data]);
 
@@ -182,7 +189,7 @@ function EditCollectionPage() {
 
   return (
     <div className="">
-      <Heading icon={<Layers />} title={t('add_collection')} description="" />
+      <Heading icon={<Layers />} title={t('edit_collection')} description="" />
       <Card className="mt-4">
         <CardContent className="p-6">
           <Form {...form}>
@@ -359,13 +366,13 @@ function EditCollectionPage() {
                   <FormItem key={form.getValues('customerId')}>
                     <FormLabel>{t('customer_department')}</FormLabel>
                     <FormControl>
-                      <NestedSelect
+                      <TreeSelect
                         placeholder={t('department_placeholder')}
-                        disabled={!Boolean(selectedCustomerId)}
-                        key={form.getValues('customerId')}
                         data={departments.data || []}
                         onChange={field.onChange}
                         value={field.value}
+                        key={form.getValues('customerId')}
+                        disabled={!Boolean(selectedCustomerId)}
                       />
                     </FormControl>
                     <FormMessage />
@@ -379,9 +386,8 @@ function EditCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('category')}</FormLabel>
                     <FormControl>
-                      <NestedSelect
+                      <TreeSelect
                         placeholder={t('select_a_category')}
-                        childrenKey="subCategories"
                         data={categories.data || []}
                         onChange={field.onChange}
                         value={field.value}

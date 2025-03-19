@@ -180,16 +180,6 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
           <ActiveOrdersTable color={color} />
         </TabsContent>
       </Tabs>
-
-      {/* 
-      <div className="mb-4 grid gap-4 md:grid-cols-1 lg:grid-cols-2">
-        <SuppliersTable data={color.suppliers} />
-        <RecentPricesTable id={params.id} />
-      </div>
-      <div className="mb-4 grid gap-4 md:grid-cols-1 lg:grid-cols-2">
-        <StocksTable data={color.stocks} fabricUnitName={''} />
-        <ActiveOrdersTable color={color} />
-      </div> */}
     </>
   );
 }

@@ -20,6 +20,7 @@ import {
 } from '../ui/card';
 import Empty from '../ui/empty';
 import { Textarea } from '../ui/textarea';
+import { Input } from '../ui/input';
 
 interface Props {
   notes: CollectionNote[];
@@ -54,6 +55,52 @@ function CollectionNotes({ notes }: Props) {
         <CardTitle className="text-lg">{t('notes')}</CardTitle>
       </CardHeader>
       <CardContent>
+        <div className="mt-4 flex w-full items-center space-x-2">
+          <Textarea
+            id="message"
+            placeholder="Type your message..."
+            className="h-10 flex-1"
+            autoComplete="off"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <Button
+            // variant="outline"
+            size="icon"
+            className="size-12"
+            disabled={false}
+            onClick={() => {
+              addNote.mutate({
+                collectionId: params?.id,
+                message: input
+              });
+            }}
+          >
+            <Send className="size-4" />
+            <span className="sr-only">Send</span>
+          </Button>
+        </div>
+        {/* <div className="relative -mx-6 border-b bg-background">
+          <Textarea
+            placeholder="Type your message..."
+            className="rounded-none border-none pb-6"
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="ml-auto flex size-12 rounded-full"
+            disabled={false}
+            onClick={() => {
+              addNote.mutate({
+                collectionId: params?.id,
+                message: input
+              });
+            }}
+          >
+            <Send className="size-4" />
+            <span className="sr-only">Send</span>
+          </Button>
+        </div> */}
         <div className="space-y-4 pt-6">
           {notes.length > 0 ? (
             notes.map((note, index) => (
@@ -80,33 +127,6 @@ function CollectionNotes({ notes }: Props) {
           )}
         </div>
       </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-center space-x-2">
-          <Textarea
-            id="message"
-            placeholder="Type your message..."
-            className="h-10 flex-1"
-            autoComplete="off"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <Button
-            // variant="outline"
-            size="icon"
-            className="size-12"
-            disabled={false}
-            onClick={() => {
-              addNote.mutate({
-                collectionId: params?.id,
-                message: input
-              });
-            }}
-          >
-            <Send className="size-4" />
-            <span className="sr-only">Send</span>
-          </Button>
-        </div>
-      </CardFooter>
     </Card>
   );
 }

@@ -14,6 +14,7 @@ import {
   CollectionDraft,
   Fabric,
   FabricColorDetails,
+  FabricOrder,
   ICollectionStatus,
   MaterialOrder,
   MaterialVariant,
@@ -81,6 +82,19 @@ export const getMaterialOrderDetails = async (id: string) => {
   try {
     const res = await api.get(`/MaterialColorVariantOrders/${id}`);
     return res.data as MaterialOrder;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.title || 'An error occurred');
+    } else {
+      throw new Error('An unknown error occurred');
+    }
+  }
+};
+
+export const getFabricOrderDetails = async (id: string) => {
+  try {
+    const res = await api.get(`/FabricColorOrders/${id}`);
+    return res.data as FabricOrder;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.title || 'An error occurred');

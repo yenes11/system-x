@@ -222,6 +222,7 @@ export interface Supplier extends BasicEntity {
   address: string;
   phone: string;
   authorizedPersonFullName: string;
+  type: ISupplierType;
 }
 
 export interface MaterialVariant {
@@ -419,12 +420,45 @@ export interface MaterialOrder {
   unitPrice: number;
   currency: number;
   createdDate: string;
-  stocks: {
-    id: string;
-    barcode: string;
-    acceptedUser: string | null;
-    incomingAmount: number;
-    remainingAmount: number;
-    returnStatus: boolean;
-  }[];
+  stocks: OrderStock[];
+}
+
+export interface FabricOrder {
+  id: string;
+  supplier: {
+    name: string;
+    phone: string;
+    authorizedPersonFullName: string;
+    manufacturerCode: string;
+    image: string;
+  };
+  fabric: {
+    name: string;
+    grammage: string;
+    color: string;
+    unit: string;
+    image: string;
+  };
+  user: {
+    fullName: string;
+    role: number;
+  };
+  orderAmount: number;
+  status: number;
+  estimatedArrivalDate: string;
+  orderPlacedDate: string;
+  arrivalDate: string | null;
+  unitPrice: number;
+  currency: number;
+  createdDate: string;
+  stocks: OrderStock[];
+}
+
+export interface OrderStock {
+  id: string;
+  barcode: string;
+  acceptedUser: string | null;
+  incomingAmount: number;
+  remainingAmount: number;
+  returnStatus: boolean;
 }

@@ -358,5 +358,18 @@
   "add_color_to_collection": "Add Color to Collection",
   "delete_color": "Delete Color",
   "delete_color_message": "If any of the color's orders exist, the color cannot be deleted. Otherwise, all data associated with the color will be deleted.",
-  "manage_color": "Manage Color"
+  "manage_color": "Manage Color",
+  "identity_required_message": "You must verify the identity to perform this action",
+  "add_size": "Add Size",
+  "edit_collection": "Edit Collection",
+  "order_placed": "Order placed",
+  "to_be_continue": "To be continue",
+  "in_stock": "In stock",
+  "out_of_stock": "Out of stock",
+  "returned": "Returned",
+  "return_status": "Return Status",
+  "incoming_amount": "Incoming Amount",
+  "material_stock_table_empty_message": "No material has arrived for this order yet. Please contact {name} for information about the status of the order.",
+  "delete_order": "Delete Order",
+  "delete_order_message": "If any part of the order has arrived, it cannot be deleted"
 }

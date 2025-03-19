@@ -21,6 +21,7 @@ import { Button } from '../ui/button';
 import { Fragment, useState } from 'react';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import Link from 'next/link';
+import ClientPagination from '../client-pagination';
 
 interface CollectionColor extends BasicEntity {
   identityDefined: boolean;
@@ -34,13 +35,15 @@ function CollectionColorsTable() {
     open: false
   });
 
+  const [currentPage, setCurrentPage] = useState(0);
+
   const colors = useQuery({
-    queryKey: ['collection-colors', params.id],
+    queryKey: ['collection-colors', params.id, currentPage],
     queryFn: async () => {
       const response = await api.get(
-        `/Collections/GetCollectionColors?PageSize=10&PageIndex=0&CollectionId=${params.id}`
+        `/Collections/GetCollectionColors?PageSize=10&PageIndex=${currentPage}&CollectionId=${params.id}`
       );
-      return response.data?.items;
+      return response.data;
     }
   });
 
@@ -114,9 +117,16 @@ function CollectionColorsTable() {
           <DataTable
             bordered={false}
             searchKey=""
-            data={colors.data || []}
+            data={colors.data?.items || []}
             columns={columns}
           />
+          <div className="border-t py-2">
+            <ClientPagination
+              setPage={setCurrentPage}
+              currentPage={currentPage + 1}
+              totalPages={colors.data?.pages}
+            />
+          </div>
         </CardContent>
       </Card>
     </Fragment>

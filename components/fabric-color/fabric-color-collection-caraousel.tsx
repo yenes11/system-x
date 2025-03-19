@@ -1,6 +1,12 @@
 'use client';
 
+import { ColorCollection } from '@/lib/types';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import React, { useState } from 'react';
+import ImageZoom from '../image-zoom';
+import { SearchBar } from '../searchbar';
+import { Card, CardContent, CardFooter } from '../ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -8,17 +14,8 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '../ui/carousel';
-import { Copy } from 'lucide-react';
-import { Card, CardContent, CardFooter } from '../ui/card';
-import { Button } from '../ui/button';
-import { useTranslations } from 'next-intl';
-import { toast } from '../ui/use-toast';
-import ThemedZoom from '../themed-zoom';
-import { SearchBar } from '../searchbar';
-import Empty from '../ui/empty';
 import Code from '../ui/code';
-import { ColorCollection } from '@/lib/types';
-import Image from 'next/image';
+import Empty from '../ui/empty';
 
 function FabricColorCollectionCarousel({ data }: { data: ColorCollection[] }) {
   const t = useTranslations();
@@ -55,7 +52,7 @@ function FabricColorCollectionCarousel({ data }: { data: ColorCollection[] }) {
                 <div className="p-1">
                   <Card className="overflow-hidden bg-cover bg-center p-0">
                     <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
-                      <ThemedZoom>
+                      <ImageZoom>
                         <Image
                           width={256}
                           height={256}
@@ -63,7 +60,7 @@ function FabricColorCollectionCarousel({ data }: { data: ColorCollection[] }) {
                           src={collection.collectionImage}
                           className="aspect-square w-full origin-top-left object-cover object-top"
                         />
-                      </ThemedZoom>
+                      </ImageZoom>
                     </CardContent>
                     <CardFooter className="flex flex-col items-start p-2">
                       <span className="text-xs text-muted-foreground">

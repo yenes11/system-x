@@ -1,130 +1,164 @@
 'use client';
 
-import { useState } from 'react';
-import { Popover, PopoverTrigger, PopoverContent } from './ui/popover';
-import { Command, CommandGroup, CommandItem } from './ui/command';
-import { Button } from './ui/button';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import * as React from 'react';
+import { ChevronDown, ChevronRight, Check, Dot, Circle } from 'lucide-react';
 
-interface TreeItem {
-  label: string;
-  value: string;
-  children?: TreeItem[];
-}
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover';
 
-const treeData: TreeItem[] = [
-  {
-    label: 'Fruits',
-    value: 'fruits',
-    children: [
-      {
-        label: 'Apple',
-        value: 'apple',
-        children: [{ label: 'asdas', value: 'sadasd' }]
-      },
-      { label: 'Banana', value: 'banana' }
-    ]
-  },
-  {
-    label: 'Vegetables',
-    value: 'vegetables',
-    children: [
-      { label: 'Carrot', value: 'carrot' },
-      { label: 'Lettuce', value: 'lettuce' }
-    ]
-  }
-];
+type TreeNode = {
+  id: string;
+  name: string;
+  children?: TreeNode[];
+};
 
-const TreeSelect: React.FC = () => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<string>('');
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+type TreeSelectProps = {
+  data: TreeNode[];
+  value?: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  className?: string;
+  disabled?: boolean;
+};
 
-  const handleSelect = (label: string) => {
-    setSelectedItem(label);
-    setOpen(false);
-  };
+export function TreeSelect({
+  data,
+  value,
+  onChange,
+  placeholder = 'Select an option',
+  className,
+  disabled
+}: TreeSelectProps) {
+  const [open, setOpen] = React.useState(false);
 
-  const toggleExpand = (value: string) => {
-    setExpandedItems((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(value)) {
-        newSet.delete(value);
-      } else {
-        newSet.add(value);
+  // Find the selected node to display its label
+  const findNodeLabel = (nodes: TreeNode[], id: string): string | undefined => {
+    for (const node of nodes) {
+      if (node.id === id) return node.name;
+      if (node.children) {
+        const label = findNodeLabel(node.children, id);
+        if (label) return label;
       }
-      return newSet;
-    });
+    }
+    return undefined;
   };
 
-  const renderTree = (items: TreeItem[], level = 0) => {
-    return (
-      <ul>
-        {items.map((item) => (
-          <li key={item.value}>
-            {item.children ? (
-              <div>
-                <button
-                  className={`flex w-full items-center px-2 py-1 text-left ${
-                    level > 0 ? 'pl-4' : ''
-                  }`}
-                  onClick={() => handleSelect(item.label)}
-                >
-                  <span
-                    className="mr-2 cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleExpand(item.value);
-                    }}
-                  >
-                    {expandedItems.has(item.value) ? (
-                      <ChevronDown className="h-4 w-4" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4" />
-                    )}
-                  </span>
-                  {item.label}
-                </button>
-                {expandedItems.has(item.value) && (
-                  <div className="pl-4">
-                    {renderTree(item.children, level + 1)}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button
-                className={`flex w-full items-center px-2 py-1 text-left pl-${
-                  (level + 1) * 4
-                }`}
-                onClick={() => handleSelect(item.label)}
-              >
-                {item.label}
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
-    );
-  };
+  const selectedLabel = value ? findNodeLabel(data, value) : undefined;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          disabled={disabled}
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-64 justify-between"
+          className={cn(
+            'w-full justify-between bg-background active:hover:!scale-100',
+            className
+          )}
         >
-          {selectedItem || 'Select an item'}
+          <span className="truncate">{selectedLabel || placeholder}</span>
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-72 p-2">
-        {renderTree(treeData)}
+      <PopoverContent
+        className="w-[var(--radix-popover-trigger-width)] p-0"
+        align="start"
+      >
+        <div className="max-h-[300px] overflow-auto p-1">
+          {data.map((node) => (
+            <TreeNode
+              key={node.id}
+              node={node}
+              selectedValue={value}
+              onSelect={(id) => {
+                onChange(id);
+                setOpen(false);
+              }}
+              level={0}
+            />
+          ))}
+        </div>
       </PopoverContent>
     </Popover>
   );
+}
+
+type TreeNodeProps = {
+  node: TreeNode;
+  selectedValue?: string;
+  onSelect: (id: string) => void;
+  level: number;
 };
 
-export default TreeSelect;
+function TreeNode({ node, selectedValue, onSelect, level }: TreeNodeProps) {
+  const [expanded, setExpanded] = React.useState(false);
+  const hasChildren = node.children && node.children.length > 0;
+  const isSelected = node.id === selectedValue;
+
+  return (
+    <div className="space-y-1">
+      <div
+        className={cn(
+          'flex items-center space-x-2 rounded-md px-2 py-1.5 text-sm outline-none',
+          'hover:bg-accent hover:text-accent-foreground',
+          isSelected && 'bg-accent text-accent-foreground',
+          'cursor-pointer'
+        )}
+        style={{ paddingLeft: `${level * 12 + 8}px` }}
+        onClick={() => onSelect(node.id)}
+        role="option"
+        aria-selected={isSelected}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect(node.id);
+          }
+        }}
+      >
+        {hasChildren ? (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setExpanded(!expanded);
+            }}
+            className="h-4 w-4 shrink-0 text-muted-foreground"
+            aria-label={expanded ? 'Collapse' : 'Expand'}
+          >
+            {expanded ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </button>
+        ) : (
+          <Circle className="ml-1 size-2 shrink-0 text-muted-foreground" />
+        )}
+        <span className="flex-1">{node.name}</span>
+        {isSelected && <Check className="h-4 w-4" />}
+      </div>
+
+      {hasChildren && expanded && (
+        <div>
+          {node.children!.map((childNode) => (
+            <TreeNode
+              key={childNode.id}
+              node={childNode}
+              selectedValue={selectedValue}
+              onSelect={onSelect}
+              level={level + 1}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
