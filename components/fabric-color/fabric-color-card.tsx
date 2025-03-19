@@ -40,15 +40,15 @@ function FabricColorCard({ id, name, img, ingredients }: Props) {
         href={`/fabric/library/color/${id}`}
         className="flex gap-4 rounded-none bg-card p-4 shadow-none"
       >
-        <Image
+        {/* <Image
           width={96}
           height={96}
           className="size-24 rounded"
           objectFit="cover"
           src={img}
           alt="Fabric color"
-        />
-        {/* <img className="h-24 w-24 rounded object-cover" src={img} alt={name} /> */}
+        /> */}
+        <img className="h-24 w-24 rounded object-cover" src={img} alt={name} />
         <div className="flex flex-col gap-2">
           <div className="flex flex-col">
             <span className="text-xs text-muted-foreground">{t('name')}</span>
