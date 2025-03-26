@@ -106,19 +106,19 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
     },
     {
       title: t('customer'),
-      description: collectionDetails.customer
+      description: collectionDetails.customer.name
     },
     {
       title: t('department'),
-      description: collectionDetails.department
+      description: collectionDetails.department.name
     },
     {
       title: t('category'),
-      description: collectionDetails.category
+      description: collectionDetails.category.name
     },
     {
       title: t('season'),
-      description: collectionDetails.season
+      description: collectionDetails.season.name
     },
     {
       title: t('buyer'),
@@ -126,7 +126,7 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
     },
     {
       title: t('size_type'),
-      description: collectionDetails.sizeType
+      description: collectionDetails.sizeType.name
     },
     {
       title: t('garment_1'),

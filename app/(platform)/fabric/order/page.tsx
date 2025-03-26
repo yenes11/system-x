@@ -1,7 +1,6 @@
 import FabricOrdersTable from '@/components/fabric/fabric-order-sheet';
-import MaterialOrdersTable from '@/components/material/material-orders-table';
 import { Heading } from '@/components/ui/heading';
-import { getFabricOrders, getMaterialOrders } from '@/lib/api-calls';
+import { getFabricOrders } from '@/lib/api-calls';
 import { ShoppingCart } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -11,7 +10,7 @@ interface SearchParams {
   status: string;
 }
 
-async function MaterialOrdersPage({
+async function FabricOrdersPage({
   searchParams
 }: {
   searchParams: SearchParams;
@@ -21,7 +20,7 @@ async function MaterialOrdersPage({
   const size = Number(searchParams?.size) || 10;
   const index = Number(searchParams?.index) || 0;
   const status = searchParams?.status;
-  const orders = await getMaterialOrders({
+  const orders = await getFabricOrders({
     pageIndex: index,
     pageSize: size,
     status
@@ -30,11 +29,11 @@ async function MaterialOrdersPage({
   return (
     <div className="space-y-2">
       <div className="mb-4 flex justify-between">
-        <Heading icon={<ShoppingCart />} title={t('material_orders')} />
+        <Heading icon={<ShoppingCart />} title={t('fabric_orders')} />
       </div>
-      <MaterialOrdersTable data={orders} />
+      <FabricOrdersTable data={orders} />
     </div>
   );
 }
 
-export default MaterialOrdersPage;
+export default FabricOrdersPage;

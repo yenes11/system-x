@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { BasicEntity } from '@/lib/types';
+import { BasicEntity, CollectionDetails } from '@/lib/types';
 import { useParams, useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 import moment from 'moment';
@@ -66,11 +66,11 @@ const formSchema = z.object({
   image: z
     .any()
     .refine(
-      (file) => file?.size <= MAX_FILE_SIZE * 1_000_000,
+      (file) => (!file ? true : file?.size <= MAX_FILE_SIZE * 1_000_000),
       `Max image size is ${MAX_FILE_SIZE}MB.`
     )
     .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      (file) => (!file ? true : ACCEPTED_IMAGE_TYPES.includes(file?.type)),
       'Only .jpg, .jpeg, .png and .webp formats are supported.'
     )
 });
@@ -80,7 +80,7 @@ function EditCollectionPage() {
   const router = useRouter();
   const params = useParams();
 
-  const [formResetKey, setFormResetKey] = useState(0);
+  const collectionId = params?.id;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
@@ -88,36 +88,23 @@ function EditCollectionPage() {
 
   const selectedCustomerId = form.watch('customerId');
 
-  const collection = useQuery({
+  const collection = useQuery<CollectionDetails>({
     queryKey: ['collection', params.id],
     queryFn: async () => {
       const request = await api.get(`/Collections/${params.id}`);
       return request.data;
-    }
+    },
+    enabled: !!collectionId
   });
-
-  console.log(collection.data, 'ccccc');
-
-  React.useEffect(() => {
-    if (collection.data) {
-      form.reset({
-        ...collection.data
-      });
-
-      const customer = customers.data?.find(
-        (c) => c.name === collection.data?.customer
-      );
-    }
-  }, [collection.data]);
 
   const addCollection = useMutation({
     mutationFn: async (formData: FormData) => {
-      const res = await api.post('/Collections', formData);
+      const res = await api.put('/Collections', formData);
       return res;
     },
     onSuccess: (res) => {
       router.replace('/collection/library');
-      toast.success(t('item_added'), {
+      toast.success(t('item_updated'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
@@ -147,6 +134,8 @@ function EditCollectionPage() {
     }
   });
 
+  console.log(form.getValues('image'), 'image');
+
   const departments = useQuery({
     queryKey: ['departments', selectedCustomerId],
     queryFn: async () => {
@@ -156,8 +145,6 @@ function EditCollectionPage() {
     enabled: !!form.getValues('customerId')
   });
 
-  console.log(categories.data, 'dddd');
-
   const seasons = useQuery({
     queryKey: ['seasons', selectedCustomerId],
     queryFn: async () => {
@@ -165,6 +152,7 @@ function EditCollectionPage() {
       return res.data;
     }
   });
+
   const selectOptions = useQuery({
     queryKey: ['select-options', selectedCustomerId],
     queryFn: async () => {
@@ -175,15 +163,57 @@ function EditCollectionPage() {
     }
   });
 
-  console.log(sizeTypes.data, 'deps');
+  React.useEffect(() => {
+    const allSuccess =
+      collection.isSuccess &&
+      customers.isSuccess &&
+      sizeTypes.isSuccess &&
+      categories.isSuccess &&
+      departments.isSuccess &&
+      seasons.isSuccess &&
+      selectOptions.isSuccess;
+
+    if (collection.isSuccess) {
+      form.reset({
+        name: collection.data.name,
+        description: collection.data.description,
+        customerCode: collection.data.customerCode,
+        garment1: collection.data.garment1,
+        garment2: collection.data.garment2,
+        designer: collection.data.designer,
+        selectionId: collection.data?.selectionId,
+        buyer: collection.data.buyer,
+        image: null,
+        categoryId: collection.data.category?.id,
+        customerId: collection.data.customer?.id,
+        customerSeasonId: collection.data.season?.id,
+        customerDepartmentId: collection.data.department?.id,
+        sizeTypeId: collection.data.sizeType?.id,
+        customerProjectId: collection.data.project?.id,
+        customerSubProjectId: collection.data.subProject?.id,
+        customerBuyerGroupId: collection.data.buyerGroup?.id,
+        customerReceiverId: collection.data.reciever?.id
+      });
+    }
+  }, [
+    collection.isSuccess,
+    customers.isSuccess,
+    sizeTypes.isSuccess,
+    categories.isSuccess,
+    departments.isSuccess,
+    seasons.isSuccess,
+    selectOptions.isSuccess
+  ]);
 
   const onSubmit = (values: Partial<z.infer<typeof formSchema>>) => {
     const formData = new FormData();
+    formData.append('Id', collectionId as string);
 
     Object.entries(values).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
+    formData.delete('image');
     addCollection.mutate(formData);
   };
 
@@ -307,6 +337,20 @@ function EditCollectionPage() {
 
               <FormField
                 control={form.control}
+                name="selectionId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('selection_id')}</FormLabel>
+                    <FormControl>
+                      <Input placeholder={t('enter_id')} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="image"
                 render={({ field: { onChange, value, ...fieldProps } }) => (
                   <FormItem>
@@ -334,6 +378,7 @@ function EditCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('customer')}</FormLabel>
                     <Select
+                      value={field.value}
                       onValueChange={(val) => {
                         field.onChange(val);
                         form.resetField('customerDepartmentId');
@@ -401,33 +446,37 @@ function EditCollectionPage() {
               <FormField
                 control={form.control}
                 name="customerSeasonId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('customer_season')}</FormLabel>
-                    <Select
-                      disabled={!Boolean(selectedCustomerId)}
-                      onValueChange={(val) => {
-                        field.onChange(val);
-                      }}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={t('select_season_placeholder')}
-                          />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {seasons.data?.map((season: any) => (
-                          <SelectItem key={season.id} value={season.id}>
-                            {season.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  console.log(field.value?.length, 'field.value');
+                  return (
+                    <FormItem>
+                      <FormLabel>{t('customer_season')}</FormLabel>
+                      <Select
+                        value={field.value}
+                        // disabled={!Boolean(selectedCustomerId)}
+                        onValueChange={(val) => {
+                          field.onChange(val);
+                        }}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={t('select_season_placeholder')}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {seasons.data?.map((season: any) => (
+                            <SelectItem key={season.id} value={season.id}>
+                              {season.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
 
               <FormField
@@ -437,6 +486,7 @@ function EditCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('size_type')}</FormLabel>
                     <Select
+                      value={field.value}
                       onValueChange={(val) => {
                         field.onChange(val);
                       }}
@@ -467,6 +517,7 @@ function EditCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('customer_reciever')}</FormLabel>
                     <Select
+                      value={field.value}
                       disabled={!Boolean(selectedCustomerId)}
                       onValueChange={(val) => {
                         field.onChange(val);
@@ -500,6 +551,7 @@ function EditCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('customer_project')}</FormLabel>
                     <Select
+                      value={field.value}
                       disabled={!Boolean(selectedCustomerId)}
                       onValueChange={(val) => {
                         field.onChange(val);
@@ -533,6 +585,7 @@ function EditCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('customer_sub_project')}</FormLabel>
                     <Select
+                      value={field.value}
                       disabled={!Boolean(selectedCustomerId)}
                       onValueChange={(val) => {
                         field.onChange(val);
@@ -568,6 +621,7 @@ function EditCollectionPage() {
                   <FormItem>
                     <FormLabel>{t('customer_buyer_group')}</FormLabel>
                     <Select
+                      value={field.value}
                       disabled={!Boolean(selectedCustomerId)}
                       onValueChange={(val) => {
                         field.onChange(val);

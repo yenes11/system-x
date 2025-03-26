@@ -113,12 +113,12 @@ const ImageZoom = ({ children }: any) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="group relative cursor-pointer self-start">
-          <div className="absolute hidden h-full w-full items-center justify-center bg-black/50 group-hover:flex">
-            <ZoomIn size={32} />
+        <span className="group relative cursor-pointer self-start">
+          <div className="absolute hidden h-full w-full items-center justify-center rounded bg-black/50 group-hover:flex">
+            <ZoomIn color="white" size={32} />
           </div>
           {children}
-        </div>
+        </span>
       </DialogTrigger>
       <DialogContent className="">
         <DialogTitle className="hidden">zoomed image</DialogTitle>

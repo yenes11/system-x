@@ -371,5 +371,20 @@
   "incoming_amount": "Incoming Amount",
   "material_stock_table_empty_message": "No material has arrived for this order yet. Please contact {name} for information about the status of the order.",
   "delete_order": "Delete Order",
-  "delete_order_message": "If any part of the order has arrived, it cannot be deleted"
+  "delete_order_message": "If any part of the order has arrived, it cannot be deleted",
+  "collection_color_orders": "Collection Color Orders",
+  "manage_order": "Manage Order",
+  "stock_details": "Stock Details",
+  "print": "Print",
+  "material_stock_dialog_message": "In the order with {plmId}({groupPlmId}), {amount} {unit} of this fabric has been used",
+  "append": "Append",
+  "add_stock": "Add Stock",
+  "fabric_details": "Fabric Details",
+  "order_placed_by": "Order Placed By",
+  "order": "Order",
+  "order_date": "Order Date",
+  "update_order": "Update Order",
+  "material_orders": "Material Orders",
+  "fabric_orders": "Fabric Orders",
+  "total_order": "Total Order"
 }

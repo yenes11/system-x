@@ -283,12 +283,12 @@ export interface CollectionDetails extends BasicEntity {
   image: string;
   customerCode: string;
   manufacturerCode: string;
-  customer: string;
-  department: string;
-  category: string;
-  season: string;
+  customer: BasicEntity;
+  department: BasicEntity;
+  category: BasicEntity;
+  season: BasicEntity;
   buyer: string;
-  sizeType: string;
+  sizeType: BasicEntity;
   garment1?: string;
   garment2?: string;
   designer?: string;
@@ -296,6 +296,11 @@ export interface CollectionDetails extends BasicEntity {
   productStations: ProductStation[];
   collectionNotes: CollectionNote[];
   collectionGalleries: CollectionGallery[];
+  project: BasicEntity;
+  subProject: BasicEntity;
+  reciever: BasicEntity;
+  buyerGroup: BasicEntity;
+  selectionId: string;
 }
 
 export interface CollectionDraft {
@@ -408,7 +413,11 @@ export interface MaterialOrder {
     orderUnit: string;
     image: string;
   };
-  user: {
+  user?: {
+    fullName: string;
+    role: number;
+  };
+  createdUser?: {
     fullName: string;
     role: number;
   };
@@ -419,8 +428,9 @@ export interface MaterialOrder {
   arrivalDate: string | null;
   unitPrice: number;
   currency: number;
+  incomingAmount: number;
   createdDate: string;
-  stocks: OrderStock[];
+  stocks?: OrderStock[];
 }
 
 export interface FabricOrder {
@@ -439,11 +449,16 @@ export interface FabricOrder {
     unit: string;
     image: string;
   };
-  user: {
+  user?: {
+    fullName: string;
+    role: number;
+  };
+  createdUser?: {
     fullName: string;
     role: number;
   };
   orderAmount: number;
+  incomingAmount: number;
   status: number;
   estimatedArrivalDate: string;
   orderPlacedDate: string;
@@ -451,7 +466,7 @@ export interface FabricOrder {
   unitPrice: number;
   currency: number;
   createdDate: string;
-  stocks: OrderStock[];
+  stocks?: OrderStock[];
 }
 
 export interface OrderStock {
@@ -461,4 +476,49 @@ export interface OrderStock {
   incomingAmount: number;
   remainingAmount: number;
   returnStatus: boolean;
+}
+
+export interface CollectionColorOrder {
+  id: string;
+  amount: number;
+  plmId: string;
+  groupPlmId?: string;
+  status: keyof typeof OrderStatus;
+  deadline: string;
+  collection: {
+    name: string;
+    color: string;
+    customerCode: string;
+    manufacturerCode: string;
+    image: string;
+    customer: string;
+  };
+}
+
+export interface IDState {
+  id: string;
+  open: boolean;
+}
+
+export interface OrderStock {
+  id: string;
+  barcode: string;
+  incomingAmount: number;
+  remainingAmount: number;
+  returnStatus: boolean;
+  acceptedUser: string | null;
+  collectionOrders: CollectionOrder[];
+}
+
+export interface CollectionOrder {
+  id: string;
+  amount: number;
+  plmId: string;
+  groupPlmId: string | null;
+  image: string;
+  name: string;
+  color: string;
+  customerCode: string;
+  manufacturerCode: string;
+  status: keyof typeof OrderStatus;
 }

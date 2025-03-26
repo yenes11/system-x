@@ -10,9 +10,11 @@ import Icon from '@/components/ui/icon';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { getCategories, getCustomers } from '@/lib/api-calls';
 import {
+  CollectionColorOrder,
   CollectionPingColor,
   CollectionStatus,
   Fabric,
+  OrderStatus,
   PaginatedData
 } from '@/lib/types';
 import { getAllSubcategories } from '@/lib/utils';
@@ -35,11 +37,12 @@ import { Gallery, Item } from 'react-photoswipe-gallery';
 import Image from 'next/image';
 import ImageZoom from '../image-zoom';
 import Link from 'next/link';
+import moment from 'moment';
 
 const getColumns = (
   setColorState: any,
   setEditFabricState: any
-): ColumnDef<any>[] => {
+): ColumnDef<CollectionColorOrder>[] => {
   return [
     {
       accessorKey: 'name',
@@ -109,24 +112,14 @@ const getColumns = (
         );
       }
     }
-  ] as ColumnDef<any>[];
-};
-
-type Data = {
-  items: Fabric[];
-  index: number;
-  size: number;
-  count: number;
-  pages: number;
-  hasPrevious: boolean;
-  hasNext: boolean;
+  ] as ColumnDef<CollectionColorOrder>[];
 };
 
 interface Props {
-  data: PaginatedData<Fabric>;
+  data: PaginatedData<CollectionColorOrder>;
 }
 
-function CollectionTable({ data }: Props) {
+function CollectionOrdersTable({ data }: Props) {
   const t = useTranslations();
   const [fabricColorState, setFabricColorState] = useState({
     id: '',
@@ -169,20 +162,18 @@ function CollectionTable({ data }: Props) {
     return getColumns(setFabricColorState, setEditFabricState);
   }, []);
 
-  const selectedCategory = categories.data?.find(
-    (c: any) => searchParams.get('categoryId') === c.id
-  );
-
-  const selectedCustomer = customers.data?.items.find(
-    (c: any) => searchParams.get('customerId') === c.id
-  );
-  const selectedStatus =
-    CollectionStatus[
-      searchParams.get('status') as unknown as keyof typeof CollectionStatus
-    ];
-
-  const handleSearch = useDebouncedCallback((customerCode) => {
+  const handleCustomerCodeSearch = useDebouncedCallback((customerCode) => {
     const newSearchParams = getNewSearchParams('customerCode', customerCode);
+    router.replace(newSearchParams);
+  }, 300);
+
+  const handlePlmIdSearch = useDebouncedCallback((customerCode) => {
+    const newSearchParams = getNewSearchParams('plmId', customerCode);
+    router.replace(newSearchParams);
+  }, 300);
+
+  const handleGroupPlmIdSearch = useDebouncedCallback((customerCode) => {
+    const newSearchParams = getNewSearchParams('groupPlmId', customerCode);
     router.replace(newSearchParams);
   }, 300);
 
@@ -202,19 +193,19 @@ function CollectionTable({ data }: Props) {
 
   const getNewSearchParams = (key: string, value: string) => {
     let filteredUrl = `${pathname}`;
-    const customerId = searchParams.get('customerId');
-    const categoryId = searchParams.get('categoryId');
+    const plmId = searchParams.get('plmId');
+    const groupPlmId = searchParams.get('groupPlmId');
     const status = searchParams.get('status');
     const customerCode = searchParams.get('customerCode');
 
     // Construct the updated query parameters based on conditions
     const params = new URLSearchParams();
 
-    if (key !== 'customerId' && customerId) {
-      params.set('customerId', customerId);
+    if (key !== 'plmId' && plmId) {
+      params.set('plmId', plmId);
     }
-    if (key !== 'categoryId' && categoryId) {
-      params.set('categoryId', categoryId);
+    if (key !== 'groupPlmId' && groupPlmId) {
+      params.set('groupPlmId', groupPlmId);
     }
     if (key !== 'status' && status) {
       params.set('status', status);
@@ -258,32 +249,27 @@ function CollectionTable({ data }: Props) {
     <>
       <div className="flex flex-wrap gap-4">
         <SearchBar
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => handleCustomerCodeSearch(e.target.value)}
           className="w-64"
-          placeholder={t('enter_a_customer_code')}
+          placeholder={t('customer_code')}
+        />
+        <SearchBar
+          onChange={(e) => handlePlmIdSearch(e.target.value)}
+          className="w-64"
+          placeholder={t('plm_id')}
+        />
+        <SearchBar
+          onChange={(e) => handleGroupPlmIdSearch(e.target.value)}
+          className="w-64"
+          placeholder={t('group_plm_id')}
         />
 
-        <ThemedSelect
-          onClear={() => clearSearchParam('customerId')}
-          value={searchParams.get('customerId') || ''}
-          options={customersOptions}
-          onValueChange={(value) => handleSearchParams('customerId', value)}
-          placeholder={t('select_a_customer')}
-        />
-
-        <ThemedSelect
-          onClear={() => clearSearchParam('categoryId')}
-          options={categoriesOptions}
-          value={searchParams.get('categoryId') || ''}
-          onValueChange={(value) => handleSearchParams('categoryId', value)}
-          placeholder={t('select_a_category')}
-        />
         <ThemedSelect
           onClear={() => clearSearchParam('status')}
           value={searchParams.get('status') || ''}
           onValueChange={(value) => handleSearchParams('status', value)}
           options={[allOption, ...collectionOptions]}
-          placeholder={t('select_a_status')}
+          placeholder={t('status')}
         />
       </div>
       <Table transparent={false} rounded>
@@ -292,15 +278,8 @@ function CollectionTable({ data }: Props) {
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 <TableCell className="px-4 py-4" colSpan={columns.length}>
-                  <div className="mb-4 flex">
-                    <div className="flex-1 pr-2">
-                      {/* <ThemedZoom>
-                        <img
-                          className="mr-2 aspect-square w-32 min-w-32 origin-top-left rounded object-cover object-top"
-                          src={row.original.image}
-                          alt={row.original.name}
-                        />
-                      </ThemedZoom> */}
+                  <div className="flex">
+                    <div className="mr-2 flex-1 pr-2">
                       <ImageZoom>
                         {/* <Image
                           width={128}
@@ -310,9 +289,9 @@ function CollectionTable({ data }: Props) {
                           alt={row.original.name}
                         /> */}
                         <img
-                          className="mr-2 aspect-square w-32 min-w-32 origin-top-left rounded object-cover object-top"
-                          src={row.original.image}
-                          alt={row.original.name}
+                          className="aspect-square w-32 min-w-32 origin-top-left rounded object-cover object-top"
+                          src={row.original.collection.image}
+                          alt={row.original.collection.name}
                         />
                       </ImageZoom>
                     </div>
@@ -320,54 +299,75 @@ function CollectionTable({ data }: Props) {
                       <span className="text-xs text-muted-foreground">
                         {t('name')}
                       </span>
-                      <span className="mb-2">{row.original.name}</span>
+                      <span className="mb-2">
+                        {row.original.collection.name}
+                      </span>
                       <span className="text-xs text-muted-foreground">
                         {t('customer_code')}
                       </span>
-                      <span className="mb-2">{row.original.customerCode}</span>
+                      <span className="mb-2">
+                        {row.original.collection.customerCode}
+                      </span>
                       <span className="text-xs text-muted-foreground">
                         {t('manufacturer_code')}
                       </span>
-                      <span>{row.original.manufacturerCode}</span>
+                      <span className="mb-2">
+                        {row.original.collection.manufacturerCode}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {t('color')}
+                      </span>
+                      <span className="mb-2">
+                        {row.original.collection.color}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {t('customer')}
+                      </span>
+                      <span>{row.original.collection.customer}</span>
                     </div>
-                    <div className="px-4">
-                      <Badge className="mb-2 mr-2 border-theme-blue-foreground/25 bg-theme-blue/20 text-theme-blue-foreground">
-                        {row.original.categoryName}
-                      </Badge>
-                      <Badge className="mb-2 mr-2 border-theme-blue-foreground/25 bg-theme-blue/20 text-theme-blue-foreground">
-                        {row.original.customerDepartment}
-                      </Badge>
-                      <Badge className="mb-2 mr-2 border-theme-blue-foreground/25 bg-theme-blue/20 text-theme-blue-foreground">
-                        {row.original.customerSeasonName}
-                      </Badge>
-                      <Badge className="mb-2 mr-2 border-theme-blue-foreground/25 bg-theme-blue/20 text-theme-blue-foreground">
-                        {row.original.sizeTypeName}
+                    <div className="flex flex-[3] flex-col">
+                      <span className="text-xs text-muted-foreground">
+                        {t('amount')}
+                      </span>
+                      <span className="mb-2">{row.original.amount}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {t('deadline')}
+                      </span>
+                      <span className="mb-2">
+                        {moment(row.original.deadline).format('LL')}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {t('plm_id')}
+                      </span>
+                      <span className="mb-2">{row.original.plmId || '-'}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {t('group_plm_id')}
+                      </span>
+                      <span className="mb-2">
+                        {row.original.groupPlmId || '-'}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {t('status')}
+                      </span>
+                      <Badge variant="outline" className="self-start">
+                        {t(
+                          OrderStatus[
+                            row.original.status as keyof typeof CollectionStatus
+                          ]
+                        )}
                       </Badge>
                     </div>
                     <div className="flex flex-[2] flex-col items-end  gap-2">
                       <Button
                         className="w-56"
-                        onClick={() =>
-                          router.push(
-                            `/collection/manage-collection/${row.original.id}`
-                          )
-                        }
-                        size="sm"
+                        // onClick={() =>
+                        //   router.push(
+                        //     `/collection/manage-collection/${row.original.id}`
+                        //   )
+                        // }
                         variant="outline"
                       >
-                        {t('manage_collection')}
-                      </Button>
-                      <Button
-                        className="w-56"
-                        onClick={() =>
-                          router.push(
-                            `/collection/manage-draft/${row.original.draftColor.id}`
-                          )
-                        }
-                        size="sm"
-                        variant="outline"
-                      >
-                        {t('manage_draft')}
+                        {t('manage_order')}
                       </Button>
                       <div className="flex items-center gap-2">
                         <span className="relative flex h-[10px] w-[10px]">
@@ -388,31 +388,8 @@ function CollectionTable({ data }: Props) {
                             }`}
                           ></span>
                         </span>
-                        <span>
-                          {t(
-                            CollectionStatus[
-                              row.original
-                                .status as keyof typeof CollectionStatus
-                            ]
-                          )}
-                        </span>
                       </div>
                     </div>
-                  </div>
-                  <div className="-mx-4 -mb-4 flex gap-2 bg-muted px-4 py-4">
-                    {row.original.colors.map((color: any) => {
-                      if (color.colorName === 'Taslak') return;
-                      return (
-                        <Link
-                          href={`/collection/manage-color/${color.id}`}
-                          key={color.id}
-                        >
-                          <Badge className="rounded-md border-theme-teal-foreground/30 bg-theme-teal/15 text-theme-teal-foreground">
-                            {color.colorName}
-                          </Badge>
-                        </Link>
-                      );
-                    })}
                   </div>
                 </TableCell>
               </TableRow>
@@ -443,4 +420,4 @@ function CollectionTable({ data }: Props) {
   );
 }
 
-export default CollectionTable;
+export default CollectionOrdersTable;

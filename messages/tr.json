@@ -371,5 +371,20 @@
   "incoming_amount": "Gelecek Miktar",
   "material_stock_table_empty_message": "Bu siparişe henüz materyal ulaşmadı. Siparişin durumu hakkında bilgi almak için {name} ile iletişime geçiniz.",
   "delete_order": "Siparişi Sil",
-  "delete_order_message": "Siparişin herhangi bir bölümü ulaştıysa silinemez"
+  "delete_order_message": "Siparişin herhangi bir bölümü ulaştıysa silinemez",
+  "collection_color_orders": "Koleksiyon Rengi Siparişleri",
+  "manage_order": "Siparişi Yönet",
+  "stock_details": "Stok Detayları",
+  "print": "Yazdır",
+  "material_stock_dialog_message": "{plmId}({groupPlmId}) nolu siparişte bu kumaştan {amount} {unit} kullanılmıştır",
+  "append": "Ekle",
+  "add_stock": "Stok Ekle",
+  "fabric_details": "Kumaş Detayları",
+  "order_placed_by": "Siparişi Veren",
+  "order": "Sipariş",
+  "order_date": "Sipariş Tarihi",
+  "update_order": "Siparişi Güncelle",
+  "material_orders": "Malzeme Siparişleri",
+  "fabric_orders": "Kumaş Siparişleri",
+  "total_order": "Toplam Sipariş"
 }

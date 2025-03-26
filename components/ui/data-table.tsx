@@ -115,14 +115,9 @@ export function DataTable<TData, TValue>({
                     )}
                     key={header.id}
                   >
-                    {header.isPlaceholder
+                    {header.isPlaceholder || !header.column.columnDef.header
                       ? null
-                      : t(
-                          flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )
-                        )}
+                      : t(header.column.columnDef.header)}
                   </TableHead>
                 );
               })}

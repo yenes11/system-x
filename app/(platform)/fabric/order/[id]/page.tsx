@@ -25,8 +25,6 @@ async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
   const t = await getTranslations();
   const details = await getFabricOrderDetails(params.id);
 
-  console.log(details);
-
   const fabric = details?.fabric;
   const supplier = details?.supplier;
 
@@ -38,7 +36,7 @@ async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
       />
       <div className="mt-4 @container">
         <Card className="mb-4 flex flex-col overflow-hidden @sm:!flex-row">
-          <CardHeader className="flex flex-row items-start bg-muted/50 p-0">
+          <CardHeader className="flex flex-1 flex-row items-start bg-muted/50 p-0">
             <Tabs defaultValue="order-image">
               <TabsList className="h-auto gap-0 rounded-none border-b bg-transparent px-0 py-0 text-foreground">
                 <TabsTrigger
@@ -61,7 +59,7 @@ async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
                 <ImageZoom>
                   <img
                     src={fabric.image}
-                    className="h-52 w-52 rounded object-cover object-top"
+                    className="aspect-square rounded object-cover object-top"
                   />
                 </ImageZoom>
               </TabsContent>
@@ -72,7 +70,7 @@ async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
                 <ImageZoom>
                   <img
                     src={details.supplier.image}
-                    className="h-52 w-52 rounded object-cover object-top"
+                    className="rounded object-cover object-top"
                   />
                 </ImageZoom>
               </TabsContent>
@@ -146,7 +144,7 @@ async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
                   <dt className="text-muted-foreground">
                     {t('order_creator')}
                   </dt>
-                  <dd className="sm:col-span-2">{details.user.fullName}</dd>
+                  <dd className="sm:col-span-2">{details.user?.fullName}</dd>
                 </div>
 
                 <div className="grid grid-cols-1 gap-1 px-6 py-3 sm:grid-cols-3 sm:gap-4">

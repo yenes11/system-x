@@ -6,7 +6,10 @@ import {
   getMaterialSuppliersUrl,
   getCollectionsUrl,
   URL_MATERIAL_VARIANT,
-  getSuppliersUrl
+  getSuppliersUrl,
+  getCollectionOrdersUrl,
+  getFabricOrdersUrl,
+  getMaterialOrdersUrl
 } from '@/constants/api-constants';
 import {
   ApiError,
@@ -147,6 +150,22 @@ export const getCollections = async (
   }
 };
 
+export const getCollectionOrders = async (
+  params: Params & {
+    plmId?: string;
+    groupPlmId?: string;
+    customerId?: string;
+    status?: ICollectionStatus;
+  }
+) => {
+  try {
+    const res = await api.get(getCollectionOrdersUrl(params));
+    return res.data;
+  } catch (e: any) {
+    console.log(e?.response?.data, 'error');
+  }
+};
+
 export const getFabricsWithColors = async (
   params: Params & {
     name?: string;
@@ -220,6 +239,36 @@ export const getSuppliers = async (
   } catch (e: any) {
     console.log(e?.response?.data, 'error');
     throw e;
+  }
+};
+
+export const getFabricOrders = async (
+  params: Params & { status: string }
+): Promise<PaginatedData<FabricOrder>> => {
+  try {
+    const res = await api.get(getFabricOrdersUrl(params));
+    return res.data;
+  } catch (e: any) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.title || 'An error occurred');
+    } else {
+      throw new Error('An unknown error occurred');
+    }
+  }
+};
+
+export const getMaterialOrders = async (
+  params: Params & { status: string }
+): Promise<PaginatedData<MaterialOrder>> => {
+  try {
+    const res = await api.get(getMaterialOrdersUrl(params));
+    return res.data;
+  } catch (e: any) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.title || 'An error occurred');
+    } else {
+      throw new Error('An unknown error occurred');
+    }
   }
 };
 

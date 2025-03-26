@@ -145,7 +145,7 @@ async function MaterialOrderDetailsPage({
                   <dt className="text-muted-foreground">
                     {t('order_creator')}
                   </dt>
-                  <dd className="sm:col-span-2">{details.user.fullName}</dd>
+                  <dd className="sm:col-span-2">{details.user?.fullName}</dd>
                 </div>
 
                 <div className="grid grid-cols-1 gap-1 px-6 py-3 sm:grid-cols-3 sm:gap-4">

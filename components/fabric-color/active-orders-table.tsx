@@ -39,6 +39,8 @@ function ActiveOrdersTable({ color }: { color: any }) {
     id: ''
   });
 
+  console.log(color, 'ccc');
+
   const type = path.startsWith('/fabric') ? '/fabric' : '/material';
   const propertyName = path.startsWith('/fabric')
     ? 'fabricColorOrderId'
@@ -89,6 +91,7 @@ function ActiveOrdersTable({ color }: { color: any }) {
       header: '',
       id: 'actions',
       cell: ({ row }: { row: any }) => {
+        console.log(row.original, 'original');
         return (
           <div className="flex items-center justify-end gap-2">
             <Button
@@ -117,10 +120,7 @@ function ActiveOrdersTable({ color }: { color: any }) {
             >
               <Trash2 className="text-destructive" size={16} />
             </Button>
-            <Link
-              href={`${type}/order/${row.original[propertyName]}`}
-              className=""
-            >
+            <Link href={`${type}/order/${row.original.id}`} className="">
               <Button
                 className="flex items-center justify-center rounded-full"
                 variant="ghost"

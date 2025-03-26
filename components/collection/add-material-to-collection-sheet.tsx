@@ -34,7 +34,7 @@ const formSchema = z.object({
   material: z.string().uuid(),
   materialColor: z.string().uuid(),
   materialColorVariantId: z.string().uuid(),
-  amount: z.number().min(1)
+  amount: z.number().min(0)
 });
 
 function AddMaterialToCollectionSheet() {

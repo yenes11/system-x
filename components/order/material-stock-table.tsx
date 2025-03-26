@@ -22,13 +22,15 @@ import { Fragment, useState } from 'react';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import Link from 'next/link';
 import { Currency } from '@/types';
+import MaterialStockDetailDialog from './material-stock-detail-dialog';
+import AddMaterialStockSheet from './add-material-stock-sheet';
 
 interface CollectionColor extends BasicEntity {
   identityDefined: boolean;
 }
 
 interface Props {
-  data: OrderStock[];
+  data: OrderStock[] | undefined;
   orderUnit: string;
   supplierName: string;
 }
@@ -39,6 +41,11 @@ function MaterialStockTable({ data, orderUnit, supplierName }: Props) {
   const [deleteState, setDeleteState] = useState({
     id: '',
     open: false
+  });
+  const [detailsState, setDetailsState] = useState({
+    open: false,
+    id: '',
+    disabled: false
   });
 
   const colors = useQuery({
@@ -90,9 +97,12 @@ function MaterialStockTable({ data, orderUnit, supplierName }: Props) {
         return (
           <Button
             onClick={() =>
-              setDeleteState({
+              setDetailsState({
+                open: true,
                 id: row.original.id,
-                open: true
+                disabled:
+                  row.original.returnStatus ||
+                  row.original.remainingAmount === 0
               })
             }
             variant="ghost"
@@ -108,10 +118,16 @@ function MaterialStockTable({ data, orderUnit, supplierName }: Props) {
 
   return (
     <Fragment>
+      <MaterialStockDetailDialog
+        orderUnit={orderUnit}
+        state={detailsState}
+        setState={setDetailsState}
+      />
       <Card className="overflow-hidden">
         <CardHeader className="h-12 flex-row items-center gap-2 border-b">
           <Package className="size-6" />
           <CardTitle>{t('stocks')}</CardTitle>
+          <AddMaterialStockSheet />
         </CardHeader>
         <CardContent className="p-0">
           <DataTable
@@ -120,7 +136,7 @@ function MaterialStockTable({ data, orderUnit, supplierName }: Props) {
             })}
             bordered={false}
             searchKey=""
-            data={colors.data || []}
+            data={data || []}
             columns={columns}
           />
         </CardContent>

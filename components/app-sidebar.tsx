@@ -47,6 +47,10 @@ const navItems = [
       {
         title: 'fabric_library',
         url: '/fabric/library'
+      },
+      {
+        title: 'orders',
+        url: '/fabric/order?status=1'
       }
     ]
   },
@@ -59,6 +63,10 @@ const navItems = [
       {
         title: 'material_library',
         url: '/material/library'
+      },
+      {
+        title: 'orders',
+        url: '/material/order?status=1'
       }
     ]
   },
@@ -71,6 +79,10 @@ const navItems = [
       {
         title: 'collection_library',
         url: '/collection/library'
+      },
+      {
+        title: 'orders',
+        url: '/collection/orders'
       }
     ]
   },

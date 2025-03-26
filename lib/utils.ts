@@ -80,3 +80,15 @@ export function getAllSubcategories(categories: Category[]): SubcategoryInfo[] {
 
   return result;
 }
+
+export function generateBarcode(length = 8): string {
+  const timestamp = Date.now().toString(36).toUpperCase(); // Convert timestamp to base36 (A-Z, 0-9)
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let randomPart = '';
+
+  for (let i = 0; i < length; i++) {
+    randomPart += chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  return timestamp + randomPart;
+}

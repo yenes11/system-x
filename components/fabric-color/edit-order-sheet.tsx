@@ -37,8 +37,9 @@ import { toast } from 'sonner';
 
 const formSchema = z.object({
   // supplierId: z.string().uuid(),
-  // orderAmount: z.number().min(1),
-  arrivalDate: z.string().datetime().optional(),
+  orderAmount: z.number().min(1),
+  arrivalDate: z.string().optional(),
+  estimatedArrivalDate: z.string().optional(),
   unitPrice: z.number().min(1),
   currency: z.string().min(1),
   status: z.string().min(1)
@@ -60,7 +61,6 @@ function EditOrderSheet({ state, setState }: Props) {
   const path = usePathname();
   const params = useParams();
   const router = useRouter();
-  const [open, setOpen] = React.useState(false);
 
   const isFabric = path.startsWith('/fabric');
   const createURL = isFabric
@@ -78,7 +78,8 @@ function EditOrderSheet({ state, setState }: Props) {
         status: state.data.status.toString(),
         currency: state.data.currency.toString(),
         unitPrice: state.data.unitPrice,
-        arrivalDate: state.data.estimatedArrivalDate
+        estimatedArrivalDate: state.data.estimatedArrivalDate,
+        orderAmount: state.data.orderAmount
       });
     }
   }, [state]);
@@ -95,14 +96,19 @@ function EditOrderSheet({ state, setState }: Props) {
     },
     onSuccess: (res) => {
       router.refresh();
-      setOpen(false);
+      setState({
+        open: false,
+        data: null
+      });
       form.reset();
 
-      toast.success(t('item_added'), {
+      toast.success(t('item_updated'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });
+
+  console.log(form.getValues(), 'vals');
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     updateOrder.mutate(values);
@@ -118,15 +124,10 @@ function EditOrderSheet({ state, setState }: Props) {
         }))
       }
       title={t('place_order')}
-      trigger={
-        <Button variant="outline" size="sm" className="ml-auto">
-          <Plus className="mr-2 size-4" /> {t('place_order')}
-        </Button>
-      }
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          {/* <FormField
+          <FormField
             control={form.control}
             name="orderAmount"
             render={({ field }) => (
@@ -143,7 +144,7 @@ function EditOrderSheet({ state, setState }: Props) {
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
 
           <FormField
             control={form.control}
@@ -210,37 +211,52 @@ function EditOrderSheet({ state, setState }: Props) {
             )}
           />
 
-          {/* <FormField
+          <FormField
             control={form.control}
-            name="supplierId"
+            name="estimatedArrivalDate"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('suppliers')}</FormLabel>
-                <Select onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('select_item')} />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {suppliers.data?.map((supplier) => (
-                      <SelectItem key={supplier.id} value={supplier.id}>
-                        {supplier.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <FormItem className="flex flex-col">
+                <FormLabel>{t('estimated_arrival_date')}</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={'outline'}
+                        className={cn(
+                          'bg-background pl-3 text-left font-normal active:hover:scale-100',
+                          !field.value && 'text-muted-foreground'
+                        )}
+                      >
+                        {field.value ? (
+                          moment(field.value).format('DD/MM/YYYY')
+                        ) : (
+                          <span>{t('pick_date')}</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value ? new Date(field.value) : undefined}
+                      onSelect={(val) => {
+                        console.log(val);
+                        field.onChange(val?.toISOString());
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
-
+          />
           <FormField
             control={form.control}
             name="arrivalDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>{t('estimated_arrival_date')}</FormLabel>
+                <FormLabel>{t('arrival_date')}</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
