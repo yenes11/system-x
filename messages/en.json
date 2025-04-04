@@ -386,5 +386,9 @@
   "update_order": "Update Order",
   "material_orders": "Material Orders",
   "fabric_orders": "Fabric Orders",
-  "total_order": "Total Order"
+  "total_order": "Total Order",
+  "add_order": "Add Order",
+  "table": "Table",
+  "graph": "Graph",
+  "delete_price": "Delete Price"
 }

@@ -101,16 +101,14 @@ async function ManageCollectionColorPage({
       )}
       <div className="@container">
         <Card className="mb-4 flex flex-col divide-y overflow-hidden @sm:!flex-row @sm:divide-x @sm:divide-y-0">
-          <CardHeader className="flex flex-row items-start bg-muted/50">
-            <div className="flex h-full flex-col">
-              <div className="flex h-full w-full justify-center p-0">
-                <ImageZoom>
-                  <img
-                    src={collectionDetails.image}
-                    className="h-52 w-52 rounded object-cover object-top"
-                  />
-                </ImageZoom>
-              </div>
+          <CardHeader className="flex-1 bg-muted/50">
+            <div className="">
+              <ImageZoom>
+                <img
+                  src={collectionDetails.image}
+                  className="aspect-square rounded object-cover object-top"
+                />
+              </ImageZoom>
             </div>
           </CardHeader>
           <CardContent className="flex-1 p-0 text-sm">

@@ -123,9 +123,6 @@ function EditMaterialSheet({ state, setState }: EditMaterialSheetProps) {
         }))
       });
     }
-
-    if (state.data) {
-    }
   }, [state.data, form, materialTypes.data]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {

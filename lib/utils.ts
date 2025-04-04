@@ -4,6 +4,7 @@ import { Active, DataRef, Over } from '@dnd-kit/core';
 import { ColumnDragData } from '@/components/kanban/board-column';
 import { TaskDragData } from '@/components/kanban/task-card';
 import { Category, SubcategoryInfo } from './types';
+import JsBarcode from 'jsbarcode';
 
 type DraggableData = ColumnDragData | TaskDragData;
 
@@ -91,4 +92,46 @@ export function generateBarcode(length = 8): string {
   }
 
   return timestamp + randomPart;
+}
+
+export function printBarcode(
+  data: {
+    info: string;
+    amount: number;
+    incomingDate: string;
+    supplier: string;
+    supplierCode: string;
+  },
+  barcode: string
+) {
+  if (typeof window === 'undefined') return;
+
+  const canvas = document.createElement('canvas');
+  JsBarcode(canvas, barcode, { format: 'CODE128', displayValue: false });
+
+  // Convert canvas to image
+  const img = new Image();
+  img.src = canvas.toDataURL('image/png');
+
+  img.onload = () => {
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head><title>Print Barcode</title></head>
+          <body style="text-align:center">
+            <img src="${img.src}" />
+            <p>${data}</p>
+            <script>
+              window.onload = function () {
+                window.print();
+                window.onafterprint = function () { window.close(); };
+              };
+            </script>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+  };
 }

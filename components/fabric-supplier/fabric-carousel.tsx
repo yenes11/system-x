@@ -156,7 +156,7 @@ function FabricCarousel({ data }: Props) {
                             id: fabric.id
                           })
                         }
-                        variant="secondary"
+                        variant="destructive"
                         size="sm"
                       >
                         {/* {t('delete')} */}

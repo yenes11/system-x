@@ -485,7 +485,7 @@ export interface CollectionColorOrder {
   groupPlmId?: string;
   status: keyof typeof OrderStatus;
   deadline: string;
-  collection: {
+  collection?: {
     name: string;
     color: string;
     customerCode: string;
@@ -498,6 +498,11 @@ export interface CollectionColorOrder {
 export interface IDState {
   id: string;
   open: boolean;
+}
+
+export interface DataState<T> {
+  open: boolean;
+  data: T | null;
 }
 
 export interface OrderStock {

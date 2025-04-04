@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useRef } from 'react';
 import ThemedDialog from '../themed-dialog';
 import { useTranslations } from 'next-intl';
 import { CollectionOrder, IDState, OrderStock } from '@/lib/types';
@@ -11,6 +11,16 @@ import { Button } from '../ui/button';
 import { DataTable } from '../ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import ThemedTooltip from '../ThemedTooltip';
+import JsBarcode from 'jsbarcode';
+
+const barcodeOptions: JsBarcode.Options = {
+  format: 'CODE128', // Büyük harf ve sayı için uygun varsayılan format
+  lineColor: '#000',
+  width: 2,
+  height: 100,
+  displayValue: true, // Değeri barkod altında göster
+  margin: 10 // Kenar boşluğu
+};
 
 interface Props {
   state: IDState & { disabled: boolean };
@@ -20,6 +30,7 @@ interface Props {
 
 function MaterialStockDetailDialog({ state, setState, orderUnit }: Props) {
   const t = useTranslations();
+  const svgRef = useRef<SVGSVGElement>(null);
 
   const [checkedList, setCheckedList] = React.useState({
     barcode: false,
@@ -27,6 +38,24 @@ function MaterialStockDetailDialog({ state, setState, orderUnit }: Props) {
     remainingAmount: false,
     status: false
   });
+
+  const print = (barcode: string) => {
+    // Ref'in bağlı olduğu SVG elementi mevcutsa ve barkod değeri varsa devam et
+    if (svgRef.current && barcode) {
+      // Sağlanan seçeneklerle varsayılan seçenekleri birleştir
+
+      try {
+        // JsBarcode'u çağırarak SVG elementine barkodu çizdir
+        JsBarcode(svgRef.current, barcode, barcodeOptions);
+        console.log('Barkod başarıyla oluşturuldu/güncellendi.');
+      } catch (e) {
+        // Hata durumunda konsola yazdır ve belki bir hata durumu yönetimi yap
+        console.error('JsBarcode hatası:', e);
+        // İsteğe bağlı: Kullanıcıya hata mesajı gösterebilirsiniz
+        // Örneğin: svgRef.current.innerHTML = '<text fill="red">Hata!</text>';
+      }
+    }
+  };
 
   const onCheckedChange = (key: keyof typeof checkedList) => {
     setCheckedList((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -94,11 +123,16 @@ function MaterialStockDetailDialog({ state, setState, orderUnit }: Props) {
 
   return (
     <ThemedDialog
+      contentClassName="sm:max-w-2xl"
       title={t('stock_details')}
       open={state.open}
       footer={
         <div>
-          <Button disabled={state.disabled || !printEnabled} size="sm">
+          <Button
+            disabled={state.disabled || !printEnabled}
+            onClick={() => print('TESTCODE1234')}
+            size="sm"
+          >
             {t('print')}
           </Button>
         </div>
@@ -139,6 +173,15 @@ function MaterialStockDetailDialog({ state, setState, orderUnit }: Props) {
           />
         </div>
       )}
+      {/* <Button
+        disabled={state.disabled || !printEnabled}
+        onClick={() => print('TESTCODE1234')}
+        size="sm"
+      >
+        {t('print')}
+      </Button>
+      <svg ref={svgRef}></svg> */}
+
       <DataTable
         bordered
         data={stockDetails.data?.collectionOrders || []}

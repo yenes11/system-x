@@ -65,36 +65,6 @@ async function SupplierDetailsPage({ params }: { params: { id: string } }) {
           </div>
         </CardHeader>
         <CardContent className="flex-1 p-0 text-sm">
-          {/* <div className="grid gap-3">
-            <ul className="grid gap-3">
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('name')}</span>
-                <span>{supplier.name}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('address')}</span>
-                <span>{supplier.address}</span>
-              </li>
-            </ul>
-            <ul className="grid gap-3">
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">{t('phone')}</span>
-                <span>{supplier.phone}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  {t('authorized_person')}
-                </span>
-                <span>{supplier.authorizedPersonFullName}</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  {t('billing_address')}
-                </span>
-                <span>{supplier.billingAddress}</span>
-              </li>
-            </ul>
-          </div> */}
           <DescriptionList listItems={listItems} />
         </CardContent>
       </Card>

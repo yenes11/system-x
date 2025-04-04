@@ -117,7 +117,12 @@ export function DataTable<TData, TValue>({
                   >
                     {header.isPlaceholder || !header.column.columnDef.header
                       ? null
-                      : t(header.column.columnDef.header)}
+                      : typeof header.column.columnDef.header === 'string'
+                      ? t(header.column.columnDef.header)
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 );
               })}

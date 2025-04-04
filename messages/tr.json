@@ -386,5 +386,9 @@
   "update_order": "Siparişi Güncelle",
   "material_orders": "Malzeme Siparişleri",
   "fabric_orders": "Kumaş Siparişleri",
-  "total_order": "Toplam Sipariş"
+  "total_order": "Toplam Sipariş",
+  "add_order": "Sipariş Ekle",
+  "table": "Tablo",
+  "graph": "Grafik",
+  "delete_price": "Fiyatı Sil"
 }

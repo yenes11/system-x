@@ -37,17 +37,17 @@ async function MaterialOrderDetailsPage({
       />
       <div className="mt-4 @container">
         <Card className="mb-4 flex flex-col overflow-hidden @sm:!flex-row">
-          <CardHeader className="flex flex-row items-start bg-muted/50 p-0">
+          <CardHeader className="flex flex-1 flex-row items-start bg-muted/50 p-0">
             <Tabs defaultValue="order-image">
-              <TabsList className="h-auto gap-0 rounded-none border-b bg-transparent px-0 py-0 text-foreground">
+              <TabsList className="flex h-auto gap-0 rounded-none border-b bg-transparent px-0 py-0 text-foreground">
                 <TabsTrigger
-                  className="relative rounded-none px-4 py-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                  className="relative flex-1 rounded-none px-4 py-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                   value="order-image"
                 >
                   {t('order_image')}
                 </TabsTrigger>
                 <TabsTrigger
-                  className="relative rounded-none px-4 py-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                  className="relative flex-1 rounded-none px-4 py-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                   value="supplier-image"
                 >
                   {t('supplier_image')}
@@ -60,7 +60,7 @@ async function MaterialOrderDetailsPage({
                 <ImageZoom>
                   <img
                     src={details.material.image}
-                    className="h-52 w-52 rounded object-cover object-top"
+                    className="aspect-square rounded object-cover object-top"
                   />
                 </ImageZoom>
               </TabsContent>
@@ -71,7 +71,7 @@ async function MaterialOrderDetailsPage({
                 <ImageZoom>
                   <img
                     src={details.supplier.image}
-                    className="h-52 w-52 rounded object-cover object-top"
+                    className="aspect-square rounded object-cover object-top"
                   />
                 </ImageZoom>
               </TabsContent>

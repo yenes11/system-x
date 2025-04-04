@@ -24,6 +24,7 @@ import Link from 'next/link';
 import { Currency } from '@/types';
 import MaterialStockDetailDialog from './material-stock-detail-dialog';
 import AddMaterialStockSheet from './add-material-stock-sheet';
+import { Checkbox } from '../ui/checkbox';
 
 interface CollectionColor extends BasicEntity {
   identityDefined: boolean;
@@ -59,6 +60,26 @@ function MaterialStockTable({ data, orderUnit, supplierName }: Props) {
   console.log(data, 'sss');
 
   const columns: ColumnDef<OrderStock>[] = [
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && 'indeterminate')
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      )
+    },
     {
       accessorKey: 'barcode',
       header: 'barcode'

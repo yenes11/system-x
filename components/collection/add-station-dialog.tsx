@@ -76,6 +76,7 @@ function AddStationDialog({ data }: { data: ProductStation[] }) {
       open={open}
       setOpen={setOpen}
       triggerLabel={t('edit')}
+      contentClassName="sm:max-w-2xl"
       title={t('add_product_station')}
       footer={
         <div>

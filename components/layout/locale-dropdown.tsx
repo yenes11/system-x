@@ -1,6 +1,8 @@
 'use client';
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
+import 'moment/src/locale/tr';
+import 'moment/src/locale/en-gb';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +14,7 @@ import {
 import { Languages } from 'lucide-react';
 import cookies from 'js-cookie';
 import Icon from '../ui/icon';
+import moment from 'moment';
 type CompProps = {};
 export default function LocaleDropdown({}: CompProps) {
   return (
@@ -30,6 +33,7 @@ export default function LocaleDropdown({}: CompProps) {
         <DropdownMenuItem
           onClick={() => {
             cookies.set('lang', 'tr-TR');
+            moment.locale(['tr']);
             window.location.reload();
           }}
         >
@@ -38,6 +42,7 @@ export default function LocaleDropdown({}: CompProps) {
         <DropdownMenuItem
           onClick={() => {
             cookies.set('lang', 'en-US');
+            moment.locale(['en-gb']);
             window.location.reload();
           }}
         >

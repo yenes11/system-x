@@ -290,8 +290,8 @@ function CollectionOrdersTable({ data }: Props) {
                         /> */}
                         <img
                           className="aspect-square w-32 min-w-32 origin-top-left rounded object-cover object-top"
-                          src={row.original.collection.image}
-                          alt={row.original.collection.name}
+                          src={row.original.collection?.image}
+                          alt={row.original.collection?.name}
                         />
                       </ImageZoom>
                     </div>
@@ -300,30 +300,30 @@ function CollectionOrdersTable({ data }: Props) {
                         {t('name')}
                       </span>
                       <span className="mb-2">
-                        {row.original.collection.name}
+                        {row.original.collection?.name}
                       </span>
                       <span className="text-xs text-muted-foreground">
                         {t('customer_code')}
                       </span>
                       <span className="mb-2">
-                        {row.original.collection.customerCode}
+                        {row.original.collection?.customerCode}
                       </span>
                       <span className="text-xs text-muted-foreground">
                         {t('manufacturer_code')}
                       </span>
                       <span className="mb-2">
-                        {row.original.collection.manufacturerCode}
+                        {row.original.collection?.manufacturerCode}
                       </span>
                       <span className="text-xs text-muted-foreground">
                         {t('color')}
                       </span>
                       <span className="mb-2">
-                        {row.original.collection.color}
+                        {row.original.collection?.color}
                       </span>
                       <span className="text-xs text-muted-foreground">
                         {t('customer')}
                       </span>
-                      <span>{row.original.collection.customer}</span>
+                      <span>{row.original.collection?.customer}</span>
                     </div>
                     <div className="flex flex-[3] flex-col">
                       <span className="text-xs text-muted-foreground">

@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -45,22 +46,27 @@ function ThemedDialog({
       )}
       <DialogContent
         className={cn(
-          'max-h-[90%] max-w-3xl gap-0 overflow-hidden p-0 sm:w-full',
+          'flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-lg [&>button:last-child]:top-3.5',
           contentClassName
         )}
       >
-        {/* Fixed Header */}
-        <DialogHeader className="sticky top-0 z-10 flex max-h-12 flex-row items-start border-b bg-muted/50 px-4 py-4">
+        <DialogHeader className="contents space-y-0 text-left">
           {headerIcon}
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className="border-b px-6 py-4 text-base">
+            {title}
+          </DialogTitle>
+          <div className="overflow-y-auto">
+            <DialogDescription asChild>
+              <div className="px-6 py-4">
+                <div className="space-y-4 [&_strong]:font-semibold [&_strong]:text-foreground">
+                  <div className="space-y-4">{children}</div>
+                </div>
+              </div>
+            </DialogDescription>
+          </div>
         </DialogHeader>
-
-        {/* Scrollable Content */}
-        <div className="h-full overflow-auto p-4">{children}</div>
-
-        {/* Footer (optional) */}
         {footer && (
-          <DialogFooter className="flex flex-row items-center border-t bg-muted/50 px-4 py-2">
+          <DialogFooter className="border-t px-6 py-4 sm:items-center">
             {footer}
           </DialogFooter>
         )}
