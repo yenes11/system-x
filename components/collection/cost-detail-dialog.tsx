@@ -75,7 +75,7 @@ function CostDetailDialog({ open, data, setOpen }: Props) {
               {data.name} - {t(CostType[data.type as keyof typeof CostType])}
             </span>
           </DialogTitle>
-          <div className="overflow-y-auto">
+          <div className="overflow-y-auto py-2">
             <DialogDescription asChild>
               <ul className="grid gap-1 divide-y px-6 pb-4 text-sm">
                 {data.details.map((item, index) => (

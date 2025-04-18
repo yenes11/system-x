@@ -47,8 +47,8 @@ function CollectionsCarousel({ data }: { data: ICollection[] }) {
         (selectedStatus === '0' ||
           collection.status.toString() === selectedStatus) &&
         collection.manufacturerCode
-          .toLowerCase()
-          .includes(searchKey.toLowerCase())
+          ?.toLowerCase()
+          ?.includes(searchKey.toLowerCase())
     );
   }, [data, searchKey, selectedStatus]);
 
@@ -57,7 +57,7 @@ function CollectionsCarousel({ data }: { data: ICollection[] }) {
       <div className="mb-2 flex justify-between">
         <SearchBar
           className="w-96 rounded-full bg-card"
-          placeholder="Search collection..."
+          placeholder={t('search_collection')}
           value={searchKey}
           onChange={(e) => setSearchKey(e.target.value)}
         />

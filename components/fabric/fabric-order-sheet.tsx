@@ -248,24 +248,30 @@ function FabricOrdersTable({ data }: { data: PaginatedData<FabricOrder> }) {
         setState={setDeletState}
       />
       <EditOrderSheet state={editState} setState={setEditState} />
-      <RadioGroup className="flex flex-wrap gap-2" defaultValue="1">
-        {items.map((item) => (
-          <div
-            key={`${id}-${item.value}`}
-            className="has-data-[state=checked]:border-ring shadow-xs relative flex flex-col items-start gap-4 rounded-md border border-input px-4 py-2 outline-none"
-          >
-            <div className="flex items-center gap-2">
-              <RadioGroupItem
-                onClick={onStatusChange}
-                id={`${id}-${item.value}`}
-                value={item.value}
-                className="after:absolute after:inset-0"
-              />
-              <Label htmlFor={`${id}-${item.value}`}>{item.label}</Label>
+      <div className="flex items-end justify-between">
+        <RadioGroup className="flex flex-wrap gap-2" defaultValue="1">
+          {items.map((item) => (
+            <div
+              key={`${id}-${item.value}`}
+              className="has-data-[state=checked]:border-ring shadow-xs relative flex flex-col items-start gap-4 rounded-md border border-input px-4 py-2 outline-none"
+            >
+              <div className="flex items-center gap-2">
+                <RadioGroupItem
+                  onClick={onStatusChange}
+                  id={`${id}-${item.value}`}
+                  value={item.value}
+                  className="after:absolute after:inset-0"
+                />
+                <Label htmlFor={`${id}-${item.value}`}>{item.label}</Label>
+              </div>
             </div>
-          </div>
-        ))}
-      </RadioGroup>
+          ))}
+        </RadioGroup>
+
+        <Badge className="py-1" variant="outline">
+          {t('total_order')}:&nbsp;{data.count}
+        </Badge>
+      </div>
 
       <DataTable
         bordered

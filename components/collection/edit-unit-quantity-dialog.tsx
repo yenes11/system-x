@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import moment from 'moment';
 
-function EditUnitMeterDialog({
+function EditUnitQuantityDialog({
   state,
   setState
 }: {
@@ -20,14 +20,23 @@ function EditUnitMeterDialog({
 }) {
   const t = useTranslations();
   const router = useRouter();
-  const [values, setValues] = React.useState<Record<string, number>>(
-    state.data?.reduce((acc: any, item: any) => {
-      acc[item.id] = item.unit;
-      return acc;
-    }, {})
-  );
+  const [values, setValues] = React.useState<Record<string, number>>({});
 
-  console.log(values, 'values');
+  React.useEffect(() => {
+    if (!state.data) return;
+
+    const mapped = state.data.reduce(
+      (acc: Record<string, number>, item: any) => {
+        acc[item.id] = item.unit;
+        return acc;
+      },
+      {}
+    );
+
+    setValues(mapped);
+  }, [state]);
+
+  console.log(state, 'values');
 
   const editUnit = useMutation({
     mutationFn: async (values: { id: string; unitMeter: number }) => {
@@ -64,7 +73,7 @@ function EditUnitMeterDialog({
   return (
     <ThemedDialog
       contentClassName="max-w-md"
-      title="Help"
+      title={t('edit_quantity_list')}
       open={state.open}
       setOpen={setState}
     >
@@ -91,4 +100,4 @@ function EditUnitMeterDialog({
   );
 }
 
-export default EditUnitMeterDialog;
+export default EditUnitQuantityDialog;

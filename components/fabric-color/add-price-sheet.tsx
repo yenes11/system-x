@@ -55,9 +55,6 @@ function AddPriceSheet() {
 
   const isMaterial = path.startsWith('/material');
 
-  const nameProperty = isMaterial
-    ? 'materialSupplierName'
-    : 'fabricSupplierName';
   const idProperty = isMaterial
     ? 'supplierMaterialColorVariantId'
     : 'supplierFabricColorId';
@@ -85,10 +82,9 @@ function AddPriceSheet() {
     queryFn: async () => {
       const res = await api.get(`${supplierColorsEndpoint}${id}`);
       return res.data;
-    }
+    },
+    staleTime: 0
   });
-
-  console.log(supplierColors.data, 'suppliersssss');
 
   const addPrice = useMutation({
     mutationKey: ['add-fabric-price'],
@@ -173,7 +169,7 @@ function AddPriceSheet() {
               name={idProperty}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('fabric_supplier')}</FormLabel>
+                  <FormLabel>{t('supplier')}</FormLabel>
                   <Select onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger>

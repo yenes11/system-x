@@ -369,7 +369,7 @@ function CollectionOrdersTable({ data }: Props) {
                       >
                         {t('manage_order')}
                       </Button>
-                      <div className="flex items-center gap-2">
+                      {/* <div className="flex items-center gap-2">
                         <span className="relative flex h-[10px] w-[10px]">
                           <span
                             className={`absolute inline-flex h-full w-full animate-ping rounded-full ${
@@ -388,7 +388,7 @@ function CollectionOrdersTable({ data }: Props) {
                             }`}
                           ></span>
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </TableCell>

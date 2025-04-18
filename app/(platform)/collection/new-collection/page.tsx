@@ -1,10 +1,9 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { useState } from 'react';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import api from '@/api';
+import { TreeSelect } from '@/components/tree-select';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -13,29 +12,26 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
-import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
-import api from '@/api';
+import { Heading } from '@/components/ui/heading';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { BasicEntity } from '@/lib/types';
-import { useRouter } from 'next/navigation';
-import { AxiosError } from 'axios';
-import moment from 'moment';
-import { toast } from 'sonner';
-import { NestedSelect } from '@/components/nested-select';
-import { Heading } from '@/components/ui/heading';
+import { BasicEntity, CollectionStatus } from '@/lib/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Layers } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { TreeSelect } from '@/components/tree-select';
+import moment from 'moment';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -43,7 +39,7 @@ const ACCEPTED_IMAGE_TYPES = [
   'image/png',
   'image/webp'
 ];
-const MAX_FILE_SIZE = 5; // MB
+const MAX_FILE_SIZE = 2; // MB
 
 const formSchema = z.object({
   customerId: z.string().uuid(),

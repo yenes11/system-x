@@ -219,6 +219,7 @@ interface MaterialSupplier {
 }
 
 export interface Supplier extends BasicEntity {
+  billingAddress: string;
   address: string;
   phone: string;
   authorizedPersonFullName: string;
@@ -326,6 +327,12 @@ export interface CollectionDraft {
   fabrics: any[];
 }
 
+export const CostEnums = {
+  1: 'product_station',
+  2: 'fabric',
+  3: 'material'
+} as const;
+
 export interface CollectionProductStation {
   productStationId: string;
   priority: number;
@@ -374,16 +381,16 @@ export interface CostItem extends BasicEntity {
 export interface CostDetailItem {
   name: string;
   unit: number;
-  price: number;
+  price: number | undefined;
   type: number;
   currency: number;
 }
 
 export const CostType = {
-  1: 'draft_cost',
-  2: 'offered_cost',
-  3: 'approved_cost',
-  4: 'real_cost'
+  1: 'draft_unit_quantity',
+  2: 'offered_unit_quantity',
+  3: 'approved_unit_quantity',
+  4: 'real_unit_quantity'
 } as const;
 
 export const OrderStatus = {

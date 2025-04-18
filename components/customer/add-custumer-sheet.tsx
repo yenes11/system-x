@@ -184,14 +184,14 @@ function AddCustomerSheet() {
                   <Select onValueChange={(val) => field.onChange(Number(val))}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a type" />
+                        <SelectValue placeholder={t('select_item')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {Object.entries(customerTypeEnums)?.map(
                         ([key, value]) => (
                           <SelectItem key={key} value={key}>
-                            {value}
+                            {t(value)}
                           </SelectItem>
                         )
                       )}
@@ -210,7 +210,7 @@ function AddCustomerSheet() {
                   <Select onValueChange={(val) => field.onChange(Number(val))}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a currency" />
+                        <SelectValue placeholder={t('select_item')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

@@ -68,7 +68,7 @@ function CollectionNotes({ notes }: Props) {
             // variant="outline"
             size="icon"
             className="size-12"
-            disabled={false}
+            disabled={!input}
             onClick={() => {
               addNote.mutate({
                 collectionId: params?.id,

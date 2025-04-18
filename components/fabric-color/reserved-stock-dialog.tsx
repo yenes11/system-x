@@ -10,14 +10,16 @@ import { OrderStatus } from '@/lib/types';
 import { Button } from '../ui/button';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Empty from '../ui/empty';
 
 interface Props {
   unit: string;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isEmpty?: boolean;
 }
 
-function ReservedStockDialog({ open, setOpen, unit }: Props) {
+function ReservedStockDialog({ open, setOpen, unit, isEmpty }: Props) {
   const t = useTranslations();
   const params = useParams();
   const path = usePathname();
@@ -31,12 +33,16 @@ function ReservedStockDialog({ open, setOpen, unit }: Props) {
     queryFn: async () => {
       const response = await api(`${url}/${params.id}`);
       return response.data;
-    }
+    },
+    enabled: !isEmpty
   });
 
   return (
     <ThemedDialog open={open} setOpen={setOpen} title={t('stock_info')}>
-      {stocks.data &&
+      {isEmpty ? (
+        <Empty description={t('no_reserved_stock')} />
+      ) : (
+        stocks.data &&
         stocks.data.map((stock: any, index: number) => {
           const collection = stock.collection;
           const order = stock.order;
@@ -133,7 +139,8 @@ function ReservedStockDialog({ open, setOpen, unit }: Props) {
               )}
             </React.Fragment>
           );
-        })}
+        })
+      )}
     </ThemedDialog>
   );
 }

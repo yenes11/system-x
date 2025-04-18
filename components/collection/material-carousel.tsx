@@ -20,6 +20,8 @@ import {
 import Empty from '../ui/empty';
 import AddMaterialToCollectionSheet from './add-material-to-collection-sheet';
 import EditCollectionMaterialSheet from './edit-collection-material-sheet';
+import { cn } from '@/lib/utils';
+import ThemedTooltip from '../ThemedTooltip';
 
 interface SupplierFabric {
   id: string;
@@ -52,9 +54,10 @@ const materialProperties = [
 
 interface Props {
   data: CollectionMaterial[];
+  verified?: boolean;
 }
 
-function MaterialCarousel({ data }: Props) {
+function MaterialCarousel({ data, verified }: Props) {
   const t = useTranslations();
   const [editState, setEditState] = useState({
     open: false,
@@ -65,8 +68,6 @@ function MaterialCarousel({ data }: Props) {
     open: false,
     id: ''
   });
-
-  console.log(data, 'data');
 
   const [searchKey, setSearchKey] = useState('');
 
@@ -94,9 +95,9 @@ function MaterialCarousel({ data }: Props) {
           value={searchKey}
           onChange={(e) => setSearchKey(e.target.value)}
           className="w-auto min-w-72 bg-card"
-          placeholder={t('search_fabric_color_code')}
+          placeholder={t('search_material_color_code')}
         />
-        <AddMaterialToCollectionSheet />
+        <AddMaterialToCollectionSheet verified={verified} />
       </div>
       <Carousel
         opts={{
@@ -107,7 +108,7 @@ function MaterialCarousel({ data }: Props) {
         <CarouselContent className="">
           {filteredData?.length === 0 ? (
             <div className="flex w-full items-center justify-center py-10">
-              <Empty description={t('fabric_carousel_empty_description')} />
+              <Empty description={t('no_material_found')} />
             </div>
           ) : (
             filteredData?.map((material, index: number) => (
@@ -156,35 +157,57 @@ function MaterialCarousel({ data }: Props) {
                       ))}
                     </div>
                     <div className="flex w-full">
-                      <Button
-                        className="flex-1 rounded-none"
-                        onClick={() =>
-                          setDeleteState({
-                            open: true,
-                            id: material.id
-                          })
-                        }
-                        variant="destructive"
-                        size="sm"
+                      <ThemedTooltip
+                        disabled={verified}
+                        text="verification_required"
                       >
-                        {/* {t('delete')} */}
-                        <Trash2 size={16} />
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        className="flex-1 rounded-none"
-                        size="sm"
-                        onClick={() => {
-                          setEditState({
-                            open: true,
-                            id: material.id,
-                            amount: material.amount
-                          });
-                        }}
+                        <Button
+                          className={cn(
+                            {
+                              'cursor-not-allowed bg-destructive/50 hover:bg-destructive/50 hover:active:bg-destructive/50':
+                                !verified
+                            },
+                            'flex-1 rounded-none'
+                          )}
+                          onClick={() => {
+                            if (!verified) return;
+                            setDeleteState({
+                              open: true,
+                              id: material.id
+                            });
+                          }}
+                          variant="destructive"
+                          size="sm"
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                      </ThemedTooltip>
+                      <ThemedTooltip
+                        disabled={verified}
+                        text="verification_required"
                       >
-                        {/* {t('edit')} */}
-                        <Pencil size={16} />
-                      </Button>
+                        <Button
+                          variant="secondary"
+                          className={cn(
+                            {
+                              'cursor-not-allowed bg-secondary/50 hover:bg-secondary/50 hover:active:bg-secondary/50':
+                                !verified
+                            },
+                            'flex-1 rounded-none'
+                          )}
+                          size="sm"
+                          onClick={() => {
+                            if (!verified) return;
+                            setEditState({
+                              open: true,
+                              id: material.id,
+                              amount: material.amount
+                            });
+                          }}
+                        >
+                          <Pencil size={16} />
+                        </Button>
+                      </ThemedTooltip>
                     </div>
                   </CardFooter>
                 </Card>

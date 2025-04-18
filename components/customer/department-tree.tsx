@@ -45,7 +45,7 @@ function DepartmentTree({ data }: { data: Department[] }) {
           open: isDeleteDialogOpen
         }}
         setState={setDeleteDialog}
-        mutationKey={['delete-customer-department']}
+        mutationKey={['delete-customer-department', deleteId as string]}
         endpoint="/CustomerDepartments"
         title={t('delete_department')}
       />

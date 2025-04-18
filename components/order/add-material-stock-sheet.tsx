@@ -28,13 +28,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '../ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import ThemedSheet from '../themed-sheet';
 import { generateBarcode } from '@/lib/utils';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
@@ -42,7 +42,7 @@ import ThemedRadio from '../themed-radio';
 import { Checkbox } from '../ui/checkbox';
 
 const formSchema = z.object({
-  status: z.string(),
+  isCompleted: z.string(),
   stocks: z.array(
     z.object({
       incomingAmount: z.number(),
@@ -64,13 +64,24 @@ interface Props {
 function AddMaterialStockSheet() {
   const t = useTranslations();
   const router = useRouter();
+  const pathname = usePathname();
+  const params = useParams();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('off');
 
+  const url = pathname.startsWith('/fabric')
+    ? '/FabricColorStocks'
+    : '/MaterialColorVariantStocks';
+
+  const idName = pathname.startsWith('/fabric')
+    ? 'fabricColorOrderId'
+    : 'materialColorVariantOrderId';
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      isCompleted: 'false',
       stocks: [{ incomingAmount: 0, barcode: generateBarcode() }]
     }
   });
@@ -81,19 +92,18 @@ function AddMaterialStockSheet() {
   });
 
   const addPrice = useMutation({
-    mutationKey: ['edit-price-to-material'],
+    mutationKey: ['add-stock', pathname],
     mutationFn: async (values: any) => {
-      const res = await api.post('/MaterialColorVariantPrices', values);
+      const res = await api.post(url, {
+        ...values,
+        isCompleted: values.isCompleted === 'true',
+        [idName]: params.id
+      });
       return res;
     },
     onSuccess: async (res) => {
       router.refresh();
-      queryClient.invalidateQueries({
-        queryKey: ['material-recent-prices']
-      });
-      form.reset({
-        stocks: [{ incomingAmount: 0 }]
-      });
+      form.reset();
       setOpen(false);
       toast.success(t('item_added'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
@@ -125,24 +135,34 @@ function AddMaterialStockSheet() {
               control={form.control}
               name={`stocks.${index}.incomingAmount`}
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('incoming_amount')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="250"
-                      type="number"
-                      {...field}
-                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <div className="flex items-end gap-2">
+                  <FormItem className="flex-1">
+                    <FormLabel>{t('incoming_amount')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="250"
+                        type="number"
+                        {...field}
+                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                  <Button
+                    disabled={index === 0}
+                    variant="destructive"
+                    onClick={() => remove(index)}
+                    size="icon"
+                  >
+                    <X className="size-4" />
+                  </Button>
+                </div>
               )}
             />
           ))}
           <FormField
             control={form.control}
-            name="status"
+            name="isCompleted"
             render={({ field }) => (
               <FormItem className="space-y-3">
                 <FormLabel>{t('status')}</FormLabel>
@@ -153,7 +173,7 @@ function AddMaterialStockSheet() {
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="1" />
+                        <RadioGroupItem value="true" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         {t('completed')}
@@ -161,7 +181,7 @@ function AddMaterialStockSheet() {
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="2" />
+                        <RadioGroupItem value="false" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         {t('to_be_continue')}

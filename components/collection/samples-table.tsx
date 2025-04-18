@@ -45,6 +45,7 @@ import moment from 'moment';
 import { AddSampleSheet } from './add-sample-sheet';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import { EditSampleSheet } from './edit-sample-sheet';
+import Translate from '../translate';
 
 const DATE_FORMAT = 'DD/MM/YYYY, HH:mm';
 
@@ -68,7 +69,7 @@ const getSamplesTableColumns = (setEditState: any, setDeleteState: any) => [
     header: 'type',
     cell: ({ row }: { row: any }) => {
       return (
-        <Badge>
+        <Badge className="rounded-md border-border bg-transparent py-1">
           {
             collectionSampleType[
               row.original?.type as keyof typeof collectionSampleType
@@ -83,12 +84,12 @@ const getSamplesTableColumns = (setEditState: any, setDeleteState: any) => [
     header: 'status',
     cell: ({ row }: { row: any }) => {
       return (
-        <Badge>
-          {
-            collectionSampleStatus[
+        <Badge className="rounded-md border-border bg-transparent py-1">
+          <Translate
+            message={collectionSampleStatus[
               row.original?.status as keyof typeof collectionSampleStatus
-            ]
-          }
+            ].toLocaleLowerCase()}
+          />
         </Badge>
       );
     }
@@ -114,7 +115,14 @@ const getSamplesTableColumns = (setEditState: any, setDeleteState: any) => [
     cell: ({ row }: { row: any }) => {
       return (
         <div className="float-end flex gap-2">
-          <Link target="_blank" download href={row.original.documentPath}>
+          <Link
+            className={cn({
+              'pointer-events-none': !row.original.documentPath
+            })}
+            target="_blank"
+            download
+            href={row.original.documentPath}
+          >
             <Button
               disabled={!row.original.documentPath}
               className="flex items-center justify-center rounded-full"
@@ -156,7 +164,7 @@ const getSamplesTableColumns = (setEditState: any, setDeleteState: any) => [
   }
 ];
 
-function SamplesTable({ isVerified }: { isVerified: boolean }) {
+function SamplesTable() {
   const t = useTranslations();
   const params = useParams();
   const [editState, setEditState] = useState({

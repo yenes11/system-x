@@ -3,16 +3,15 @@ import CollectionGallery from '@/components/collection/collection-gallery';
 import CollectionNotes from '@/components/collection/collection-notes';
 import DeleteCollectionDialog from '@/components/collection/delete-collection-dialog';
 import ProductStationsStepper from '@/components/collection/product-stations-stepper';
-import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import DescriptionList from '@/components/description-list';
 import ImageZoom from '@/components/image-zoom';
-import ThemedZoom from '@/components/themed-zoom';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
-import Icon from '@/components/ui/icon';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollectionDetails } from '@/lib/api-calls';
+import { CollectionPingColor, CollectionStatus } from '@/lib/types';
 import {
   Images,
   NotebookTabs,
@@ -22,10 +21,8 @@ import {
   Waypoints
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { Gallery, Item } from 'react-photoswipe-gallery';
 // import CollectionCarousel from '@/components/fabric-color/collection-carousel';
 
 const collectionDetailItems = [
@@ -89,9 +86,40 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
 
   const collectionDetailItems = [
     {
+      title: t('status'),
+      description: (
+        <Badge className="-m-1 flex w-max items-center gap-2 rounded-sm border border-border bg-transparent text-foreground">
+          <span className="relative flex h-[10px] w-[10px]">
+            <span
+              className={`absolute inline-flex h-full w-full animate-ping rounded-full ${
+                CollectionPingColor[
+                  collectionDetails.status as keyof typeof CollectionPingColor
+                ]
+              } opacity-75`}
+            ></span>
+            <span
+              className={`relative inline-flex h-[10px] w-[10px] rounded-full ${
+                CollectionPingColor[
+                  collectionDetails.status as keyof typeof CollectionPingColor
+                ]
+              }`}
+            ></span>
+          </span>
+          <span>
+            {t(
+              CollectionStatus[
+                collectionDetails.status as keyof typeof CollectionStatus
+              ]
+            )}
+          </span>
+        </Badge>
+      )
+    },
+    {
       title: t('name'),
       description: collectionDetails.name
     },
+
     {
       title: t('description'),
       description: collectionDetails.description
@@ -150,7 +178,7 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
           className="ml-auto mr-4"
           href={`/collection/edit-collection/${params.id}`}
         >
-          <Button>
+          <Button size="sm">
             <SquarePen className="mr-2 size-4" />
             {t('edit')}
           </Button>

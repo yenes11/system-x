@@ -39,6 +39,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Icon from '../ui/icon';
 import ComboboxForm from '../ui/combobox-form';
+import SelectSearch from '../select-search';
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -66,13 +67,12 @@ function AddMaterialSheet() {
 
   const materialTypes = useQuery({
     queryKey: ['material-types'],
-    queryFn: async () => {
+    queryFn: async (): Promise<BasicEntity[]> => {
       const res = await api.get('/MaterialTypes');
       return res.data;
-    }
+    },
+    select: (data) => data.map((item) => ({ label: item.name, value: item.id }))
   });
-
-  console.log(materialTypes, 'materialTypes');
 
   const addMaterial = useMutation({
     mutationKey: ['add-material'],
@@ -113,6 +113,8 @@ function AddMaterialSheet() {
     addMaterial.mutate(values);
   };
 
+  console.log(form.getValues(), 'forrrrr');
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -150,7 +152,12 @@ function AddMaterialSheet() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('material_type')}</FormLabel>
-                  <Select onValueChange={field.onChange}>
+                  <SelectSearch
+                    items={materialTypes.data || []}
+                    value={field.value}
+                    setValue={(value) => form.setValue('materialTypeId', value)}
+                  />
+                  {/* <Select onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue
@@ -172,7 +179,7 @@ function AddMaterialSheet() {
                         )}
                       </SelectGroup>
                     </SelectContent>
-                  </Select>
+                  </Select> */}
                   <FormMessage />
                 </FormItem>
               )}

@@ -1,31 +1,16 @@
-import React from 'react';
-import ThemedDialog from '../themed-dialog';
-import { useTranslations } from 'next-intl';
-import { Plus } from 'lucide-react';
-import { z } from 'zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '../ui/form';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
 import api from '@/api';
-import { useParams } from 'next/navigation';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '../ui/select';
 import { CostDetailItem, CostType } from '@/lib/types';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
+import { useCollectionSlice } from '@/store/collection-slice';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import ThemedTooltip from '../ThemedTooltip';
+import { Button } from '../ui/button';
 import {
   Dialog,
   DialogClose,
@@ -36,7 +21,17 @@ import {
   DialogTitle,
   DialogTrigger
 } from '../ui/dialog';
-import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '../ui/select';
+import { toast } from 'sonner';
+import moment from 'moment';
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -44,31 +39,69 @@ const formSchema = z.object({
   price: z.number().min(1)
 });
 
+interface Props {
+  verified?: boolean;
+}
+
 function AddCostDialog() {
   const t = useTranslations();
   const params = useParams();
   const [open, setOpen] = React.useState(false);
+  const verified = useCollectionSlice((state) => state.isVerified);
+  const queryClient = useQueryClient();
 
-  const [info, setInfo] = React.useState<any>({
+  const [info, setInfo] = React.useState<{
+    name: string;
+    type: number | undefined;
+  }>({
     name: '',
-    type: '',
-    collectionColorId: params.id
+    type: undefined
   });
 
-  const [costs, setCosts] = React.useState<CostDetailItem[]>([]);
+  const [fabricCosts, setFabricCosts] = React.useState<CostDetailItem[]>([]);
+  const [materialCosts, setMaterialCosts] = React.useState<CostDetailItem[]>(
+    []
+  );
+  const [productStationCosts, setProductStationCosts] = React.useState<
+    CostDetailItem[]
+  >([]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
+  const handleInfoChange = (key: keyof typeof info, value: string | number) => {
+    setInfo((prev) => ({
+      ...prev,
+      [key]: value
+    }));
+  };
+
+  const addCost = useMutation({
+    mutationFn: async (data) => {
+      const response = await api.post('/CollectionColorCosts', data);
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['costs']
+      });
+      setOpen(false);
+      setInfo({ name: '', type: undefined });
+      setFabricCosts([]);
+      setMaterialCosts([]);
+      setProductStationCosts([]);
+
+      toast.success(t('item_added'), {
+        description: moment().format('DD/MM/YYYY, HH:mm')
+      });
+    }
   });
 
   const costDetails = useQuery({
-    queryKey: ['x'],
+    queryKey: ['cost-details'],
     queryFn: async () => {
       const response = await api.get(
         `/CollectionColors/GetCostInformationsForCreate/${params.id}`
       );
 
-      const tempCosts: CostDetailItem[] = [];
+      let tempCosts: CostDetailItem[] = [];
 
       response.data?.fabrics?.forEach((item: any, index: number) => {
         tempCosts.push({
@@ -80,6 +113,9 @@ function AddCostDialog() {
         });
       });
 
+      setFabricCosts(tempCosts);
+      tempCosts = [];
+
       response.data?.materials?.forEach((item: any, index: number) => {
         tempCosts.push({
           name: item.name,
@@ -90,6 +126,9 @@ function AddCostDialog() {
         });
       });
 
+      setMaterialCosts(tempCosts);
+      tempCosts = [];
+
       response.data?.productStations?.forEach((item: any, index: number) => {
         tempCosts.push({
           name: item.name,
@@ -99,21 +138,33 @@ function AddCostDialog() {
           type: item.type
         });
       });
-
-      setCosts(tempCosts);
+      setProductStationCosts(tempCosts);
       return response.data;
-    }
+    },
+    staleTime: 0
   });
 
-  console.log(costDetails, 'xxxxxx');
-
-  const onSubmit = (values: z.infer<typeof formSchema>) => {};
+  const onSubmit = () => {
+    const formData = {
+      ...info,
+      collectionColorId: params.id,
+      costs: [...fabricCosts, ...materialCosts, ...productStationCosts]
+    };
+    addCost.mutate(formData as any);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">{t('add_cost')}</Button>
-      </DialogTrigger>
+      <ThemedTooltip text="verification_required">
+        <div className="inline-block">
+          <DialogTrigger asChild>
+            <Button disabled={!verified} size="sm" variant="outline">
+              <Plus className="mr-2 size-4" />
+              {t('add_cost')}
+            </Button>
+          </DialogTrigger>
+        </div>
+      </ThemedTooltip>
       <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-3xl [&>button:last-child]:top-3.5">
         <DialogHeader className="contents space-y-0 text-left">
           <DialogTitle className="flex flex-col border-b border-border px-6 py-4 text-base">
@@ -124,10 +175,17 @@ function AddCostDialog() {
               <div>
                 <div className="mb-6">
                   <Label className="mb-1 inline-block">{t('name')}</Label>
-                  <Input placeholder={t('Name')} />
+                  <Input
+                    onChange={(e) => handleInfoChange('name', e.target.value)}
+                    placeholder={t('draft_cost')}
+                  />
 
                   <Label className="mb-1 mt-2 inline-block">{t('type')}</Label>
-                  <Select>
+                  <Select
+                    onValueChange={(value) =>
+                      handleInfoChange('type', Number(value))
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder={t('select_supplier')} />
                     </SelectTrigger>
@@ -145,38 +203,80 @@ function AddCostDialog() {
                   {t('product_stations')}
                 </span>
                 <div className="mt-4 grid grid-cols-3 gap-2">
-                  {costDetails.data?.productStations.map((item: any) => (
-                    <React.Fragment key={item.name}>
-                      <Label>{item.name}</Label>
-                      <span>{item.amount}</span>
-                      <Input />
-                    </React.Fragment>
-                  ))}
+                  {costDetails.data?.productStations.map(
+                    (item: any, index: number) => (
+                      <React.Fragment key={item.name}>
+                        <Label>{item.name}</Label>
+                        <span>{item.amount}</span>
+                        <Input
+                          type="number"
+                          onChange={(e) => {
+                            setProductStationCosts((prev) => {
+                              const updatedCosts = [...prev];
+                              updatedCosts[index] = {
+                                ...updatedCosts[index],
+                                price: Number(e.target.value)
+                              };
+                              return updatedCosts;
+                            });
+                          }}
+                        />
+                      </React.Fragment>
+                    )
+                  )}
                 </div>
 
                 <span className="mt-4 inline-block text-lg text-foreground">
                   {t('fabric')}
                 </span>
                 <div className="grid grid-cols-3 items-center gap-2">
-                  {costDetails.data?.fabrics.map((item: any) => (
+                  {costDetails.data?.fabrics.map((item: any, index: number) => (
                     <React.Fragment key={item.name}>
                       <Label>
                         {item.name}-{item.color}-{item.grammage}
                       </Label>
-                      <Select>
+                      <Select
+                        onValueChange={(value) => {
+                          console.log(value, 222);
+                          console.log(item, 222);
+                          setFabricCosts((prev) => {
+                            const updatedCosts = [...prev];
+                            updatedCosts[index] = {
+                              ...updatedCosts[index],
+                              type: Number(value)
+                            };
+                            return updatedCosts;
+                          });
+                        }}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder={t('select_item')} />
                         </SelectTrigger>
                         <SelectContent>
                           {item.unitMeters.map((unit: any, index: number) => (
-                            <SelectItem key={index} value={unit.amount}>
+                            <SelectItem
+                              key={unit.type}
+                              value={unit.type.toString()}
+                            >
                               {t(CostType[unit.type as keyof typeof CostType])}{' '}
                               - {unit.amount}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      <Input type="number" />
+                      <Input
+                        onChange={(e) => {
+                          setFabricCosts((prev) => {
+                            const updatedCosts = [...prev];
+                            updatedCosts[index] = {
+                              ...updatedCosts[index],
+                              price: Number(e.target.value)
+                            };
+                            return updatedCosts;
+                          });
+                        }}
+                        type="number"
+                      />
                     </React.Fragment>
                   ))}
                 </div>
@@ -184,13 +284,27 @@ function AddCostDialog() {
                   {t('material')}
                 </span>
                 <div className="mt-4 grid grid-cols-3 items-center gap-2">
-                  {costDetails.data?.materials.map((item: any) => (
-                    <React.Fragment key={item.name}>
-                      <Label>{item.name}</Label>
-                      <span>{item.amount}</span>
-                      <Input type="number" />
-                    </React.Fragment>
-                  ))}
+                  {costDetails.data?.materials.map(
+                    (item: any, index: number) => (
+                      <React.Fragment key={item.name}>
+                        <Label>{item.name}</Label>
+                        <span>{item.amount}</span>
+                        <Input
+                          onChange={(e) => {
+                            setMaterialCosts((prev) => {
+                              const updatedCosts = [...prev];
+                              updatedCosts[index] = {
+                                ...updatedCosts[index],
+                                price: Number(e.target.value)
+                              };
+                              return updatedCosts;
+                            });
+                          }}
+                          type="number"
+                        />
+                      </React.Fragment>
+                    )
+                  )}
                 </div>
               </div>
             </DialogDescription>
@@ -199,12 +313,12 @@ function AddCostDialog() {
         <DialogFooter className="border-t border-border px-6 py-4 sm:items-center">
           <DialogClose asChild>
             <Button type="button" variant="outline">
-              Cancel
+              {t('cancel')}
             </Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button type="button">I agree</Button>
-          </DialogClose>
+          <Button onClick={onSubmit} type="button">
+            {t('save')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

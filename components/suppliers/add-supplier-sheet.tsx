@@ -122,7 +122,7 @@ function AddSupplierSheet() {
                   <Select onValueChange={(val) => field.onChange(Number(val))}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={t('select_currency')} />
+                        <SelectValue placeholder={t('select_item')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

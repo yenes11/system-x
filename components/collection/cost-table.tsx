@@ -1,20 +1,18 @@
 'use client';
 
+import api from '@/api';
+import { currencyEnums } from '@/types';
+import { useQuery } from '@tanstack/react-query';
+import { Banknote, Info, Pencil, Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 import React from 'react';
-import { DataTable } from '../ui/data-table';
-import { Link, Badge, Info, Pencil, Trash2, Banknote } from 'lucide-react';
 import ThemedTooltip from '../ThemedTooltip';
 import { Button } from '../ui/button';
-import { useQuery } from '@tanstack/react-query';
-import api from '@/api';
-import { useParams } from 'next/navigation';
-import { CostItem } from '@/lib/types';
-import { currencyEnums } from '@/types';
-import CostDetailDialog from './cost-detail-dialog';
-import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import DialogDemo from './test-dialog';
+import { DataTable } from '../ui/data-table';
 import AddCostDialog from './add-cost-dialog';
+import CostDetailDialog from './cost-detail-dialog';
 
 const getCustomersTableColumns = (
   setInfoState: any,

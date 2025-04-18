@@ -52,20 +52,26 @@ function PlaceOrderSheet() {
   const [open, setOpen] = React.useState(false);
 
   const isFabric = path.startsWith('/fabric');
+  const url = isFabric
+    ? `/Suppliers/GetSuppliersForFabricColor?FabricColorId=${params.id}`
+    : `/Suppliers/GetSuppliersForMaterialColorVariant?MaterialColorVariantId=${params.id}`;
   const createURL = isFabric
     ? '/FabricColorOrders'
     : '/MaterialColorVariantOrders';
   const propertyName = isFabric ? 'fabricColorId' : 'materialColorVariantId';
 
   const suppliers = useQuery({
-    queryKey: ['suppliers', isFabric],
-    queryFn: () => getSuppliers({ name: '', pageIndex: 0, pageSize: 9999 }),
-    select: (data) => {
-      if (isFabric) {
-        return data.items.filter((i) => i.type === 1 || i.type === 2);
-      }
-      return data.items.filter((i) => i.type === 1 || i.type === 3);
+    queryKey: ['suppliers', isFabric, params.id],
+    queryFn: async () => {
+      const response = await api.get(url);
+      return response.data;
     }
+    // select: (data) => {
+    //   if (isFabric) {
+    //     return data.items.filter((i) => i.type === 1 || i.type === 2);
+    //   }
+    //   return data.items.filter((i) => i.type === 1 || i.type === 3);
+    // }
   });
 
   console.log(suppliers.data, 'sssd');
@@ -183,7 +189,7 @@ function PlaceOrderSheet() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {suppliers.data?.map((supplier) => (
+                    {suppliers.data?.map((supplier: any) => (
                       <SelectItem key={supplier.id} value={supplier.id}>
                         {supplier.name}
                       </SelectItem>

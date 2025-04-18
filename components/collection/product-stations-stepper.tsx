@@ -22,7 +22,7 @@ interface Props {
   editable?: boolean;
 }
 
-function ProductStationsStepper({ data, editable = false }: Props) {
+function ProductStationsStepper({ data, editable = true }: Props) {
   const t = useTranslations();
   const sortedData = data.toSorted((a, b) => a.priority - b.priority);
 
@@ -36,7 +36,7 @@ function ProductStationsStepper({ data, editable = false }: Props) {
         {/* {data.length > 0 && editable ? (
           <Button disabled>{t('edit')}</Button>
         ) : data.length === 0 && editable ? ( */}
-        <AddStationDialog data={sortedData} />
+        {editable && <AddStationDialog data={sortedData} />}
         {/* ) : null} */}
       </CardHeader>
       <CardContent className="pb-20 pt-16 @container">

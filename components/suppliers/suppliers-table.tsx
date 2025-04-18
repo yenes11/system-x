@@ -1,21 +1,23 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Pencil, SquarePen, Trash2 } from 'lucide-react';
+import { SquarePen, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { PaginatedData, Supplier } from '@/lib/types';
+import { PaginatedData, Supplier, SupplierType } from '@/lib/types';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
+import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import { SearchBar } from '../searchbar';
 import ThemedTooltip from '../ThemedTooltip';
 import { DataTable } from '../ui/data-table';
 import EditSupplierSheet from './edit-supplier-sheet';
-import ThemedSelect from '../themed-select';
-import { SearchBar } from '../searchbar';
-import { useDebouncedCallback } from 'use-debounce';
-import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import { Badge } from '../ui/badge';
+import Translate from '../translate';
+import classNames from 'classnames';
 
 type Fabric = {
   id: string;
@@ -47,6 +49,37 @@ const getColumns = (
       meta: {
         // headerClassName: 'w-48',
         // cellClassName: 'max-w-44 overflow-hidden text-ellipsis text-nowrap'
+      }
+    },
+    {
+      accessorKey: 'type',
+      header: 'type',
+      cell: ({ row }) => {
+        return (
+          <Badge
+            className={classNames(
+              {
+                'bg-teal-600': row.original.type === 1,
+                'bg-blue-600': row.original.type === 2,
+                'bg-violet-600': row.original.type === 3
+              },
+              'rounded py-0.5 text-xs'
+            )}
+          >
+            <Translate message={SupplierType[row.original.type]} />
+          </Badge>
+        );
+      }
+    },
+    {
+      accessorKey: 'billingAddress',
+      header: 'billing_address',
+      cell: ({ row }) => {
+        return (
+          <span title={row.original.billingAddress}>
+            {row.original.billingAddress}
+          </span>
+        );
       }
     },
     {

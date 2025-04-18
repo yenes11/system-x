@@ -1,7 +1,7 @@
 import api from '@/api';
 import { BasicEntity } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
@@ -36,6 +36,7 @@ function AddCollectionColorSheet() {
   const t = useTranslations();
   const params = useParams();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,7 +60,9 @@ function AddCollectionColorSheet() {
       return res;
     },
     onSuccess: (res) => {
-      router.refresh();
+      queryClient.invalidateQueries({
+        queryKey: ['collection-colors']
+      });
       setOpen(false);
       form.reset();
       toast.success(t('item_added'), {
@@ -98,7 +101,7 @@ function AddCollectionColorSheet() {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={t('select_a_material')} />
+                      <SelectValue placeholder={t('select_item')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>

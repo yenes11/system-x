@@ -7,17 +7,20 @@ import { Button } from '../ui/button';
 import { Edit, Trash2 } from 'lucide-react';
 import React from 'react';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
-import EditMaterialVariantSheet from './edit-material-variant-sheet';
+// import EditMaterialVariantSheet from './edit-material-variant-sheet';
+import dynamic from 'next/dynamic';
 
 interface Props {
   id: string;
   size: string;
   img: string;
+  unit: string;
 }
 
-function MaterialColorCard({ id, size, img }: Props) {
-  const t = useTranslations();
+const EditMaterial = dynamic(() => import('./edit-material-variant-sheet'));
 
+function MaterialColorCard({ id, size, img, unit }: Props) {
+  const t = useTranslations();
   const [editOpen, setEditOpen] = React.useState(false);
   const [deleteState, setDeleteState] = React.useState({
     open: false,
@@ -72,12 +75,14 @@ function MaterialColorCard({ id, size, img }: Props) {
         mutationKey={['delete-material-variant', id]}
         title={t('delete_material_variant_color')}
       />
-      <EditMaterialVariantSheet
+
+      <EditMaterial
         state={{
           open: editOpen,
           id,
           img,
-          size
+          size,
+          unit
         }}
         setState={setEditOpen}
       />

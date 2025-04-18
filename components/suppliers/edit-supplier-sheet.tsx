@@ -28,11 +28,24 @@ import validator from 'validator';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '../ui/select';
+import { SupplierType } from '@/lib/types';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   address: z.string().min(1).max(255),
-  phone: z.string().refine(validator.isMobilePhone),
+  phone: z.string().refine((value) => {
+    // Remove all whitespace for validation
+    const cleanPhone = value.replace(/\s/g, '');
+    return validator.isMobilePhone(cleanPhone, 'any', { strictMode: true });
+  }),
+  type: z.string(),
   authorizedPersonFullName: z.string().min(2).max(50),
   billingAddress: z.string().optional()
 });
@@ -70,16 +83,27 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
   });
 
   useEffect(() => {
-    form.reset(state.data);
+    if (!state.data) return;
+    form.reset({
+      ...state.data,
+      type: state.data.type.toString()
+    });
   }, [state.data]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     editSupplier.mutate({
       ...values,
       id: state.data.id,
-      type: state.data.type
+      type: Number(values.type)
     });
   };
+
+  let suppliers = { ...SupplierType } as Partial<typeof SupplierType>;
+  if (state.data?.type === 2) {
+    delete suppliers[3];
+  } else if (state.data?.type === 3) {
+    delete suppliers[2];
+  }
 
   return (
     <Sheet
@@ -124,6 +148,35 @@ function EditSupplierSheet({ state, setState }: { state: any; setState: any }) {
                 </FormItem>
               )}
             />
+            {state.data?.type !== 1 && (
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('type')}</FormLabel>
+                    <Select
+                      value={field.value}
+                      onValueChange={(val) => field.onChange(val)}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('select_item')} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(suppliers)?.map(([key, value]) => (
+                          <SelectItem key={key} value={key}>
+                            {t(value)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="authorizedPersonFullName"

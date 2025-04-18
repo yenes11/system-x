@@ -15,6 +15,7 @@ function DeleteCollectionDialog({ id }: { id: string }) {
   return (
     <React.Fragment>
       <Button
+        size="sm"
         variant="destructive"
         onClick={() => setState({ open: true, id })}
       >

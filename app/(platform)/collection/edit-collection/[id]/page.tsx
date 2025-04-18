@@ -1,10 +1,9 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import React, { useState } from 'react';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import api from '@/api';
+import { TreeSelect } from '@/components/tree-select';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -13,29 +12,27 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
-import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
-import api from '@/api';
+import { Heading } from '@/components/ui/heading';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { BasicEntity, CollectionDetails } from '@/lib/types';
-import { useParams, useRouter } from 'next/navigation';
-import { AxiosError } from 'axios';
+import { BasicEntity, CollectionDetails, CollectionStatus } from '@/lib/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ArrowLeft, ChevronLeft, Layers } from 'lucide-react';
 import moment from 'moment';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { NestedSelect } from '@/components/nested-select';
-import { Heading } from '@/components/ui/heading';
-import { Layers } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { TreeSelect } from '@/components/tree-select';
+import { z } from 'zod';
 
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -43,7 +40,7 @@ const ACCEPTED_IMAGE_TYPES = [
   'image/png',
   'image/webp'
 ];
-const MAX_FILE_SIZE = 5; // MB
+const MAX_FILE_SIZE = 2; // MB
 
 const formSchema = z.object({
   customerId: z.string().uuid(),
@@ -51,11 +48,12 @@ const formSchema = z.object({
   categoryId: z.string().uuid(),
   customerSeasonId: z.string().uuid(),
   sizeTypeId: z.string().uuid(),
-  customerReceiverId: z.string().uuid(),
-  customerProjectId: z.string().uuid(),
-  customerSubProjectId: z.string().uuid(),
-  customerBuyerGroupId: z.string().uuid(),
+  customerReceiverId: z.string().uuid().optional(),
+  customerProjectId: z.string().uuid().optional(),
+  customerSubProjectId: z.string().uuid().optional(),
+  customerBuyerGroupId: z.string().uuid().optional(),
   name: z.string(),
+  status: z.string(),
   description: z.string(),
   customerCode: z.string().optional(),
   selectionId: z.string().optional(),
@@ -103,7 +101,7 @@ function EditCollectionPage() {
       return res;
     },
     onSuccess: (res) => {
-      router.replace('/collection/library');
+      router.replace('/collection/manage-collection/' + params.id);
       toast.success(t('item_updated'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
       });
@@ -185,6 +183,7 @@ function EditCollectionPage() {
         buyer: collection.data.buyer,
         image: null,
         categoryId: collection.data.category?.id,
+        status: collection.data.status.toString(),
         customerId: collection.data.customer?.id,
         customerSeasonId: collection.data.season?.id,
         customerDepartmentId: collection.data.department?.id,
@@ -210,7 +209,9 @@ function EditCollectionPage() {
     formData.append('Id', collectionId as string);
 
     Object.entries(values).forEach(([key, value]) => {
-      formData.append(key, value);
+      if (value) {
+        formData.append(key, value);
+      }
     });
 
     formData.delete('image');
@@ -219,7 +220,14 @@ function EditCollectionPage() {
 
   return (
     <div className="">
-      <Heading icon={<Layers />} title={t('edit_collection')} description="" />
+      <Link
+        href={'/collection/manage-collection/' + params.id}
+        className="mb-4 flex items-center text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="mr-2 size-4" /> {t('go_back')}
+      </Link>
+      <Heading title={t('edit_collection')} description="" />
+
       <Card className="mt-4">
         <CardContent className="p-6">
           <Form {...form}>
@@ -366,6 +374,33 @@ function EditCollectionPage() {
                         }
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('status')}</FormLabel>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('select_item')} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(CollectionStatus).map(
+                          ([key, value]) => (
+                            <SelectItem key={key} value={key}>
+                              {t(value)}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

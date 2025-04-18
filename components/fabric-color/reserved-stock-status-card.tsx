@@ -1,11 +1,9 @@
 'use client';
 
-import React from 'react';
-import { Card, CardContent } from '../ui/card';
 import { Blocks, Link } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Button } from '../ui/button';
-import ThemedDialog from '../themed-dialog';
+import React from 'react';
+import { Card, CardContent } from '../ui/card';
 import ReservedStockDialog from './reserved-stock-dialog';
 
 interface Props {
@@ -37,7 +35,12 @@ function ReservedStockStatusCard({ value, unit }: Props) {
           </div>
         </CardContent>
       </Card>
-      <ReservedStockDialog unit={unit} open={open} setOpen={setOpen} />
+      <ReservedStockDialog
+        isEmpty={value === 0}
+        unit={unit}
+        open={open}
+        setOpen={setOpen}
+      />
     </React.Fragment>
   );
 }

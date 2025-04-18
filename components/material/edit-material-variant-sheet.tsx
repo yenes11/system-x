@@ -59,18 +59,20 @@ interface Props {
     id: string;
     size: string;
     img: string;
+    unit: string;
   };
   setState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function EditMaterialVariantSheet({ state, setState }: Props) {
   const t = useTranslations();
+
   const { toast } = useToast();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      size: '',
+      size: state.size,
       image: null
     }
   });
@@ -111,9 +113,9 @@ function EditMaterialVariantSheet({ state, setState }: Props) {
 
   return (
     <ThemedSheet
-      title={t('add_material_variant')}
+      title={t('edit_material_variant')}
       open={state.open}
-      setOpen={(val: any) => setState((prev: any) => ({ ...prev, open: val }))}
+      setOpen={setState}
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -122,7 +124,12 @@ function EditMaterialVariantSheet({ state, setState }: Props) {
             name="size"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('size')}</FormLabel>
+                <FormLabel>
+                  {t('size')}
+                  <span className="ml-2 text-xs text-slate-400">
+                    **{state.unit}**
+                  </span>
+                </FormLabel>
                 <FormControl>
                   <Input placeholder={t('enter_size')} {...field} />
                 </FormControl>
