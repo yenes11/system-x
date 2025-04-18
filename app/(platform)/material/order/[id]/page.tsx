@@ -1,5 +1,5 @@
 import ImageZoom from '@/components/image-zoom';
-import MaterialStockTable from '@/components/order/material-stock-table';
+import StockTable from '@/components/order/stock-table';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Code from '@/components/ui/code';
@@ -194,9 +194,10 @@ async function MaterialOrderDetailsPage({
           </CardContent>
         </Card>
       </div>
-      <MaterialStockTable
+      <StockTable
         supplierName={supplier.name}
         orderUnit={material.orderUnit}
+        details={details}
         data={details.stocks}
       />
     </div>

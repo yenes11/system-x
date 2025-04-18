@@ -1,8 +1,6 @@
 'use client';
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
-import 'moment/src/locale/tr';
-import 'moment/src/locale/en-gb';
 
 import { Button } from '@/components/ui/button';
 import {

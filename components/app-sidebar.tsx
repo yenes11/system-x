@@ -29,8 +29,6 @@ import api from '@/api';
 import { URL_USER_INFO } from '@/constants/api-constants';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
-// This is sample data.
-
 const navItems = [
   {
     title: 'dashboard',
