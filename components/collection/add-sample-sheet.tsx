@@ -84,6 +84,17 @@ export const AddSampleSheet = () => {
   const { data: user } = queryClient.getQueryData(['user-info']) as {
     data: UserInfo;
   };
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      type: '',
+      image: '',
+      document: '',
+      description: ''
+    }
+  });
+
   const createSample = useMutation({
     mutationFn: async (values: FormData) => {
       const response = await api.post('/Samples', values);
@@ -92,6 +103,7 @@ export const AddSampleSheet = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['collection-samples'] });
       setOpen(false);
+      form.reset();
       toast.success(t('item_added'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
       });
@@ -111,16 +123,6 @@ export const AddSampleSheet = () => {
     queryFn: async () => {
       const response = await api.get('/Users/GetUsersByType/4');
       return response.data as User[];
-    }
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      type: '',
-      image: '',
-      document: '',
-      description: ''
     }
   });
 

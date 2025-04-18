@@ -61,7 +61,7 @@ function SizeAndBarcodeTable() {
   const columns: ColumnDef<CollectionColor>[] = [
     {
       accessorKey: 'size',
-      header: 'size'
+      header: 'body_size'
     },
     {
       accessorKey: 'barcode',

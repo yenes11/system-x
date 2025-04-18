@@ -1,3 +1,5 @@
+'use client';
+
 import FabricCarousel from '@/components/collection/fabric-carousel';
 import ManageColorTabs from '@/components/collection/manage-color-tabs';
 import MaterialCarousel from '@/components/collection/material-carousel';
@@ -8,17 +10,28 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollectionDraftDetails } from '@/lib/api-calls';
+import { useCollectionSlice } from '@/store/collection-slice';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { BadgeCheck, SquareBottomDashedScissors } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { useTranslations } from 'next-intl';
 import { Fragment } from 'react';
 
-async function ManageCollectionColorPage({
-  params
-}: {
-  params: { id: string };
-}) {
-  const t = await getTranslations();
-  const collectionDetails = await getCollectionDraftDetails(params.id);
+function ManageCollectionColorPage({ params }: { params: { id: string } }) {
+  const t = useTranslations();
+  const setCurrentCollectionColor = useCollectionSlice(
+    (state) => state.setCurrentCollectionColor
+  );
+  // const collectionDetails = await getCollectionDraftDetails(params.id);
+
+  const { data: collectionDetails } = useSuspenseQuery({
+    queryKey: ['collection-color', params.id],
+    queryFn: async () => {
+      const data = await getCollectionDraftDetails(params.id);
+      setCurrentCollectionColor(data);
+      return data;
+    }
+  });
+
   const listItems = [
     {
       title: t('collection_name'),

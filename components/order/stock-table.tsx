@@ -1,35 +1,27 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { DataTable } from '../ui/data-table';
-import {
-  BadgeCheck,
-  Check,
-  Info,
-  Package,
-  Printer,
-  SwatchBook,
-  Trash2,
-  XCircle
-} from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
 import api from '@/api';
-import { useParams } from 'next/navigation';
-import { BasicEntity, MaterialOrder, OrderStock } from '@/lib/types';
+import {
+  BasicEntity,
+  FabricOrder,
+  MaterialOrder,
+  OrderStock
+} from '@/lib/types';
+import { printBarcode } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import { Button } from '../ui/button';
+import { Info, Package, Printer } from 'lucide-react';
+import moment from 'moment';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 import { Fragment, useState } from 'react';
-import ConfirmDeleteDialog from '../confirm-delete-dialog';
-import Link from 'next/link';
-import { Currency } from '@/types';
-import StockDetailDialog from './stock-detail-dialog';
-import AddStockSheet from './add-material-stock-sheet';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Checkbox } from '../ui/checkbox';
 import {
   Table,
@@ -39,21 +31,27 @@ import {
   TableHeader,
   TableRow
 } from '../ui/table';
-import { printBarcode } from '@/lib/utils';
-import moment from 'moment';
+import AddStockSheet from './add-stock-sheet';
+import StockDetailDialog from './stock-detail-dialog';
+import Empty from '../ui/empty';
 
 interface CollectionColor extends BasicEntity {
   identityDefined: boolean;
 }
 
-interface Props {
-  data: OrderStock[] | undefined;
-  orderUnit: string;
-  supplierName: string;
-  details: MaterialOrder;
-}
+type Props =
+  | {
+      type: 'material';
+      orderUnit: string;
+      details: MaterialOrder;
+    }
+  | {
+      type: 'fabric';
+      orderUnit: string;
+      details: FabricOrder;
+    };
 
-function StockTable({ data, orderUnit, supplierName, details }: Props) {
+function StockTable({ orderUnit, details, type }: Props) {
   const t = useTranslations();
   const params = useParams();
   const [deleteState, setDeleteState] = useState({
@@ -157,7 +155,7 @@ function StockTable({ data, orderUnit, supplierName, details }: Props) {
   ];
 
   const table = useReactTable({
-    data: data || [],
+    data: details.stocks || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setSelectedRows,
@@ -170,7 +168,12 @@ function StockTable({ data, orderUnit, supplierName, details }: Props) {
   const _selectedRows = table?.getSelectedRowModel?.()?.rows;
 
   const handlePrint = () => {
-    const info = `${details.material.name} - ${details.material.color} - ${details.material.size}`;
+    let info: string;
+    if (type === 'fabric') {
+      info = `${details.fabric.name} - ${details.fabric.color} - ${details.fabric.unit}`;
+    } else {
+      info = `${details.material.name} - ${details.material.color} - ${details.material.orderUnit}`;
+    }
     const date = moment(details.arrivalDate).format('DD/MM/YYYY');
 
     const labelData = _selectedRows.map((item) => ({
@@ -209,15 +212,6 @@ function StockTable({ data, orderUnit, supplierName, details }: Props) {
           <AddStockSheet />
         </CardHeader>
         <CardContent className="p-0">
-          {/* <DataTable
-            emptyDescription={t('material_stock_table_empty_message', {
-              name: `"${supplierName}"`
-            })}
-            bordered={false}
-            searchKey=""
-            data={data || []}
-            columns={columns}
-          /> */}
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -227,6 +221,8 @@ function StockTable({ data, orderUnit, supplierName, details }: Props) {
                       <TableHead key={header.id}>
                         {header.isPlaceholder
                           ? null
+                          : typeof header.column.columnDef.header === 'string'
+                          ? t(header.column.columnDef.header)
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
@@ -260,7 +256,7 @@ function StockTable({ data, orderUnit, supplierName, details }: Props) {
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    <Empty />
                   </TableCell>
                 </TableRow>
               )}

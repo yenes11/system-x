@@ -51,19 +51,26 @@ function ManageColorTabs({ details }: Props) {
             <Banknote className="mr-2 size-4" />
             {t('costs')}
           </TabsTrigger>
-          <ThemedTooltip
-            disabled={details.identityDefined}
-            disableHoverableContent={!details.identityDefined}
-            text="identity_required_message"
-          >
-            <TabsTrigger
-              value="size-and-barcode"
-              className={!details.identityDefined ? 'opacity-50' : ''}
-            >
+          {details.identityDefined ? (
+            <TabsTrigger value="size-and-barcode">
               <QrCode className="mr-2 size-4" />
               {t('size_and_barcode')}
             </TabsTrigger>
-          </ThemedTooltip>
+          ) : (
+            <ThemedTooltip
+              disabled={details.identityDefined}
+              text="identity_required_message"
+            >
+              <TabsTrigger
+                value="size-and-barcode"
+                className={!details.identityDefined ? 'opacity-50' : ''}
+              >
+                <QrCode className="mr-2 size-4" />
+                {t('size_and_barcode')}
+              </TabsTrigger>
+            </ThemedTooltip>
+          )}
+
           <TabsTrigger className="flex-1" value="orders">
             <ShoppingCart className="mr-2 size-4" />
             {t('orders')}
@@ -75,7 +82,7 @@ function ManageColorTabs({ details }: Props) {
         <ProductStationsStepper data={details.productStations} />
       </TabsContent>
       <TabsContent value="samples">
-        <SamplesTable isVerified={details.identityDefined} />
+        <SamplesTable />
       </TabsContent>
       <TabsContent value="costs">
         <CostTable />
@@ -84,7 +91,7 @@ function ManageColorTabs({ details }: Props) {
         <SizeAndBarcodeTable />
       </TabsContent>
       <TabsContent value="orders">
-        <CollectionColorOrdersTable identityDefined={details.identityDefined} />
+        <CollectionColorOrdersTable />
       </TabsContent>
     </Tabs>
   );

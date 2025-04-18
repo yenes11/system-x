@@ -94,7 +94,7 @@ function EditCollectionFabricSheet({ state, setState }: Props) {
             name="percent"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('percent')}</FormLabel>
+                <FormLabel>{t('percentage')}</FormLabel>
                 <FormControl>
                   <Input
                     type="number"

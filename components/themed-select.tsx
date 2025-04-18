@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import {
   Select,
   SelectContent,
@@ -7,6 +7,7 @@ import {
   SelectValue
 } from './ui/select';
 import { CaretDownIcon, CrossCircledIcon } from '@radix-ui/react-icons';
+import { BasicEntity } from '@/lib/types';
 
 interface Props<T> {
   placeholder: string;
@@ -23,6 +24,8 @@ function ThemedSelect<T>({
   options,
   onClear
 }: Props<T>) {
+  const id = useId();
+
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger
@@ -34,11 +37,13 @@ function ThemedSelect<T>({
       </SelectTrigger>
 
       <SelectContent>
-        {options?.map((customer: any) => (
-          <SelectItem key={customer.id} value={customer.id}>
-            {customer.name}
-          </SelectItem>
-        ))}
+        {options?.map((option: any) => {
+          return (
+            <SelectItem key={option.id + '-' + id} value={option.id}>
+              {option.name}
+            </SelectItem>
+          );
+        })}
       </SelectContent>
     </Select>
   );

@@ -49,10 +49,10 @@ const dateNames = {
 };
 
 const dateLabels = {
-  '2': 'Produced Date',
-  '3': 'Sent Date',
-  '4': 'Result Date',
-  '5': 'Result Date'
+  '2': 'produced_date',
+  '3': 'sent_date',
+  '4': 'result_date',
+  '5': 'result_date'
 };
 
 const ACCEPTED_IMAGE_TYPES = [
@@ -284,7 +284,7 @@ export const EditSampleSheet = ({
                           key={key}
                           value={key}
                         >
-                          {value}
+                          {t(value.toLocaleLowerCase())}
                         </SelectItem>
                       )
                     )}
@@ -316,7 +316,7 @@ export const EditSampleSheet = ({
                           {field.value ? (
                             moment(field.value as string).format('LL')
                           ) : (
-                            <span>Pick a date</span>
+                            <span>{t('pick_date')}</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>

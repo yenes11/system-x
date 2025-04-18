@@ -84,7 +84,7 @@ const TreeNode = ({ department, depth }: TreeNodeProps) => {
         <div className="flex w-full items-center justify-between gap-6">
           {department.name}
           <div className="flex items-center gap-2">
-            <ThemedTooltip text={t('display_employees')}>
+            <ThemedTooltip text="display_employees">
               <Users
                 onClick={() => {
                   selectDepartment(department.employees, department.id);
@@ -93,7 +93,7 @@ const TreeNode = ({ department, depth }: TreeNodeProps) => {
                 className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 hover:bg-muted`}
               />
             </ThemedTooltip>
-            <ThemedTooltip text={t('edit_department')}>
+            <ThemedTooltip text="edit_department">
               <PencilLine
                 onClick={() => {
                   console.log(department, 'department');
@@ -103,13 +103,20 @@ const TreeNode = ({ department, depth }: TreeNodeProps) => {
                 className={`-m-2 mr-1 box-content cursor-pointer rounded-full p-2 hover:bg-muted`}
               />
             </ThemedTooltip>
-            <ThemedTooltip text={t('delete_department')}>
+            <ThemedTooltip text="delete_department">
               <Trash2
+                role="button"
+                onClick={() => {
+                  setDeleteDialog({
+                    open: true,
+                    id: department.id
+                  });
+                }}
                 size={16}
-                className={`-m-2 mr-1 box-content cursor-not-allowed rounded-full p-2 text-destructive/50 hover:bg-muted`}
+                className={`-m-2 mr-1 box-content rounded-full p-2 text-destructive hover:bg-muted`}
               />
             </ThemedTooltip>
-            <ThemedTooltip text={t('add_sub_department')}>
+            <ThemedTooltip text="add_sub_department">
               <Plus
                 onClick={() => {
                   setIsAddSheetOpen(true, department.id);

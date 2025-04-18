@@ -2,7 +2,7 @@ import api from '@/api';
 import { BasicEntity } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Plus } from 'lucide-react';
+import { Minus, Plus, X } from 'lucide-react';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
@@ -56,7 +56,7 @@ function AddBarcodeSheet() {
     name: 'items'
   });
 
-  const availableColors = useQuery({
+  const sizes = useQuery({
     queryKey: ['available-sizes'],
     queryFn: async (): Promise<BasicEntity[]> => {
       const response = await api.get(
@@ -91,24 +91,32 @@ function AddBarcodeSheet() {
     <ThemedSheet
       open={open}
       setOpen={setOpen}
-      title={t('add_size')}
+      title={t('add_body_size')}
       trigger={
         <Button className="ml-auto" variant="outline">
           <Plus className="mr-2 size-4" />
-          {t('add_size')}
+          {t('add_body_size')}
         </Button>
       }
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {fields.map((field, index) => (
-            <Fragment key={field.id}>
+            <div
+              className="relative -m-2 space-y-2 rounded-lg border p-4"
+              key={field.id}
+            >
+              <Minus
+                role="button"
+                onClick={() => remove(index)}
+                className="absolute right-2 top-2 box-border size-8 cursor-pointer rounded-full p-2 hover:bg-muted"
+              />
               <FormField
                 control={form.control}
                 name={`items.${index}.sizeId`}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('color')}</FormLabel>
+                    <FormLabel>{t('body_size')}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -119,7 +127,7 @@ function AddBarcodeSheet() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {availableColors.data?.map((size) => (
+                        {sizes.data?.map((size) => (
                           <SelectItem key={size.id} value={size.id}>
                             {size.name}
                           </SelectItem>
@@ -144,7 +152,7 @@ function AddBarcodeSheet() {
                   </FormItem>
                 )}
               />
-            </Fragment>
+            </div>
           ))}
 
           <Button
@@ -154,7 +162,7 @@ function AddBarcodeSheet() {
             type="button"
           >
             <Plus className="mr-2 size-4" />
-            {t('add_size')}
+            {t('add_body_size')}
           </Button>
 
           <Button className="w-full" type="submit">

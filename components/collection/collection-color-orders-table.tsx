@@ -35,16 +35,9 @@ import ThemedSelect from '../themed-select';
 import { useDebouncedCallback } from 'use-debounce';
 import AddCollectionOrderSheet from './add-collection-order-sheet';
 import EditCollectionOrderSheet from './edit-collection-order-sheet';
+import { useCollectionSlice } from '@/store/collection-slice';
 
-interface CollectionColor extends BasicEntity {
-  identityDefined: boolean;
-}
-
-function CollectionColorOrdersTable({
-  identityDefined
-}: {
-  identityDefined: boolean;
-}) {
+function CollectionColorOrdersTable() {
   const t = useTranslations();
   const params = useParams();
   const [deleteState, setDeleteState] = useState({
@@ -70,7 +63,7 @@ function CollectionColorOrdersTable({
     ],
     queryFn: async () => {
       let url = `/CollectionColorOrders/GetOrdersByCollectionColor/${params.id}?PageSize=10&PageIndex=${currentPage}`;
-      if (status) {
+      if (status && status !== 'all') {
         url += `&Status=${status}`;
       }
       if (plmId) {
@@ -80,8 +73,6 @@ function CollectionColorOrdersTable({
       return response.data;
     }
   });
-
-  console.log(collectionOrders, 'oorr');
 
   const columns: ColumnDef<CollectionColorOrder>[] = [
     {
@@ -157,6 +148,10 @@ function CollectionColorOrdersTable({
 
   const statusOptions = [
     {
+      id: 'all',
+      name: t('all')
+    },
+    {
       id: '1',
       name: t('new')
     },
@@ -204,7 +199,7 @@ function CollectionColorOrdersTable({
         <CardHeader className="h-16 flex-row items-center gap-2 border-b">
           <ShoppingCart className="size-6" />
           <CardTitle>{t('orders')}</CardTitle>
-          <AddCollectionOrderSheet identityDefined={identityDefined} />
+          <AddCollectionOrderSheet />
         </CardHeader>
         <CardContent className="p-0">
           <div className="flex gap-2 border-b p-2">

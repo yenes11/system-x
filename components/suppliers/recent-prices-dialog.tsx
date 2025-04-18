@@ -26,6 +26,7 @@ import moment from 'moment';
 import { Button } from '../ui/button';
 import { Trash2 } from 'lucide-react';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import Empty from '../ui/empty';
 
 function RecentPricesDialog({ state, setState }: any) {
   const t = useTranslations();
@@ -125,7 +126,11 @@ function RecentPricesDialog({ state, setState }: any) {
             )}
           </TabsContent>
           <TabsContent value="graph">
-            <PricesGraph data={recentPrices.data} />
+            {recentPrices.data?.length === 0 ? (
+              <Empty className="my-12" description={t('add_price_for_graph')} />
+            ) : (
+              <PricesGraph data={recentPrices.data} />
+            )}
           </TabsContent>
         </Tabs>
       </ThemedDialog>

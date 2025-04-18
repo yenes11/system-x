@@ -195,11 +195,7 @@ async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
           </CardContent>
         </Card>
       </div>
-      <StockTable
-        supplierName={supplier.name}
-        orderUnit={fabric.unit}
-        data={details.stocks}
-      />
+      <StockTable type="fabric" orderUnit={fabric.unit} details={details} />
     </div>
   );
 }

@@ -12,6 +12,7 @@ import { DataTable } from '../ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import ThemedTooltip from '../ThemedTooltip';
 import JsBarcode from 'jsbarcode';
+import { usePathname } from 'next/navigation';
 
 const barcodeOptions: JsBarcode.Options = {
   format: 'CODE128', // Büyük harf ve sayı için uygun varsayılan format
@@ -30,12 +31,16 @@ interface Props {
 
 function StockDetailDialog({ state, setState, orderUnit }: Props) {
   const t = useTranslations();
-  const svgRef = useRef<SVGSVGElement>(null);
+  const pathname = usePathname();
+
+  const url = pathname.startsWith('/fabric')
+    ? `/FabricColorStocks/${state.id}`
+    : `/MaterialColorVariantStocks/${state.id}`;
 
   const stockDetails = useQuery<OrderStock>({
-    queryKey: ['stock-detail', state.id],
+    queryKey: ['stock-detail', state.id, url],
     queryFn: async () => {
-      const response = await api.get(`/MaterialColorVariantStocks/${state.id}`);
+      const response = await api.get(url);
       return response.data;
     }
   });

@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 import {
   Building2,
+  ExternalLink,
   Pencil,
   Plus,
   Trash2,
@@ -21,6 +22,7 @@ import EditWarehouseSheet from '../fabric-supplier/edit-warehouse-sheet';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import ThemedTooltip from '../ThemedTooltip';
 import { usePathname } from 'next/navigation';
+import Translate from '../translate';
 
 interface Props {
   data: Warehouse[];
@@ -57,11 +59,12 @@ const getColumns = (
         return (
           <a
             target="_blank"
-            className="text-blue-600 underline"
+            className="flex items-center text-blue-600 underline"
             href={href}
             rel="noopener noreferrer"
           >
-            Show on maps
+            <Translate message="show_on_maps" />
+            <ExternalLink className="ml-1 size-4" />
           </a>
         );
       }

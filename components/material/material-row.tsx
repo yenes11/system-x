@@ -51,7 +51,6 @@ function MaterialRow({
   colors
 }: Props) {
   const t = useTranslations();
-  console.log(colors, 'colors');
   return (
     <>
       <TableRow
@@ -171,22 +170,13 @@ function MaterialRow({
                             id={variant.id}
                             img={variant.image}
                             size={variant.size}
+                            unit={row.original.type.variantUnit}
                           />
                         ))}
                       </div>
                     ))}
                 </>
               ))}
-              {/* <div className="grid grid-cols-1 sm:grid-cols-2">
-                {colors.map((color: any) => (
-                  <MaterialColorCard
-                  key={color.id}
-                  id={color.id}
-                  img={color.image}
-                  name={color.name}
-                  />
-                  ))}
-                  </div> */}
             </TableCell>
           </TableRow>
         ))}

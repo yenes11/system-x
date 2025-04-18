@@ -1,19 +1,14 @@
 import api from '@/api';
-import { description } from '@/components/charts/bar-graph';
 import DescriptionList from '@/components/description-list';
-import AssignFabricSheet from '@/components/fabric-supplier/assign-fabric-sheet';
 import FabricCarousel from '@/components/fabric-supplier/fabric-carousel';
 import MaterialCarousel from '@/components/material-supplier/material-carousel';
 import WarehouseTable from '@/components/suppliers/warehouse-table';
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SupplierType } from '@/lib/types';
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient
-} from '@tanstack/react-query';
 import { getTranslations } from 'next-intl/server';
+import classNames from 'classnames';
 
 async function getSupplierDetails(id: string) {
   try {
@@ -58,10 +53,23 @@ async function SupplierDetailsPage({ params }: { params: { id: string } }) {
     <>
       <Card className="mb-4 flex flex-col overflow-hidden">
         <CardHeader className="flex flex-row items-start border-b bg-muted px-6 py-2">
-          <div className="flex h-full flex-col">
+          <div className="flex w-full items-center justify-between">
             <CardTitle className="group flex items-center gap-2 text-lg">
               {t('details')}
             </CardTitle>
+            <Badge
+              className={classNames(
+                {
+                  'bg-teal-600': supplier.type === 1,
+                  'bg-blue-600': supplier.type === 2,
+                  'bg-violet-600': supplier.type === 3
+                },
+                'ml-auto rounded-md py-0.5 text-xs'
+              )}
+            >
+              {t(SupplierType[supplier.type as keyof typeof SupplierType])}{' '}
+              {t('supplier')}
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="flex-1 p-0 text-sm">

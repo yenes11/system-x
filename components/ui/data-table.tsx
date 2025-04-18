@@ -13,6 +13,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow
@@ -24,6 +25,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { SearchBar } from '../searchbar';
 import ServerPagination from '../server-pagination';
 import Empty from './empty';
+import React from 'react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,6 +38,7 @@ interface DataTableProps<TData, TValue> {
   className?: string;
   emptyDescription?: string;
   serverPagination?: boolean;
+  footer?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -48,7 +51,8 @@ export function DataTable<TData, TValue>({
   className,
   emptyDescription,
   inputClassName,
-  serverPagination = false
+  serverPagination = false,
+  footer
 }: DataTableProps<TData, TValue>) {
   const t = useTranslations();
   const router = useRouter();
@@ -88,12 +92,12 @@ export function DataTable<TData, TValue>({
     <>
       {searchKey && (
         <SearchBar
-          placeholder={`Search...`}
+          placeholder={t('search')}
           value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn(searchKey)?.setFilterValue(event.target.value)
           }
-          className={cn('mb-2 w-full rounded-full md:max-w-sm', inputClassName)}
+          className={cn('mb-2 w-full md:max-w-sm', inputClassName)}
         />
       )}
 
@@ -154,6 +158,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           )}
         </TableBody>
+        <TableFooter className="bg-muted">{footer}</TableFooter>
       </Table>
 
       {isUsingServerPagination && (

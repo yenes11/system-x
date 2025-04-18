@@ -10,14 +10,20 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { currencyEnums, customerTypeEnums } from '@/types';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle
+} from '@/components/ui/sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import moment from 'moment';
 import { useTranslations } from 'next-intl';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import {
@@ -27,12 +33,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { Textarea } from '../ui/textarea';
-import moment from 'moment';
-import { toast } from 'sonner';
+import { BasicEntity } from '@/lib/types';
 
 const formSchema = z.object({
-  barcode: z.string().min(2).max(50)
+  barcode: z.string().min(2).max(50),
+  size: z.string().uuid()
 });
 
 interface Props {
@@ -48,10 +53,23 @@ function EditBarcodeSheet({ state, setState }: Props) {
   useEffect(() => {
     if (state.data) {
       form.reset({
-        ...state.data
+        barcode: state.data.barcode,
+        size: state.data.sizeId
       });
     }
   }, [state.data]);
+
+  const sizes = useQuery({
+    queryKey: ['available-sizes'],
+    queryFn: async (): Promise<BasicEntity[]> => {
+      const response = await api.get(
+        `/Sizes/GetSizesByCollectionColorId/${params.id}`
+      );
+      return response.data;
+    }
+  });
+
+  console.log(sizes, 'sizeee');
 
   const editCustomer = useMutation({
     mutationKey: ['edit-barcode'],
@@ -102,7 +120,38 @@ function EditBarcodeSheet({ state, setState }: Props) {
     >
       <SheetContent>
         <Form {...form}>
+          <SheetHeader>
+            <SheetTitle>{t('edit_body_size')}</SheetTitle>
+          </SheetHeader>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="size"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('body_size')}</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('select_item')} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {sizes.data?.map((size) => (
+                        <SelectItem key={size.id} value={size.id}>
+                          {size.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="barcode"

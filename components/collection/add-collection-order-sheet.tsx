@@ -1,8 +1,8 @@
 import api from '@/api';
-import { BasicEntity } from '@/lib/types';
+import { BasicEntity, CostEnums } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { CalendarIcon, Divide, Plus } from 'lucide-react';
+import { CalendarIcon, Divide, Minus, Plus } from 'lucide-react';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
@@ -36,6 +36,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow
@@ -43,6 +44,13 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '@/lib/utils';
 import { Calendar } from '../ui/calendar';
+import { useCollectionSlice } from '@/store/collection-slice';
+import ThemedTooltip from '../ThemedTooltip';
+import { SheetTrigger } from '../ui/sheet';
+import { currencyEnums } from '@/types';
+import { DataTable } from '../ui/data-table';
+import { ColumnDef } from '@tanstack/react-table';
+import { Badge } from '../ui/badge';
 
 const formSchema = z
   .object({
@@ -74,14 +82,12 @@ const formSchema = z
     }
   });
 
-interface Props {
-  identityDefined: boolean;
-}
-
-function AddCollectionOrderSheet({ identityDefined }: Props) {
+function AddCollectionOrderSheet() {
   const t = useTranslations();
   const params = useParams();
   const queryClient = useQueryClient();
+  const verified = useCollectionSlice((state) => state.isVerified);
+
   const id = useId();
   const [open, setOpen] = useState(false);
 
@@ -98,7 +104,7 @@ function AddCollectionOrderSheet({ identityDefined }: Props) {
   });
 
   const approvedCosts = useQuery({
-    queryKey: ['costs'],
+    queryKey: ['approved-costs'],
     queryFn: async () => {
       const response = await api.get(
         `/CollectionColorCosts?PageIndex=0&PageSize=999&CollectionColorId=${params.id}&Type=3`
@@ -111,7 +117,7 @@ function AddCollectionOrderSheet({ identityDefined }: Props) {
   console.log(approvedCosts.data, 'approvedCosts');
 
   const realCosts = useQuery({
-    queryKey: ['costs'],
+    queryKey: ['real-costs'],
     queryFn: async () => {
       const response = await api.get(
         `/CollectionColorCosts?PageIndex=0&PageSize=999&CollectionColorId=${params.id}&Type=4`
@@ -162,14 +168,18 @@ function AddCollectionOrderSheet({ identityDefined }: Props) {
       setOpen={setOpen}
       title={t('add_order')}
       trigger={
-        <Button
-          disabled={!identityDefined}
-          className="ml-auto"
-          variant="outline"
-        >
-          <Plus className="mr-2 size-4" />
-          {t('add_order')}
-        </Button>
+        <ThemedTooltip disabled={verified} text="verification_required">
+          <div className="ml-auto inline">
+            <Button
+              onClick={() => setOpen(true)}
+              disabled={!verified}
+              variant="outline"
+            >
+              <Plus className="mr-2 size-4" />
+              {t('add_order')}
+            </Button>
+          </div>
+        </ThemedTooltip>
       }
     >
       <Form {...form}>
@@ -324,8 +334,17 @@ function AddCollectionOrderSheet({ identityDefined }: Props) {
             )}
           />
 
+          <Label className="!mt-6 block text-lg font-medium text-muted-foreground">
+            {t('body_sizes')}
+          </Label>
+
           {fields.map((field, index) => (
-            <Fragment key={field.id}>
+            <div className="relative -m-2 rounded-md border p-4" key={field.id}>
+              <Minus
+                onClick={() => remove(index)}
+                role="button"
+                className="absolute right-2 top-2 size-6 rounded-lg p-1 hover:cursor-pointer hover:bg-muted"
+              />
               <FormField
                 control={form.control}
                 name={`sizes.${index}.id`}
@@ -372,7 +391,7 @@ function AddCollectionOrderSheet({ identityDefined }: Props) {
                   </FormItem>
                 )}
               />
-            </Fragment>
+            </div>
           ))}
           {form.formState.errors.sizes?.root?.message && (
             <p className="text-sm font-medium text-destructive">
@@ -387,7 +406,7 @@ function AddCollectionOrderSheet({ identityDefined }: Props) {
             type="button"
           >
             <Plus className="mr-2 size-4" />
-            {t('add_size')}
+            {t('add_body_size')}
           </Button>
 
           <Button className="w-full" type="submit">
@@ -401,13 +420,75 @@ function AddCollectionOrderSheet({ identityDefined }: Props) {
 
 export default AddCollectionOrderSheet;
 
-const tableHeaders = ['name', 'unit', 'type', 'price'];
+const tableHeaders = ['name', 'unit', 'price', 'type'];
 
 const TooltipContent = ({ item }: any) => {
   const t = useTranslations();
+
+  const totalPrice: Record<number, number> = item.reduce(
+    (acc: any, item: any) => {
+      const total = item.unit * item.price;
+      acc[item.currency] = (acc[item.currency] || 0) + total;
+      return acc;
+    },
+    {} as Record<number, number>
+  );
+
+  const totalPriceString = Object.entries(totalPrice)
+    .map(
+      ([currency, total]) =>
+        `${total.toFixed(2)} ${
+          currencyEnums[currency as unknown as keyof typeof currencyEnums]
+        }`
+    )
+    .join(' + ');
+
+  const columns: ColumnDef<any>[] = [
+    {
+      accessorKey: 'name',
+      header: 'name'
+    },
+    {
+      accessorKey: 'unit',
+      header: 'unit'
+    },
+    {
+      id: 'type',
+      header: 'type',
+      cell: ({ row }) => (
+        <Badge className="py-0.5">
+          {t(CostEnums[row.original.type as keyof typeof CostEnums])}
+        </Badge>
+      )
+    },
+    {
+      id: 'price',
+      header: 'price',
+      cell: ({ row }) =>
+        `${row.original.price} ${
+          currencyEnums[row.original.currency as keyof typeof currencyEnums]
+        }`
+    }
+  ];
+
   return (
     <>
-      <Table bordered={false}>
+      <DataTable
+        rounded={false}
+        searchKey=""
+        className="max-w-2xl"
+        columns={columns}
+        data={item.sort((a: any, b: any) => a.type - b.type)}
+        footer={
+          <TableRow className="text-foreground">
+            <TableCell colSpan={2}>{t('total')}</TableCell>
+            <TableCell colSpan={2} className="text-right">
+              {totalPriceString}
+            </TableCell>
+          </TableRow>
+        }
+      />
+      {/* <Table bordered={false}>
         <TableHeader className="">
           <TableRow>
             {tableHeaders.map((header, index) => (
@@ -422,6 +503,25 @@ const TooltipContent = ({ item }: any) => {
             <TableRow key={rowIndex}>
               {Object.entries(row).map(([key, value]: any, cellIndex) => {
                 if (key === 'currency') return;
+                if (key === 'type') {
+                  return (
+                    <TableCell key={cellIndex} className="py-1.5 text-xs">
+                      {t(CostEnums[value as keyof typeof CostEnums])}
+                    </TableCell>
+                  );
+                }
+                if (key === 'price') {
+                  return (
+                    <TableCell key={cellIndex} className="py-1.5 text-xs">
+                      {value}{' '}
+                      {
+                        currencyEnums[
+                          row.currency as keyof typeof currencyEnums
+                        ]
+                      }
+                    </TableCell>
+                  );
+                }
                 return (
                   <TableCell key={cellIndex} className="py-1.5 text-xs">
                     {value}
@@ -431,7 +531,13 @@ const TooltipContent = ({ item }: any) => {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+        <TableFooter className="bg-transparent">
+          <TableRow className="text-foreground">
+            <TableCell colSpan={3}>{t('total')}</TableCell>
+            <TableCell className="text-right">$2,500.00</TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table> */}
     </>
   );
 };

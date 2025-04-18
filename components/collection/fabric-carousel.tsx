@@ -1,6 +1,6 @@
 'use client';
 
-import { CircleHelp, Pencil, Trash2 } from 'lucide-react';
+import { CircleHelp, Pencil, PencilRuler, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import ConfirmDeleteDialog from '../confirm-delete-dialog';
@@ -19,7 +19,10 @@ import {
 import Empty from '../ui/empty';
 import AddFabricToCollectionSheet from './add-fabric-to-collection-sheet';
 import EditCollectionFabricSheet from './edit-collection-fabric';
-import EditUnitMeterDialog from './edit-unit-meter-dialog';
+import EditUnitQuantityDialog from './edit-unit-quantity-dialog';
+import { useCollectionSlice } from '@/store/collection-slice';
+import { cn } from '@/lib/utils';
+import ThemedTooltip from '../ThemedTooltip';
 
 interface SupplierFabric {
   id: string;
@@ -34,10 +37,12 @@ interface SupplierFabric {
 
 interface Props {
   data: SupplierFabric[];
+  verified?: boolean;
 }
 
 function FabricCarousel({ data }: Props) {
   const t = useTranslations();
+  const verified = useCollectionSlice((state) => state.isVerified);
   const [deleteState, setDeleteState] = useState({
     open: false,
     id: ''
@@ -49,7 +54,7 @@ function FabricCarousel({ data }: Props) {
     percent: 0
   });
 
-  const [helpState, setHelpState] = useState({
+  const [unitQuantityState, setUnitQuantityState] = useState({
     open: false,
     data: null
   });
@@ -75,8 +80,10 @@ function FabricCarousel({ data }: Props) {
         setState={setDeleteState}
       />
       <EditCollectionFabricSheet setState={setEditState} state={editState} />
-      <EditUnitMeterDialog state={helpState} setState={setHelpState} />
-      {/* <EditFabricSheet state={editState} setState={setEditState} /> */}
+      <EditUnitQuantityDialog
+        state={unitQuantityState}
+        setState={setUnitQuantityState}
+      />
       <div className="mb-4 flex justify-between gap-4">
         <SearchBar
           value={searchKey}
@@ -84,7 +91,6 @@ function FabricCarousel({ data }: Props) {
           className="w-auto min-w-72 bg-card"
           placeholder={t('search_fabric_color_code')}
         />
-        {/* <AssignFabricSheet /> */}
         <AddFabricToCollectionSheet />
       </div>
       <Carousel
@@ -96,7 +102,7 @@ function FabricCarousel({ data }: Props) {
         <CarouselContent>
           {filteredData?.length === 0 ? (
             <div className="flex w-full items-center justify-center py-10">
-              <Empty description={t('fabric_carousel_empty_description')} />
+              <Empty description={t('no_fabric_found')} />
             </div>
           ) : (
             filteredData?.map((fabric, index: number) => (
@@ -122,46 +128,64 @@ function FabricCarousel({ data }: Props) {
                       </Badge>
                     </div>
                     <div className="flex w-full">
-                      <Button
-                        className="flex-1 rounded-none"
-                        onClick={() =>
-                          setDeleteState({
-                            open: true,
-                            id: fabric.id
-                          })
-                        }
-                        variant="destructive"
-                        size="sm"
+                      <ThemedTooltip
+                        disabled={verified}
+                        text="verification_required"
                       >
-                        {/* {t('delete')} */}
-                        <Trash2 size={16} />
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        className="flex-1 rounded-none"
-                        size="sm"
-                        onClick={() => {
-                          setEditState({
-                            id: fabric.id,
-                            percent: fabric.percent,
-                            open: true
-                          });
-                        }}
+                        <div className="flex-1">
+                          <Button
+                            disabled={!verified}
+                            className="w-full rounded-none"
+                            onClick={() => {
+                              setDeleteState({
+                                open: true,
+                                id: fabric.id
+                              });
+                            }}
+                            variant="destructive"
+                            size="sm"
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </div>
+                      </ThemedTooltip>
+                      <ThemedTooltip
+                        disabled={verified}
+                        text="verification_required"
                       >
-                        {/* {t('edit')} */}
-                        <Pencil size={16} />
-                      </Button>
-                      <Button
-                        className="flex-1 rounded-none"
-                        onClick={() =>
-                          setHelpState({ open: true, data: fabric.unitMeters })
-                        }
-                        variant="secondary"
-                        size="sm"
-                      >
-                        {/* {t('delete')} */}
-                        <CircleHelp size={16} />
-                      </Button>
+                        <div className="flex-1">
+                          <Button
+                            disabled={!verified}
+                            variant="secondary"
+                            className="w-full rounded-none"
+                            size="sm"
+                            onClick={() => {
+                              setEditState({
+                                id: fabric.id,
+                                percent: fabric.percent,
+                                open: true
+                              });
+                            }}
+                          >
+                            <Pencil size={16} />
+                          </Button>
+                        </div>
+                      </ThemedTooltip>
+                      <div className="flex-1">
+                        <Button
+                          className="w-full rounded-none"
+                          onClick={() =>
+                            setUnitQuantityState({
+                              open: true,
+                              data: fabric.unitMeters
+                            })
+                          }
+                          variant="secondary"
+                          size="sm"
+                        >
+                          <PencilRuler size={16} />
+                        </Button>
+                      </div>
                     </div>
                   </CardFooter>
                 </Card>

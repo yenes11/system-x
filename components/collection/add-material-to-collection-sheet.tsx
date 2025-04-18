@@ -29,6 +29,9 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
+import { Plus } from 'lucide-react';
+import ThemedTooltip from '../ThemedTooltip';
+import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
   material: z.string().uuid(),
@@ -37,7 +40,7 @@ const formSchema = z.object({
   amount: z.number().min(0)
 });
 
-function AddMaterialToCollectionSheet() {
+function AddMaterialToCollectionSheet({ verified }: { verified?: boolean }) {
   const t = useTranslations();
   const params = useParams();
   const router = useRouter();
@@ -107,15 +110,30 @@ function AddMaterialToCollectionSheet() {
     assignMaterialToCollection.mutate(values);
   };
 
-  console.log(selectedColor?.variants, 'vvv');
-
   return (
     <ThemedSheet
       open={open}
       setOpen={setOpen}
       title={t('add_material_to_collection')}
-      triggerLabel={t('add_material_to_collection')}
-      triggerIcon={<Icon className="mr-2" icon="plus" currentColor />}
+      trigger={
+        <ThemedTooltip disabled={verified} text="verification_required">
+          <Button
+            className={cn({
+              'cursor-not-allowed opacity-50 hover:bg-primary hover:active:scale-100 hover:active:bg-primary':
+                !verified
+            })}
+            onClick={() => {
+              if (!verified) return;
+              setOpen(true);
+            }}
+          >
+            <Plus className="mr-2 size-4" />
+            {t('add_material_to_collection')}
+          </Button>
+        </ThemedTooltip>
+      }
+      // triggerLabel={t('add_material_to_collection')}
+      // triggerIcon={<Icon className="mr-2" icon="plus" currentColor />}
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

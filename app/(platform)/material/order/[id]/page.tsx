@@ -37,45 +37,47 @@ async function MaterialOrderDetailsPage({
       />
       <div className="mt-4 @container">
         <Card className="mb-4 flex flex-col overflow-hidden @sm:!flex-row">
-          <CardHeader className="flex flex-1 flex-row items-start bg-muted/50 p-0">
-            <Tabs defaultValue="order-image">
-              <TabsList className="flex h-auto gap-0 rounded-none border-b bg-transparent px-0 py-0 text-foreground">
-                <TabsTrigger
-                  className="relative flex-1 rounded-none px-4 py-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+          <CardHeader className="flex h-[645px] flex-row items-start bg-muted/50 p-0">
+            <div className="aspect-square h-full w-full">
+              <Tabs defaultValue="order-image">
+                <TabsList className="h-auto gap-0 rounded-none border-b bg-transparent px-0 py-0 text-foreground">
+                  <TabsTrigger
+                    className="relative rounded-none px-4 py-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                    value="order-image"
+                  >
+                    {t('order_image')}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="relative rounded-none px-4 py-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                    value="supplier-image"
+                  >
+                    {t('supplier_image')}
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent
+                  className="flex items-center justify-center"
                   value="order-image"
                 >
-                  {t('order_image')}
-                </TabsTrigger>
-                <TabsTrigger
-                  className="relative flex-1 rounded-none px-4 py-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                  <ImageZoom>
+                    <img
+                      src={material.image}
+                      className="aspect-square rounded object-cover object-top"
+                    />
+                  </ImageZoom>
+                </TabsContent>
+                <TabsContent
+                  className="flex items-center justify-center"
                   value="supplier-image"
                 >
-                  {t('supplier_image')}
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent
-                className="flex items-center justify-center"
-                value="order-image"
-              >
-                <ImageZoom>
-                  <img
-                    src={details.material.image}
-                    className="aspect-square rounded object-cover object-top"
-                  />
-                </ImageZoom>
-              </TabsContent>
-              <TabsContent
-                className="flex items-center justify-center"
-                value="supplier-image"
-              >
-                <ImageZoom>
-                  <img
-                    src={details.supplier.image}
-                    className="aspect-square rounded object-cover object-top"
-                  />
-                </ImageZoom>
-              </TabsContent>
-            </Tabs>
+                  <ImageZoom>
+                    <img
+                      src={details.supplier.image}
+                      className="aspect-square rounded object-cover object-top"
+                    />
+                  </ImageZoom>
+                </TabsContent>
+              </Tabs>
+            </div>
           </CardHeader>
           <CardContent className="flex-1 p-0 text-sm">
             <h2 className="mb-2 ml-6 mt-4 text-xl font-bold ">
@@ -195,10 +197,9 @@ async function MaterialOrderDetailsPage({
         </Card>
       </div>
       <StockTable
-        supplierName={supplier.name}
+        type="material"
         orderUnit={material.orderUnit}
         details={details}
-        data={details.stocks}
       />
     </div>
   );

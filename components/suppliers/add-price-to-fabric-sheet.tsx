@@ -57,7 +57,11 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
   const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      currency: 2,
+      price: 0
+    }
   });
 
   const addPrice = useMutation({
@@ -80,10 +84,6 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
       });
     }
   });
-
-  // useEffect(() => {
-  //   form.reset({ manufacturerCode: state.manufacturerCode });
-  // }, [state.fabricColorId]);
 
   const onSubmit = (
     values: Partial<z.infer<typeof formSchema>> & {
@@ -120,7 +120,7 @@ function AddPriceToFabricSheet({ state, setState }: Props) {
                   <FormLabel>{t('currency')}</FormLabel>
                   <Select
                     defaultValue="2"
-                    onValueChange={(val) => field.onChange(Number(val))}
+                    onValueChange={(value) => field.onChange(value)}
                   >
                     <FormControl>
                       <SelectTrigger>

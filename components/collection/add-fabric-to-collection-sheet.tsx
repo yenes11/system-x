@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
-import ThemedSheet from '../themed-sheet';
-import { useTranslations } from 'next-intl';
-import Icon from '../ui/icon';
-import { z } from 'zod';
-import { useParams, useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import api from '@/api';
+import { getFabricUrl } from '@/constants/api-constants';
+import { getFabricsWithColors } from '@/lib/api-calls';
+import { useCollectionSlice } from '@/store/collection-slice';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Plus } from 'lucide-react';
+import moment from 'moment';
+import { useTranslations } from 'next-intl';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import ThemedSheet from '../themed-sheet';
+import ThemedTooltip from '../ThemedTooltip';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
@@ -22,15 +30,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { getFabricsWithColors } from '@/lib/api-calls';
-import { FabricColor } from '@/lib/types';
-import { Button } from '../ui/button';
-import api from '@/api';
-import { getFabricUrl } from '@/constants/api-constants';
 import { toast } from '../ui/use-toast';
-import { AxiosError } from 'axios';
-import moment from 'moment';
 
 const formSchema = z.object({
   fabric: z.string().uuid(),
@@ -44,6 +44,8 @@ function AddFabricToCollectionSheet() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
+  const verified = useCollectionSlice((state) => state.isVerified);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
   });
@@ -53,8 +55,6 @@ function AddFabricToCollectionSheet() {
     queryFn: () => getFabricsWithColors({ pageIndex: 0, pageSize: 99999 }),
     select: (data) => data.items
   });
-
-  // const fabrics = fabricColors.data.map(f => )
 
   const isFabricSelected = !!form.watch('fabric');
 
@@ -106,8 +106,21 @@ function AddFabricToCollectionSheet() {
       open={open}
       setOpen={setOpen}
       title={t('add_fabric_to_collection')}
-      triggerLabel={t('add_fabric_to_collection')}
-      triggerIcon={<Icon className="mr-2" icon="plus" currentColor />}
+      trigger={
+        <ThemedTooltip disabled={verified} text="verification_required">
+          <div>
+            <Button
+              disabled={!verified}
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <Plus className="mr-2 size-4" />
+              {t('add_fabric_to_collection')}
+            </Button>
+          </div>
+        </ThemedTooltip>
+      }
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
