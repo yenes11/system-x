@@ -107,10 +107,10 @@ function AddFabricToCollectionSheet() {
       setOpen={setOpen}
       title={t('add_fabric_to_collection')}
       trigger={
-        <ThemedTooltip disabled={verified} text="verification_required">
+        <ThemedTooltip disabled={!verified} text="verification_required">
           <div>
             <Button
-              disabled={!verified}
+              disabled={verified}
               onClick={() => {
                 setOpen(true);
               }}

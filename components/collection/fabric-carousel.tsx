@@ -129,12 +129,12 @@ function FabricCarousel({ data }: Props) {
                     </div>
                     <div className="flex w-full">
                       <ThemedTooltip
-                        disabled={verified}
+                        disabled={!verified}
                         text="verification_required"
                       >
                         <div className="flex-1">
                           <Button
-                            disabled={!verified}
+                            disabled={verified}
                             className="w-full rounded-none"
                             onClick={() => {
                               setDeleteState({
@@ -150,12 +150,12 @@ function FabricCarousel({ data }: Props) {
                         </div>
                       </ThemedTooltip>
                       <ThemedTooltip
-                        disabled={verified}
+                        disabled={!verified}
                         text="verification_required"
                       >
                         <div className="flex-1">
                           <Button
-                            disabled={!verified}
+                            disabled={verified}
                             variant="secondary"
                             className="w-full rounded-none"
                             size="sm"
