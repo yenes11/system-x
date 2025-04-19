@@ -178,7 +178,7 @@ async function ManageCollectionPage({ params }: { params: { id: string } }) {
           className="ml-auto mr-4"
           href={`/collection/edit-collection/${params.id}`}
         >
-          <Button size="sm">
+          <Button variant="secondary" size="sm">
             <SquarePen className="mr-2 size-4" />
             {t('edit')}
           </Button>

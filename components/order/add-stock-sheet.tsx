@@ -36,10 +36,12 @@ import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Plus, X } from 'lucide-react';
 import ThemedSheet from '../themed-sheet';
-import { generateBarcode } from '@/lib/utils';
+import { generateBarcode, printBarcode } from '@/lib/utils';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import ThemedRadio from '../themed-radio';
 import { Checkbox } from '../ui/checkbox';
+import { CheckedState } from '@radix-ui/react-checkbox';
+import { FabricOrder, MaterialOrder } from '@/lib/types';
 
 const formSchema = z.object({
   isCompleted: z.string(),
@@ -56,19 +58,23 @@ interface EditState {
   materialColorId: string;
 }
 
-interface Props {
-  state: EditState;
-  setState: Dispatch<SetStateAction<EditState>>;
-}
+type Props =
+  | {
+      type: 'material';
+      details: MaterialOrder;
+    }
+  | {
+      type: 'fabric';
+      details: FabricOrder;
+    };
 
-function AddStockSheet() {
+function AddStockSheet({ details, type }: Props) {
   const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
-  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [status, setStatus] = useState('off');
+  const [print, setPrint] = useState<CheckedState>(false);
 
   const url = pathname.startsWith('/fabric')
     ? '/FabricColorStocks'
@@ -102,6 +108,25 @@ function AddStockSheet() {
       return res;
     },
     onSuccess: async (res) => {
+      if (print) {
+        let info: string;
+        if (type === 'fabric') {
+          info = `${details.fabric.name} - ${details.fabric.color} - ${details.fabric.unit}`;
+        } else {
+          info = `${details.material.name} - ${details.material.color} - ${details.material.orderUnit}`;
+        }
+        const date = moment(details.arrivalDate).format('DD/MM/YYYY');
+
+        const labelData = fields.map((item) => ({
+          barcode: item.barcode,
+          info,
+          amount: item.incomingAmount,
+          date,
+          supplier: details.supplier.name,
+          supplierCode: details.supplier.manufacturerCode
+        }));
+        printBarcode(labelData);
+      }
       router.refresh();
       form.reset();
       setOpen(false);
@@ -121,7 +146,7 @@ function AddStockSheet() {
       setOpen={setOpen}
       title={t('add_stock')}
       trigger={
-        <Button variant="outline" size="sm">
+        <Button disabled={details.status === 3} variant="outline" size="sm">
           <Plus className="mr-2 size-4" />
           {t('add_stock')}
         </Button>
@@ -194,15 +219,20 @@ function AddStockSheet() {
             )}
           />
           <div className="flex items-center space-x-2">
-            <Checkbox id="terms" />
+            <Checkbox
+              checked={print}
+              onCheckedChange={(checked) => setPrint(checked)}
+              id="print"
+            />
             <label
-              htmlFor="terms"
+              htmlFor="print"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               {t('print')}
             </label>
           </div>
           <Button
+            variant="secondary"
             onClick={() =>
               append({ incomingAmount: 0, barcode: generateBarcode() })
             }

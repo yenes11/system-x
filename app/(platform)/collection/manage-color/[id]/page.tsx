@@ -12,7 +12,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollectionDraftDetails } from '@/lib/api-calls';
 import { useCollectionSlice } from '@/store/collection-slice';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { BadgeCheck, SquareBottomDashedScissors } from 'lucide-react';
+import {
+  AlertCircle,
+  BadgeCheck,
+  SquareBottomDashedScissors
+} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Fragment } from 'react';
 
@@ -103,9 +107,10 @@ function ManageCollectionColorPage({ params }: { params: { id: string } }) {
       </div>
       {!collectionDetails.identityDefined && (
         <div className="mb-3 flex items-center gap-2 rounded-md border-l-destructive bg-destructive/15 px-4 py-2 text-destructive">
-          <div>
-            <span className="text-sm font-medium">{t('unverified')}</span>
-            <p className="text-xs">{t('unverified_description')}</p>
+          <div className="flex gap-2">
+            <AlertCircle />
+            <span className="font-medium">{t('unverified')}</span>
+            {/* <p className="">{t('unverified_description')}</p> */}
           </div>
           <div className="ml-auto">
             <VerifyCollectionDialog details={collectionDetails} />

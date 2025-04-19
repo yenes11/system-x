@@ -38,7 +38,7 @@ import { toast } from 'sonner';
 const formSchema = z.object({
   supplierId: z.string().uuid(),
   orderAmount: z.number().min(1),
-  placedDate: z.string().datetime(),
+  orderPlacedDate: z.string().datetime(),
   estimatedArrivalDate: z.string().datetime(),
   unitPrice: z.number().min(1),
   currency: z.number().min(1)
@@ -203,7 +203,7 @@ function PlaceOrderSheet() {
 
           <FormField
             control={form.control}
-            name="placedDate"
+            name="orderPlacedDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>{t('placed_date')}</FormLabel>

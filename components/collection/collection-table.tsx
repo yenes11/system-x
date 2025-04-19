@@ -294,13 +294,6 @@ function CollectionTable({ data }: Props) {
                 <TableCell className="px-4 py-4" colSpan={columns.length}>
                   <div className="mb-4 flex">
                     <div className="flex-1 pr-2">
-                      {/* <ThemedZoom>
-                        <img
-                          className="mr-2 aspect-square w-32 min-w-32 origin-top-left rounded object-cover object-top"
-                          src={row.original.image}
-                          alt={row.original.name}
-                        />
-                      </ThemedZoom> */}
                       <ImageZoom>
                         {/* <Image
                           width={128}

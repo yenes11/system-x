@@ -5,15 +5,11 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Code from '@/components/ui/code';
 import { Heading } from '@/components/ui/heading';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  getFabricOrderDetails,
-  getMaterialOrderDetails
-} from '@/lib/api-calls';
+import { getFabricOrderDetails } from '@/lib/api-calls';
 import { currencyEnums } from '@/types';
 import { ShoppingCart } from 'lucide-react';
 import moment from 'moment';
 import { getTranslations } from 'next-intl/server';
-import React from 'react';
 
 const OrderStatus = {
   1: 'order_placed',
@@ -94,14 +90,14 @@ async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
                 <div className="grid grid-cols-1 gap-1 px-6 py-3 sm:grid-cols-3 sm:gap-4">
                   <dt className="text-muted-foreground">{t('amount')}</dt>
                   <dd className="sm:col-span-2">
-                    {details.orderAmount + fabric.unit}
+                    {details.orderAmount + ' ' + fabric.unit}
                   </dd>
                 </div>
 
                 <div className="grid grid-cols-1 gap-1 px-6 py-3 sm:grid-cols-3 sm:gap-4">
                   <dt className="text-muted-foreground">{t('status')}</dt>
                   <dd className="sm:col-span-2">
-                    <Badge variant="outline" className="-my-3 gap-1.5">
+                    <Badge variant="outline" className="-mt-4 gap-1.5">
                       <span
                         className="size-1.5 rounded-full bg-emerald-500"
                         aria-hidden="true"

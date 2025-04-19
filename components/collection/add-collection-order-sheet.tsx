@@ -173,7 +173,7 @@ function AddCollectionOrderSheet() {
             <Button
               onClick={() => setOpen(true)}
               disabled={!verified}
-              variant="outline"
+              variant="secondary"
             >
               <Plus className="mr-2 size-4" />
               {t('add_order')}

@@ -209,7 +209,11 @@ function StockTable({ orderUnit, details, type }: Props) {
             <Printer className="mr-2 size-4" />
             {t('print')}
           </Button>
-          <AddStockSheet />
+          {type === 'fabric' ? (
+            <AddStockSheet type="fabric" details={details as FabricOrder} />
+          ) : (
+            <AddStockSheet type="material" details={details as MaterialOrder} />
+          )}
         </CardHeader>
         <CardContent className="p-0">
           <Table>

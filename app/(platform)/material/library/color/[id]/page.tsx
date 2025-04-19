@@ -7,7 +7,6 @@ import SuppliersTable from '@/components/fabric-color/suppliers-table';
 import ImageZoom from '@/components/image-zoom';
 import MaterialCollectionsCarousel from '@/components/material/material-collections-caraousel';
 import StatusCard from '@/components/status-card';
-import ThemedZoom from '@/components/themed-zoom';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import {
@@ -134,7 +133,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
                       {t('stock_in_hand')} ({stockInHandCount}) +{' '}
                       {t('incoming_stock')} ({activeOrderCount}) -{' '}
                       {t('reserved_stock')} ({color.reservedAmount}) = {summary}{' '}
-                      {color.type.variantUnit}
+                      {color.type.orderUnit}
                     </p>
                   </PopoverContent>
                 </Popover>

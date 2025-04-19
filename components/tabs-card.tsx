@@ -15,14 +15,14 @@ export default function TabsCard() {
     { header: 'unit', accessorKey: 'unit' },
     { header: 'currency', accessorKey: 'currency' },
     {
-      id: '',
+      id: 'asd',
 
-      cell: () => (
-        <div>
-          <Button>
-            <Plus className="mr-2 size-4" /> Add Material
-          </Button>
-        </div>
+      header: () => (
+        // <div>
+        <Button variant="ghost" size="sm" className="-my-2 ml-auto flex">
+          <Plus className="mr-2 size-4" /> Add Material
+        </Button>
+        // </div>
       )
     }
   ];

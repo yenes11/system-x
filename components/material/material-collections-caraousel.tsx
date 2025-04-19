@@ -113,7 +113,7 @@ function MaterialCollectionsCarousel({ data }: { data: MaterialCollection[] }) {
           value={searchKey}
           onChange={(e) => setSearchKey(e.target.value)}
           className="w-auto min-w-72 bg-card"
-          placeholder={t('search_fabric_color_code')}
+          placeholder={t('search_material_color_code')}
         />
       </div>
       <Carousel
@@ -148,6 +148,10 @@ function MaterialCollectionsCarousel({ data }: { data: MaterialCollection[] }) {
                         {t('manufacturer_code')}
                       </span>
                       <Code>{collection.collectionManufacturerCode}</Code>
+                      <span className="mt-1 text-xs text-muted-foreground">
+                        {t('customer_code')}
+                      </span>
+                      <Code>{collection.collectionCustomerCode}</Code>
                       <span className="mt-1 text-xs text-muted-foreground">
                         {t('amount')}
                       </span>

@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import moment from 'moment';
 import { toast } from 'sonner';
@@ -31,8 +32,8 @@ export default function page() {
             <Button>Downloads</Button>
           </div>
         </div>
-        <TabsCard />
-        <TabsSegmented />
+        {/* <TabsCard />
+        <TabsSegmented /> */}
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>

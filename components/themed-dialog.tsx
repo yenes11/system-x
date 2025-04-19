@@ -20,6 +20,7 @@ interface Props {
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   footer?: React.ReactNode;
+  trigger?: React.ReactNode;
   contentClassName?: string;
 }
 
@@ -32,18 +33,21 @@ function ThemedDialog({
   headerIcon,
   triggerIcon,
   footer,
+  trigger,
   contentClassName
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {triggerLabel && (
+      {trigger ? (
+        <DialogTrigger asChild>{trigger}</DialogTrigger>
+      ) : triggerLabel ? (
         <DialogTrigger asChild>
           <Button>
             {triggerIcon}
             {triggerLabel}
           </Button>
         </DialogTrigger>
-      )}
+      ) : null}
       <DialogContent
         className={cn(
           'flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-lg [&>button:last-child]:top-3.5',

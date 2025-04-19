@@ -158,7 +158,7 @@ function AddCostDialog() {
       <ThemedTooltip text="verification_required">
         <div className="inline-block">
           <DialogTrigger asChild>
-            <Button disabled={!verified} size="sm" variant="outline">
+            <Button disabled={!verified} variant="secondary">
               <Plus className="mr-2 size-4" />
               {t('add_cost')}
             </Button>

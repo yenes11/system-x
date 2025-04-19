@@ -1,25 +1,30 @@
 'use client';
 
-import { CollectionGallery as CollectionImage } from '@/lib/types';
-import React, { Ref, useRef, useState } from 'react';
-import ThemedZoom from '../themed-zoom';
-import { useParams, useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
 import api from '@/api';
-import { useTranslations } from 'next-intl';
-import { Input } from '../ui/input';
+import { CollectionGallery as CollectionImage } from '@/lib/types';
+import { useMutation } from '@tanstack/react-query';
+import { Trash2 } from 'lucide-react';
 import moment from 'moment';
+import { useTranslations } from 'next-intl';
+import { useParams, useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
-import { Card, CardContent, CardHeader } from '../ui/card';
-import Empty from '../ui/empty';
+import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import ImageZoom from '../image-zoom';
 import { Button } from '../ui/button';
-import { Trash2 } from 'lucide-react';
-import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import { Card, CardContent, CardHeader } from '../ui/card';
+import Empty from '../ui/empty';
+import { Input } from '../ui/input';
+import FileUpload from '../file-upload';
+import { useFileUpload } from '@/hooks/use-file-upload';
 
 interface Props {
   images: CollectionImage[];
 }
+
+const maxSizeMB = 5;
+const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
+const maxFiles = 6;
 
 function CollectionGallery({ images }: Props) {
   const params = useParams();
@@ -31,6 +36,15 @@ function CollectionGallery({ images }: Props) {
     id: ''
   });
 
+  const upload = useFileUpload({
+    accept: 'image/svg+xml,image/png,image/jpeg,image/jpg,image/gif',
+    maxSize,
+    multiple: true,
+    maxFiles
+  });
+
+  const [{ files }, { clearFiles }] = upload;
+
   const addImage = useMutation({
     mutationFn: async (formData: FormData) => {
       const res = await api.post(`/CollectionImages`, formData);
@@ -39,11 +53,21 @@ function CollectionGallery({ images }: Props) {
     onSuccess: (res) => {
       router.refresh();
       setInputKey((prev) => prev + 1);
+      clearFiles();
       toast.success(t('item_added'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
       });
     }
   });
+
+  const onSubmit = () => {
+    const formData = new FormData();
+    formData.append('collectionId', params?.id as string);
+    for (const file of files) {
+      formData.append('images', file.file as Blob);
+    }
+    addImage.mutate(formData);
+  };
 
   return (
     <React.Fragment>
@@ -55,8 +79,9 @@ function CollectionGallery({ images }: Props) {
         title={t('delete_image')}
       />
       <Card>
-        <CardHeader className="h-16 flex-row items-center border-b px-4 py-0">
-          <Input
+        <CardHeader className="flex-row items-center border-b p-0">
+          <FileUpload onSend={onSubmit} upload={upload} />
+          {/* <Input
             key={inputKey}
             multiple
             onChange={(event) => {
@@ -76,7 +101,7 @@ function CollectionGallery({ images }: Props) {
             }}
             type="file"
             className="w-72 py-0 pl-0"
-          />
+          /> */}
         </CardHeader>
         <CardContent className="flex flex-wrap gap-1 p-4">
           {images.length > 0 ? (

@@ -14,6 +14,7 @@ import ThemedDialog from '../themed-dialog';
 import { Button } from '../ui/button';
 import Icon from '../ui/icon';
 import TransferList from './transfer-list';
+import { SquarePen } from 'lucide-react';
 
 function AddStationDialog({ data }: { data: ProductStation[] }) {
   const t = useTranslations();
@@ -44,8 +45,6 @@ function AddStationDialog({ data }: { data: ProductStation[] }) {
     }
   }, [productStations.data, data]);
 
-  console.log(productStations.data, 'daaaa');
-
   const addProductStation = useMutation({
     mutationFn: async (data: any) => {
       const res = await api.post('/CollectionProductionStations', data);
@@ -75,7 +74,12 @@ function AddStationDialog({ data }: { data: ProductStation[] }) {
     <ThemedDialog
       open={open}
       setOpen={setOpen}
-      triggerLabel={t('edit')}
+      trigger={
+        <Button variant="secondary">
+          <SquarePen className="mr-2 size-4" /> {t('edit')}
+        </Button>
+      }
+      // triggerLabel={t('edit')}
       contentClassName="sm:max-w-2xl"
       title={t('add_product_station')}
       footer={

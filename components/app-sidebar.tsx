@@ -11,22 +11,20 @@ import {
 } from 'lucide-react';
 import * as React from 'react';
 
+import api from '@/api';
 import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail
 } from '@/components/ui/sidebar';
-import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
-import api from '@/api';
 import { URL_USER_INFO } from '@/constants/api-constants';
+import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 const navItems = [
@@ -121,7 +119,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
                   {company?.logo ? (
-                    <Avatar>
+                    <Avatar className=" border-border/50 bg-muted/50">
                       <AvatarImage
                         className="object-contain"
                         src={company.logo}

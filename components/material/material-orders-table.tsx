@@ -62,8 +62,8 @@ function MaterialOrdersTable({ data }: { data: PaginatedData<MaterialOrder> }) {
 
   const columns: ColumnDef<MaterialOrder>[] = [
     {
-      id: 'fabric_details',
-      header: 'fabric_details',
+      id: 'material_details',
+      header: 'material_details',
       meta: {
         cellClassName: 'align-top'
       },

@@ -143,8 +143,13 @@ export const AddSampleSheet = () => {
       title={t('add_sample')}
       open={open}
       setOpen={setOpen}
-      triggerIcon={<Plus className="mr-2 size-5" />}
-      triggerLabel={t('add_sample')}
+      trigger={
+        <Button variant="secondary">
+          <Plus className="mr-2 size-4" /> {t('add_sample')}
+        </Button>
+      }
+      // triggerIcon={<Plus className="mr-2 size-5" />}
+      // triggerLabel={t('add_sample')}
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
