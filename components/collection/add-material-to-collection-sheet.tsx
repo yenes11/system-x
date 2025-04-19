@@ -32,6 +32,7 @@ import {
 import { Plus } from 'lucide-react';
 import ThemedTooltip from '../ThemedTooltip';
 import { cn } from '@/lib/utils';
+import { useCollectionSlice } from '@/store/collection-slice';
 
 const formSchema = z.object({
   material: z.string().uuid(),
@@ -40,11 +41,13 @@ const formSchema = z.object({
   amount: z.number().min(0)
 });
 
-function AddMaterialToCollectionSheet({ verified }: { verified?: boolean }) {
+function AddMaterialToCollectionSheet() {
   const t = useTranslations();
   const params = useParams();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  const verified = useCollectionSlice((state) => state.isVerified);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
@@ -116,20 +119,18 @@ function AddMaterialToCollectionSheet({ verified }: { verified?: boolean }) {
       setOpen={setOpen}
       title={t('add_material_to_collection')}
       trigger={
-        <ThemedTooltip disabled={verified} text="verification_required">
-          <Button
-            className={cn({
-              'cursor-not-allowed opacity-50 hover:bg-primary hover:active:scale-100 hover:active:bg-primary':
-                !verified
-            })}
-            onClick={() => {
-              if (!verified) return;
-              setOpen(true);
-            }}
-          >
-            <Plus className="mr-2 size-4" />
-            {t('add_material_to_collection')}
-          </Button>
+        <ThemedTooltip disabled={!verified} text="verification_required">
+          <div>
+            <Button
+              disabled={verified}
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <Plus className="mr-2 size-4" />
+              {t('add_material_to_collection')}
+            </Button>
+          </div>
         </ThemedTooltip>
       }
       // triggerLabel={t('add_material_to_collection')}

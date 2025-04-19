@@ -27,7 +27,7 @@ export async function login(formData: any) {
     email: formData.email,
     password: formData.password
   };
-
+  debugger;
   try {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_BASE_URL}/Auth/Login`,

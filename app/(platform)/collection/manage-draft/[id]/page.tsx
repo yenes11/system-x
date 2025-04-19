@@ -156,10 +156,7 @@ function ManageCollectionPage({ params }: { params: { id: string } }) {
           />
         </TabsContent>
         <TabsContent value="material">
-          <MaterialCarousel
-            verified={collectionDetails.identityDefined}
-            data={collectionDetails.materials}
-          />
+          <MaterialCarousel data={collectionDetails.materials} />
         </TabsContent>
       </Tabs>
 

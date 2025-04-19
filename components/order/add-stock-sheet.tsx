@@ -61,7 +61,7 @@ interface Props {
   setState: Dispatch<SetStateAction<EditState>>;
 }
 
-function AddMaterialStockSheet() {
+function AddStockSheet() {
   const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
@@ -121,7 +121,7 @@ function AddMaterialStockSheet() {
       setOpen={setOpen}
       title={t('add_stock')}
       trigger={
-        <Button className="ml-auto" variant="outline" size="sm">
+        <Button variant="outline" size="sm">
           <Plus className="mr-2 size-4" />
           {t('add_stock')}
         </Button>
@@ -221,4 +221,4 @@ function AddMaterialStockSheet() {
   );
 }
 
-export default AddMaterialStockSheet;
+export default AddStockSheet;
