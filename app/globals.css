@@ -17,7 +17,7 @@
     --popover: 210 33% 99%;
     --popover-foreground: 224 71.4% 4.1%;
     /* --primary: 240 75% 59%; */
-    --primary: 224.3 76.3% 48%; /*174.67 83.85% 31.57%;*/
+    --primary: 238.99 96.76% 63.73%; /*174.67 83.85% 31.57%;*/
     --primary-foreground: 210 20% 98%;
     --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 220.9 39.3% 11%;
@@ -42,8 +42,8 @@
     --icon: 205.71 6.31% 43.53%;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-primary: 238.99 96.76% 63.73% /25%;
+    --sidebar-primary-foreground: 248 68% 51%;
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
@@ -65,23 +65,23 @@
     --background: 210 8% 5%;
     --foreground: 210 20% 98%;
     /* --card: 240 5.9% 10%; */
-    --card: 240 5% 8.82%;
+    --card: 240 5% 7%;
     --card-foreground: 210 20% 98%;
     --popover: 210 8% 5%;
     --popover-foreground: 210 20% 98%;
     /* --primary: 240 75% 59%; */
-    --primary: 224.3 76.3% 48%; /*174.67 83.85% 31.57%;*/
+    --primary: 238.99 96.76% 63.73%; /*174.67 83.85% 31.57%;*/
     /* --primary: 221.2 83.2% 53.3%; */
     --primary-foreground: 210 20% 98%;
-    --secondary: 215 27.9% 16.9%;
+    --secondary: 218 6% 14%;
     --secondary-foreground: 210 20% 98%;
-    --muted: 195 7.14% 10.98%; /* 215 27.9% 16.9%; */
+    --muted: 220 6% 10%; /* 215 27.9% 16.9%; */
     --muted-foreground: 217.9 10.6% 64.9%;
     --accent: 215 27.9% 16.9%;
     --accent-foreground: 210 20% 98%;
     --destructive: 352.1 95.3% 57.8%;
     --destructive-foreground: 210 20% 98%;
-    --border: 240 3.7% 15.9%;
+    --border: 216.81 6.8% 19.44%;
     /* --border: 205.71 6.67% 20.59%; */
     --input: 205.71 6.67% 20.59%; /*215 27.9% 16.9%;*/
     --ring: 224.3 76.3% 48%; /*263.4 70% 50.4%;*/
@@ -94,10 +94,10 @@
     --light: 200 6.67% 8.82%;
     --light-foreground: 205.71 6.67% 20.59%;
     --icon: 207.27 5.82% 62.94%;
-    --sidebar-background: 240 5.9% 10%;
+    --sidebar-background: 240 5% 7%;
     --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary: 238.99 96.76% 63.73% /25%;
+    --sidebar-primary-foreground: 229.91 100% 82.68%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
@@ -149,6 +149,11 @@
 }
 .collapsibleDropdown[data-state='closed'] {
   animation: slideUp 200ms ease-out;
+}
+
+[data-sidebar='menu-sub'] {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
 }
 
 @keyframes slideDown {

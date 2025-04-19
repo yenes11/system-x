@@ -4,6 +4,8 @@ import Component from '@/components/comp-170';
 import { CalendarDateRangePicker } from '@/components/date-range-picker';
 import { NestedSelect } from '@/components/nested-select';
 import { RecentSales } from '@/components/recent-sales';
+import TabsCard from '@/components/tabs-card';
+import TabsSegmented from '@/components/tabs-segmented';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -29,6 +31,8 @@ export default function page() {
             <Button>Downloads</Button>
           </div>
         </div>
+        <TabsCard />
+        <TabsSegmented />
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -63,6 +67,7 @@ export default function page() {
                   </p>
                 </CardContent>
               </Card>
+
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">

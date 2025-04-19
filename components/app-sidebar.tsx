@@ -35,13 +35,13 @@ const navItems = [
   {
     title: 'dashboard',
     url: '/dashboard',
-    icon: LayoutGrid,
+    icon: <LayoutGrid className="!size-5" />,
     isActive: true
   },
   {
     title: 'fabric',
     url: '/fabric',
-    icon: SwatchBook,
+    icon: <SwatchBook className="!size-5" />,
     isActive: true,
     items: [
       {
@@ -50,14 +50,15 @@ const navItems = [
       },
       {
         title: 'orders',
-        url: '/fabric/order?status=1'
+        url: '/fabric/order',
+        searchParams: '?status=1'
       }
     ]
   },
   {
     title: 'material',
     url: '/material',
-    icon: Disc3,
+    icon: <Disc3 className="!size-5" />,
     isActive: true,
     items: [
       {
@@ -66,14 +67,15 @@ const navItems = [
       },
       {
         title: 'orders',
-        url: '/material/order?status=1'
+        url: '/material/order',
+        searchParams: '?status=1'
       }
     ]
   },
   {
     title: 'collection',
     url: '/collection',
-    icon: Layers,
+    icon: <Layers className="!size-5" />,
     isActive: true,
     items: [
       {
@@ -89,13 +91,13 @@ const navItems = [
   {
     title: 'customer',
     url: '/customer/management',
-    icon: UserRound,
+    icon: <UserRound className="!size-5" />,
     isActive: true
   },
   {
     title: 'supplier',
     url: '/supplier',
-    icon: Package2,
+    icon: <Package2 className="!size-5" />,
     isActive: true
   }
 ];
@@ -109,16 +111,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const company = user?.data?.company;
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton
+              className="mx-2 gap-4 hover:bg-transparent"
+              size="lg"
+              asChild
+            >
               <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
                   {company?.logo ? (
                     <Avatar>
-                      <AvatarImage src={company.logo} alt="Company Logo" />
+                      <AvatarImage
+                        className="object-contain"
+                        src={company.logo}
+                        alt="Company Logo"
+                      />
                       <AvatarFallback>{company.name[0]}</AvatarFallback>
                     </Avatar>
                   ) : (

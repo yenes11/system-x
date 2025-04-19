@@ -23,7 +23,7 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
       className={`overflow-auto shadow-sm
         ${bordered && 'border border-light-foreground'}
       ${rounded ? 'rounded-lg' : 'rounded-none'} ${
-        transparent === true ? 'bg-transparent' : 'bg-card'
+        transparent === true ? 'bg-transparent' : 'bg-transparent'
       }`}
     >
       <table
@@ -42,7 +42,10 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn('border-b-light-foreground [&_tr]:border-b', className)}
+    className={cn(
+      'border-b-light-foreground text-muted-foreground [&_tr]:border-b',
+      className
+    )}
     {...props}
   />
 ));
@@ -94,7 +97,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-10 bg-sidebar px-6 py-3 text-left align-middle font-medium  [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+      'h-10 bg-muted px-6 py-3 text-left align-middle font-medium  [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
       className
     )}
     {...props}

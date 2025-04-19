@@ -1,6 +1,6 @@
 'use client';
 
-import { type LucideIcon } from 'lucide-react';
+import { CircleDot, Dot, type LucideIcon } from 'lucide-react';
 
 import {
   Collapsible,
@@ -29,23 +29,23 @@ export function NavMain({
   items: {
     title: string;
     url: string;
-    icon?: LucideIcon;
+    icon?: React.ReactNode;
     isActive?: boolean;
     items?: {
       title: string;
       url: string;
+      searchParams?: string;
     }[];
   }[];
 }) {
   const t = useTranslations();
   const pathname = usePathname();
 
-  const isActive = (url: string) =>
-    pathname === url || pathname.startsWith(url);
+  const isActive = (url: string) => pathname.startsWith(url);
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel className="px-3">Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -58,8 +58,11 @@ export function NavMain({
               {item.items ? (
                 <Fragment>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={item.title}>
-                      {item.icon && <item.icon />}
+                    <SidebarMenuButton
+                      className="h-10 px-3 !font-normal"
+                      tooltip={item.title}
+                    >
+                      {item.icon}
                       <span>{t(item.title)}</span>
                       {item.items && (
                         <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -69,15 +72,24 @@ export function NavMain({
                   <CollapsibleContent className="collapsibleDropdown">
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubItem
+                          className="!mr-0 !pr-0"
+                          key={subItem.title}
+                        >
                           <SidebarMenuSubButton
+                            className="!mr-0 h-10 !pr-0"
                             isActive={isActive(subItem.url)}
                             asChild
                           >
                             <Link
                               // data-active={isActive(subItem.url)}
-                              href={subItem.url}
+                              href={
+                                subItem.searchParams
+                                  ? subItem.url + subItem?.searchParams
+                                  : subItem.url
+                              }
                             >
+                              <CircleDot className="ml-2 !size-2" />
                               <span>{t(subItem.title)}</span>
                             </Link>
                           </SidebarMenuSubButton>
@@ -87,9 +99,13 @@ export function NavMain({
                   </CollapsibleContent>
                 </Fragment>
               ) : (
-                <SidebarMenuButton isActive={isActive(item.url)} asChild>
+                <SidebarMenuButton
+                  className="h-10 px-3 text-sm"
+                  isActive={isActive(item.url)}
+                  asChild
+                >
                   <Link href={item.url}>
-                    {item.icon && <item.icon />}
+                    {item.icon}
                     <span>{t(item.title)}</span>
                   </Link>
                 </SidebarMenuButton>
