@@ -327,6 +327,33 @@ export interface CollectionDraft {
   fabrics: any[];
 }
 
+export interface CollectionOrderDetails {
+  id: string;
+  collection: {
+    name: string;
+    color: string;
+    customerCode: string;
+    manufacturerCode: string;
+    image: string;
+    customer: string;
+  };
+  order: {
+    amount: number;
+    plmId: string;
+    groupPlmId: string;
+    status: keyof typeof OrderStatus;
+    deadline: string;
+    approvedCostId: string;
+    realCostId: string;
+    sizeBarcode: {
+      status: number;
+      inProgressDate: string;
+      preparedDate: string;
+      deliveredDate: string;
+    };
+  };
+}
+
 export const CostEnums = {
   1: 'product_station',
   2: 'fabric',
@@ -533,4 +560,8 @@ export interface CollectionOrder {
   customerCode: string;
   manufacturerCode: string;
   status: keyof typeof OrderStatus;
+}
+
+export interface Color extends BasicEntity {
+  createdDate: string;
 }

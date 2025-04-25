@@ -416,5 +416,16 @@
   "edit_body_size": "Bedeni Düzenle",
   "edit_quantity_list": "Birim Metraj Listesi",
   "draft_cost": "Taslak Maliyet",
-  "total": "Toplam"
+  "total": "Toplam",
+  "marker": "Pastal",
+  "cost_report": "Maliyet Raporu",
+  "customer_and_project_info": "Müşteri & Proje Bilgileri",
+  "customer_and_project_desc": "Müşteri ve proje ile ilgili meta verileri seçerek başlayın. Bu alanlar, öğenizi kuruluşunuz içinde doğru bir şekilde kategorize etmeye ve ilişkilendirmeye yardımcı olur",
+  "product_and_design_details": "Ürün & Tasarım Detayları",
+  "product_and_design_desc": "Ürünle ilgili özel detayları sağlayın ve ilgili tasarımcı ve alıcıyı atayın. Bu bölüm, neyin oluşturulduğunu ve kimin sorumlu olduğunu açıklamaya yardımcı olur",
+  "order_info": "Sipariş Bilgileri",
+  "collection_info": "Koleksiyon Bilgileri",
+  "settings": "Ayarlar",
+  "color_management": "Renk Yönetimi",
+  "product_station_address_management": "Ürün İstasyonu Adresi Yönetimi"
 }

@@ -64,11 +64,13 @@ function FabricColorCollectionCarousel({ data }: { data: ColorCollection[] }) {
                     </CardContent>
                     <CardFooter className="flex flex-col items-start p-2">
                       <span className="text-xs text-muted-foreground">
-                        {t('code')}
+                        {t('manufacturer_code')}
                       </span>
-                      <div className="flex items-center gap-2">
-                        <Code>{collection.collectionManufacturerCode}</Code>
-                      </div>
+                      <Code>{collection.collectionManufacturerCode}</Code>
+                      <span className="mt-1 text-xs text-muted-foreground">
+                        {t('customer_code')}
+                      </span>
+                      <Code>{collection.collectionCustomerCode}</Code>
                       <span className="text-xs text-muted-foreground">
                         {t('percentage')}
                       </span>

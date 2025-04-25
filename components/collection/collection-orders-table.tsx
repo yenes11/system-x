@@ -130,6 +130,8 @@ function CollectionOrdersTable({ data }: Props) {
     open: false
   });
 
+  console.log(data, 'dddddd');
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -244,6 +246,10 @@ function CollectionOrdersTable({ data }: Props) {
     columns,
     getCoreRowModel: getCoreRowModel()
   });
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <>
@@ -360,12 +366,10 @@ function CollectionOrdersTable({ data }: Props) {
                     <div className="flex flex-[2] flex-col items-end  gap-2">
                       <Button
                         className="w-56"
-                        // onClick={() =>
-                        //   router.push(
-                        //     `/collection/manage-collection/${row.original.id}`
-                        //   )
-                        // }
-                        variant="outline"
+                        onClick={() =>
+                          router.push(`/collection/order/${row.original.id}`)
+                        }
+                        variant="secondary"
                       >
                         {t('manage_order')}
                       </Button>

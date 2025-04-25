@@ -37,8 +37,8 @@ async function MaterialOrderDetailsPage({
       />
       <div className="mt-4 @container">
         <Card className="mb-4 flex flex-col overflow-hidden @sm:!flex-row">
-          <CardHeader className="flex h-[645px] flex-row items-start bg-muted/50 p-0">
-            <div className="aspect-square h-full w-full">
+          <CardHeader className="flex flex-row items-start bg-muted/50 p-0">
+            <div className="aspect-square h-44">
               <Tabs defaultValue="order-image">
                 <TabsList className="h-auto gap-0 rounded-none border-b bg-transparent px-0 py-0 text-foreground">
                   <TabsTrigger
@@ -55,7 +55,7 @@ async function MaterialOrderDetailsPage({
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center px-2"
                   value="order-image"
                 >
                   <ImageZoom>
@@ -66,7 +66,7 @@ async function MaterialOrderDetailsPage({
                   </ImageZoom>
                 </TabsContent>
                 <TabsContent
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center px-2"
                   value="supplier-image"
                 >
                   <ImageZoom>

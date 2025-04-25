@@ -101,7 +101,7 @@ function EditCollectionPage() {
       return res;
     },
     onSuccess: (res) => {
-      router.replace('/collection/manage-collection/' + params.id);
+      window.location.replace('/collection/manage-collection/' + params.id);
       toast.success(t('item_updated'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
       });
@@ -131,8 +131,6 @@ function EditCollectionPage() {
       return res.data;
     }
   });
-
-  console.log(form.getValues('image'), 'image');
 
   const departments = useQuery({
     queryKey: ['departments', selectedCustomerId],
@@ -214,7 +212,6 @@ function EditCollectionPage() {
       }
     });
 
-    formData.delete('image');
     addCollection.mutate(formData);
   };
 
@@ -222,7 +219,7 @@ function EditCollectionPage() {
     <div className="">
       <Link
         href={'/collection/manage-collection/' + params.id}
-        className="mb-4 flex items-center text-sm text-muted-foreground hover:text-foreground"
+        className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="mr-2 size-4" /> {t('go_back')}
       </Link>

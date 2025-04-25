@@ -1,14 +1,12 @@
 import { Ingredient } from '@/lib/types';
+import { Edit, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Badge } from '../ui/badge';
-import { Card } from '../ui/card';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Button } from '../ui/button';
-import { Edit, Edit2, Pencil, Trash2 } from 'lucide-react';
-import ConfirmDeleteDialog from '../confirm-delete-dialog';
-import React from 'react';
 import { useRouter } from 'next/navigation';
+import React from 'react';
+import ConfirmDeleteDialog from '../confirm-delete-dialog';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
 import EditFabricColorSheet from './edit-fabric-color-sheet';
 
 interface Props {
@@ -61,7 +59,7 @@ function FabricColorCard({ id, name, img, ingredients }: Props) {
             <div className="flex flex-wrap gap-1">
               {ingredients.map((ingredient, index) => (
                 <Badge
-                  className="text-nowrap rounded-sm text-white"
+                  className="text-nowrap rounded-sm text-background"
                   key={index}
                 >
                   {ingredient.percentage}% {ingredient.name}

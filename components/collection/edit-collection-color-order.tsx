@@ -1,14 +1,22 @@
+'use client';
+
 import api from '@/api';
-import { CollectionColorOrder, DataState, OrderStatus } from '@/lib/types';
+import {
+  CollectionColorOrder,
+  CollectionOrderDetails,
+  CostEnums,
+  DataState,
+  OrderStatus
+} from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { CalendarIcon, Plus } from 'lucide-react';
+import { CalendarIcon, Plus, SquarePen } from 'lucide-react';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { Dispatch, Fragment, useEffect } from 'react';
+import { Dispatch, Fragment, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -41,57 +49,42 @@ import {
   TableHeader,
   TableRow
 } from '../ui/table';
+import { currencyEnums } from '@/types';
+import { Badge } from '../ui/badge';
+import { DataTable } from '../ui/data-table';
+import { ColumnDef } from '@tanstack/react-table';
 
-const formSchema = z
-  .object({
-    amount: z.number().min(0),
-    plmId: z.string().min(1),
-    groupPlmId: z.string().min(1),
-    status: z.string().min(1),
-    approvedCostId: z.string().uuid(),
-    realCostId: z.string().uuid().optional(),
-    deadline: z.string(),
-    sizes: z.array(
-      z.object({
-        id: z.string().uuid(),
-        amount: z.number().min(0)
-      })
-    )
-  })
-  .superRefine((data, ctx) => {
-    // Calculate the sum of amounts within the sizes array
-    const sumOfSizes = data.sizes.reduce((acc, size) => acc + size.amount, 0);
-
-    // Compare the sum with the top-level amount
-    if (data.amount !== sumOfSizes) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom, // Use custom error code
-        message: `The sum of size amounts (${sumOfSizes}) must equal the total amount (${data.amount})`,
-        path: ['sizes'] // Attach the error message to the 'sizes' field
-      });
-    }
-  });
+const formSchema = z.object({
+  amount: z.number().min(0),
+  plmId: z.string().min(1),
+  groupPlmId: z.string().min(1),
+  status: z.string().min(1),
+  approvedCostId: z.string().uuid(),
+  realCostId: z.string().uuid().optional(),
+  deadline: z.string()
+});
 
 interface Props {
-  state: DataState<CollectionColorOrder>;
-  setState: Dispatch<DataState<CollectionColorOrder>>;
+  state: CollectionOrderDetails;
 }
 
-function EditCollectionOrderSheet({ state, setState }: Props) {
+function EditCollectionColorOrderSheet({ state }: Props) {
   const t = useTranslations();
   const params = useParams();
   const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      sizes: [{ id: '', amount: 0 }] // Initialize with one field
+      amount: 0,
+      plmId: '',
+      groupPlmId: '',
+      approvedCostId: '',
+      realCostId: '',
+      deadline: '',
+      status: '1'
     }
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: 'sizes'
   });
 
   const approvedCosts = useQuery({
@@ -140,7 +133,7 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
       queryClient.invalidateQueries({
         queryKey: ['collection-color-orders']
       });
-      setState({ ...state, open: false });
+      setOpen(false);
       form.reset();
       toast.success(t('item_added'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
@@ -149,15 +142,15 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
   });
 
   useEffect(() => {
-    if (state.data && state.open) {
+    if (state && open) {
       form.reset({
-        amount: state.data?.amount || 0,
-        plmId: state.data?.plmId || '',
-        groupPlmId: state.data?.groupPlmId || '',
-        // approvedCostId: state.data?.approvedCost?.id || '',
-        // realCostId: state.data?.realCost?.id || '',
-        deadline: state.data?.deadline || '',
-        status: state.data?.status.toString() || '1'
+        amount: state.order.amount || 0,
+        plmId: state.order.plmId || '',
+        groupPlmId: state.order.groupPlmId || '',
+        approvedCostId: state.order.approvedCostId || '',
+        realCostId: state.order.realCostId || '',
+        deadline: state.order.deadline || '',
+        status: state.order.status.toString() || '1'
       });
     }
   }, [state]);
@@ -166,28 +159,37 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
     addCollectionOrder.mutate(values);
   };
 
+  if (!state) return null;
+
   return (
     <ThemedSheet
-      open={state.open}
-      setOpen={(open: boolean) => setState({ ...state, open })}
-      title={t('add_order')}
+      trigger={
+        <Button variant="secondary" className="mr-2" size="sm">
+          <SquarePen className="mr-2 size-4" />
+          {t('edit')}
+        </Button>
+      }
+      open={open}
+      setOpen={setOpen}
+      title={t('update_order')}
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="amount"
-            render={({ field }) => (
+            render={({ field: { name, onChange, ref } }) => (
               <FormItem>
                 <FormLabel>{t('amount')}</FormLabel>
                 <FormControl>
                   <Input
+                    defaultValue={state.order.amount}
                     placeholder="15"
                     type="number"
-                    {...field}
+                    ref={ref}
+                    name={name}
                     onChange={(e) => {
-                      // console.log(first)
-                      field.onChange(e.target.valueAsNumber);
+                      onChange(e.target.valueAsNumber);
                     }}
                   />
                 </FormControl>
@@ -202,7 +204,13 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
               <FormItem>
                 <FormLabel>{t('plm_id')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="TYY11ER09" {...field} />
+                  <Input
+                    placeholder="TYY11ER09"
+                    defaultValue={state.order.plmId}
+                    onChange={field.onChange}
+                    ref={field.ref}
+                    name={field.name}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -215,7 +223,13 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
               <FormItem>
                 <FormLabel>{t('group_plm_id')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="TYY11ER09" {...field} />
+                  <Input
+                    defaultValue={state.order.groupPlmId}
+                    placeholder="TYY11ER09"
+                    onChange={field.onChange}
+                    ref={field.ref}
+                    name={field.name}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -228,7 +242,11 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('approved_cost')}</FormLabel>
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  defaultValue={state.order.approvedCostId}
+                  name={field.name}
+                  onValueChange={field.onChange}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder={t('select_item')} />
                   </SelectTrigger>
@@ -259,7 +277,11 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('real_cost')}</FormLabel>
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  defaultValue={state.order.realCostId}
+                  name={field.name}
+                  onValueChange={field.onChange}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder={t('select_item')} />
                   </SelectTrigger>
@@ -292,7 +314,8 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
               <FormItem>
                 <FormLabel>{t('status')}</FormLabel>
                 <Select
-                  value={field.value}
+                  defaultValue={state.order.status.toString()}
+                  name={field.name}
                   onValueChange={(value) => field.onChange(value)}
                 >
                   <FormControl>
@@ -302,10 +325,10 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
                   </FormControl>
                   <SelectContent>
                     {Object.entries(OrderStatus).map(([key, value]) => {
-                      if (!state.data) return;
+                      if (!state) return;
                       const enabled = [
-                        state.data.status,
-                        state.data.status + 1
+                        state.order.status,
+                        state.order.status + 1
                       ].includes(parseInt(key));
                       return (
                         <SelectItem disabled={!enabled} key={key} value={key}>
@@ -359,73 +382,6 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
             )}
           />
 
-          {fields.map((field, index) => (
-            <Fragment key={field.id}>
-              <FormField
-                control={form.control}
-                name={`sizes.${index}.id`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('size')}</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder={t('select_item')} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {sizes.data?.map((size: any) => (
-                          <SelectItem key={size.id} value={size.id}>
-                            {size.size}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name={`sizes.${index}.amount`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('amount')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="15"
-                        type="number"
-                        {...field}
-                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </Fragment>
-          ))}
-
-          {form.formState.errors.sizes?.root?.message && (
-            <p className="text-sm font-medium text-destructive">
-              {form.formState.errors.sizes.root.message}
-            </p>
-          )}
-
-          <Button
-            onClick={() => append({ id: '', amount: 0 })}
-            variant="outline"
-            className="w-full"
-            type="button"
-          >
-            <Plus className="mr-2 size-4" />
-            {t('add_size')}
-          </Button>
-
           <Button className="w-full" type="submit">
             {addCollectionOrder.isPending ? t('submitting') : t('submit')}
           </Button>
@@ -435,39 +391,72 @@ function EditCollectionOrderSheet({ state, setState }: Props) {
   );
 }
 
-export default EditCollectionOrderSheet;
-
-const tableHeaders = ['name', 'unit', 'type', 'price'];
+export default EditCollectionColorOrderSheet;
 
 const TooltipContent = ({ item }: any) => {
   const t = useTranslations();
+
+  const totalPrice: Record<number, number> = item.reduce(
+    (acc: any, item: any) => {
+      const total = item.unit * item.price;
+      acc[item.currency] = (acc[item.currency] || 0) + total;
+      return acc;
+    },
+    {} as Record<number, number>
+  );
+
+  const totalPriceString = Object.entries(totalPrice)
+    .map(
+      ([currency, total]) =>
+        `${total.toFixed(2)} ${
+          currencyEnums[currency as unknown as keyof typeof currencyEnums]
+        }`
+    )
+    .join(' + ');
+
+  const columns: ColumnDef<any>[] = [
+    {
+      accessorKey: 'name',
+      header: 'name'
+    },
+    {
+      accessorKey: 'unit',
+      header: 'unit'
+    },
+    {
+      id: 'type',
+      header: 'type',
+      cell: ({ row }) => (
+        <Badge className="py-0.5">
+          {t(CostEnums[row.original.type as keyof typeof CostEnums])}
+        </Badge>
+      )
+    },
+    {
+      id: 'price',
+      header: 'price',
+      cell: ({ row }) =>
+        `${row.original.price} ${
+          currencyEnums[row.original.currency as keyof typeof currencyEnums]
+        }`
+    }
+  ];
+
   return (
-    <>
-      <Table bordered={false}>
-        <TableHeader className="">
-          <TableRow>
-            {tableHeaders.map((header, index) => (
-              <TableHead key={index} className="text-xs">
-                {t(header)}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {item.map((row: any, rowIndex: number) => (
-            <TableRow key={rowIndex}>
-              {Object.entries(row).map(([key, value]: any, cellIndex) => {
-                if (key === 'currency') return;
-                return (
-                  <TableCell key={cellIndex} className="py-1.5 text-xs">
-                    {value}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+    <DataTable
+      rounded={false}
+      searchKey=""
+      className="max-w-2xl"
+      columns={columns}
+      data={item.sort((a: any, b: any) => a.type - b.type)}
+      footer={
+        <TableRow className="text-foreground">
+          <TableCell colSpan={2}>{t('total')}</TableCell>
+          <TableCell colSpan={2} className="text-right">
+            {totalPriceString}
+          </TableCell>
+        </TableRow>
+      }
+    />
   );
 };

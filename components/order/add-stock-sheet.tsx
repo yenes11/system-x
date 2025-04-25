@@ -10,38 +10,23 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle
-} from '@/components/ui/sheet';
+import { FabricOrder, MaterialOrder } from '@/lib/types';
+import { generateBarcode, printBarcode } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { CheckedState } from '@radix-ui/react-checkbox';
+import { useMutation } from '@tanstack/react-query';
+import { Plus, X } from 'lucide-react';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { Button } from '../ui/button';
-import { Plus, X } from 'lucide-react';
 import ThemedSheet from '../themed-sheet';
-import { generateBarcode, printBarcode } from '@/lib/utils';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
-import ThemedRadio from '../themed-radio';
+import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
-import { CheckedState } from '@radix-ui/react-checkbox';
-import { FabricOrder, MaterialOrder } from '@/lib/types';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 const formSchema = z.object({
   isCompleted: z.string(),

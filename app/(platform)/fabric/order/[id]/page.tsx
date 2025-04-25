@@ -32,10 +32,10 @@ async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
       />
       <div className="mt-4 @container">
         <Card className="mb-4 flex flex-col overflow-hidden @sm:!flex-row">
-          <CardHeader className="flex h-[645px] flex-row items-start bg-muted/50 p-0">
-            <div className="aspect-square h-full w-full">
+          <CardHeader className="flex flex-row items-start bg-muted/50 p-0">
+            <div className="aspect-square h-44 ">
               <Tabs defaultValue="order-image">
-                <TabsList className="h-auto gap-0 rounded-none border-b bg-transparent px-0 py-0 text-foreground">
+                <TabsList className="flex h-auto gap-0 rounded-none border-b bg-transparent px-0 py-0 text-foreground">
                   <TabsTrigger
                     className="relative rounded-none px-4 py-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                     value="order-image"
@@ -50,7 +50,7 @@ async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center px-2"
                   value="order-image"
                 >
                   <ImageZoom>
@@ -61,7 +61,7 @@ async function FabricOrderDetailsPage({ params }: { params: { id: string } }) {
                   </ImageZoom>
                 </TabsContent>
                 <TabsContent
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center px-2"
                   value="supplier-image"
                 >
                   <ImageZoom>

@@ -119,8 +119,8 @@ function ManageCollectionColorPage({ params }: { params: { id: string } }) {
       )}
       <div className="@container">
         <Card className="mb-4 flex flex-col divide-y overflow-hidden @sm:!flex-row @sm:divide-x @sm:divide-y-0">
-          <CardHeader className="flex-1 bg-muted/50">
-            <div className="">
+          <CardHeader className="bg-muted/50">
+            <div className="size-52">
               <ImageZoom>
                 <img
                   src={collectionDetails.image}

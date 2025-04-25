@@ -1,19 +1,9 @@
-import api from '@/api';
-import AddCollectionDialog from '@/components/collection/add-collection-dialog';
-import CollectionColorsTable from '@/components/collection/collection-colors-table';
 import CollectionOrdersTable from '@/components/collection/collection-orders-table';
-import CollectionTable from '@/components/collection/collection-table';
-import FabricCarousel from '@/components/collection/fabric-carousel';
-import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
-import Icon from '@/components/ui/icon';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getCollectionOrders } from '@/lib/api-calls';
 import { CollectionStatus } from '@/lib/types';
-import { Plus, PlusCircle, SwatchBook } from 'lucide-react';
-import { getMessages, getTranslations } from 'next-intl/server';
-import Link from 'next/link';
-import React from 'react';
+import { SwatchBook } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 type Props = {};
 

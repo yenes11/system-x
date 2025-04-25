@@ -346,7 +346,7 @@ function CollectionTable({ data }: Props) {
                           )
                         }
                         size="sm"
-                        variant="outline"
+                        variant="secondary"
                       >
                         {t('manage_collection')}
                       </Button>

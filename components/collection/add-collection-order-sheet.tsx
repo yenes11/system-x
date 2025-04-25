@@ -420,8 +420,6 @@ function AddCollectionOrderSheet() {
 
 export default AddCollectionOrderSheet;
 
-const tableHeaders = ['name', 'unit', 'price', 'type'];
-
 const TooltipContent = ({ item }: any) => {
   const t = useTranslations();
 
@@ -472,72 +470,20 @@ const TooltipContent = ({ item }: any) => {
   ];
 
   return (
-    <>
-      <DataTable
-        rounded={false}
-        searchKey=""
-        className="max-w-2xl"
-        columns={columns}
-        data={item.sort((a: any, b: any) => a.type - b.type)}
-        footer={
-          <TableRow className="text-foreground">
-            <TableCell colSpan={2}>{t('total')}</TableCell>
-            <TableCell colSpan={2} className="text-right">
-              {totalPriceString}
-            </TableCell>
-          </TableRow>
-        }
-      />
-      {/* <Table bordered={false}>
-        <TableHeader className="">
-          <TableRow>
-            {tableHeaders.map((header, index) => (
-              <TableHead key={index} className="text-xs">
-                {t(header)}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {item.map((row: any, rowIndex: number) => (
-            <TableRow key={rowIndex}>
-              {Object.entries(row).map(([key, value]: any, cellIndex) => {
-                if (key === 'currency') return;
-                if (key === 'type') {
-                  return (
-                    <TableCell key={cellIndex} className="py-1.5 text-xs">
-                      {t(CostEnums[value as keyof typeof CostEnums])}
-                    </TableCell>
-                  );
-                }
-                if (key === 'price') {
-                  return (
-                    <TableCell key={cellIndex} className="py-1.5 text-xs">
-                      {value}{' '}
-                      {
-                        currencyEnums[
-                          row.currency as keyof typeof currencyEnums
-                        ]
-                      }
-                    </TableCell>
-                  );
-                }
-                return (
-                  <TableCell key={cellIndex} className="py-1.5 text-xs">
-                    {value}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter className="bg-transparent">
-          <TableRow className="text-foreground">
-            <TableCell colSpan={3}>{t('total')}</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table> */}
-    </>
+    <DataTable
+      rounded={false}
+      searchKey=""
+      className="max-w-2xl"
+      columns={columns}
+      data={item.sort((a: any, b: any) => a.type - b.type)}
+      footer={
+        <TableRow className="text-foreground">
+          <TableCell colSpan={2}>{t('total')}</TableCell>
+          <TableCell colSpan={2} className="text-right">
+            {totalPriceString}
+          </TableCell>
+        </TableRow>
+      }
+    />
   );
 };

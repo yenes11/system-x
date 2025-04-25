@@ -68,6 +68,7 @@ async function ColorDetailsPage({ params }: { params: { id: string } }) {
       description: color.type.variantUnit
     }
   ];
+  console.log(color.collectionColors);
 
   return (
     <>

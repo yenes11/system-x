@@ -416,5 +416,16 @@
   "edit_body_size": "Edit Size",
   "unit_quantity_list": "Unit Quantity List",
   "draft_cost": "Draft Cost",
-  "total": "Total"
+  "total": "Total",
+  "marker": "Marker",
+  "cost_report": "Cost Report",
+  "customer_and_project_info": "Customer & Project Information",
+  "customer_and_project_desc": "Get started by selecting customer and project-related metadata. These fields help categorize and associate your item correctly within your organization",
+  "product_and_design_details": "Product & Design Details",
+  "product_and_design_desc": "Provide specific product details and assign the designer and buyer involved. This section helps describe what’s being created and who is responsible",
+  "order_info": "Order Info",
+  "collection_info": "Collection Info",
+  "settings": "Settings",
+  "color_management": "Color Management",
+  "product_station_address_management": "Product Station Address Management"
 }

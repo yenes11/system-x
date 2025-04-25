@@ -6,6 +6,7 @@ import {
   Layers,
   LayoutGrid,
   Package2,
+  Settings,
   SwatchBook,
   UserRound
 } from 'lucide-react';
@@ -80,7 +81,7 @@ const navItems = [
       },
       {
         title: 'orders',
-        url: '/collection/orders'
+        url: '/collection/order'
       }
     ]
   },
@@ -95,6 +96,11 @@ const navItems = [
     url: '/supplier',
     icon: <Package2 className="!size-5" />,
     isActive: true
+  },
+  {
+    title: 'settings',
+    url: '/settings',
+    icon: <Settings className="!size-5" />
   }
 ];
 

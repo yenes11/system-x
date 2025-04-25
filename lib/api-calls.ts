@@ -15,6 +15,7 @@ import {
   ApiError,
   CollectionDetails,
   CollectionDraft,
+  CollectionOrderDetails,
   Fabric,
   FabricColorDetails,
   FabricOrder,
@@ -59,6 +60,19 @@ export const getCollectionDraftDetails = async (id: string) => {
       `/CollectionColors/GetCollectionColorDetail/${id}`
     );
     return res.data as CollectionDraft;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.title || 'An error occurred');
+    } else {
+      throw new Error('An unknown error occurred');
+    }
+  }
+};
+
+export const getCollectionOrderDetails = async (id: string) => {
+  try {
+    const res = await api.get(`/CollectionColorOrders/${id}`);
+    return res.data as CollectionOrderDetails;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.title || 'An error occurred');
