@@ -19,7 +19,7 @@ import { Dispatch, SetStateAction } from 'react';
 type PaginationProps = {
   currentPage: number;
   totalPages: number;
-  setPage: Dispatch<SetStateAction<number>>;
+  setPage: Dispatch<SetStateAction<number>> | ((page: number) => void);
   paginationItemsToDisplay?: number;
 };
 
@@ -50,7 +50,7 @@ export default function ClientPagination({
             onClick={(event) => {
               event.preventDefault();
               if (currentPage === 1) return;
-              setPage((prev) => prev - 1);
+              setPage(currentPage - 1);
             }}
             aria-label="Go to previous page"
             aria-disabled={currentPage === 1 ? true : undefined}
@@ -108,7 +108,7 @@ export default function ClientPagination({
             onClick={(event) => {
               event.preventDefault();
               if (currentPage === totalPages) return;
-              setPage((prev) => prev + 1);
+              setPage(currentPage + 1);
             }}
             aria-label="Go to next page"
             aria-disabled={currentPage === totalPages ? true : undefined}

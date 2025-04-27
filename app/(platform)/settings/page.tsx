@@ -1,4 +1,5 @@
 import ColorManagementTable from '@/components/settings/color-management-table';
+import ProductStationAddressTable from '@/components/settings/product-station-address-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MapPinHouse, Palette } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -21,7 +22,9 @@ function SettingsPage() {
       <TabsContent value="color-management">
         <ColorManagementTable />
       </TabsContent>
-      <TabsContent value="product-station-address-management">2</TabsContent>
+      <TabsContent value="product-station-address-management">
+        <ProductStationAddressTable />
+      </TabsContent>
     </Tabs>
   );
 }

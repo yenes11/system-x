@@ -2,7 +2,13 @@
 
 import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader } from '../ui/card';
-import { Palette, SquarePen, Trash2 } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Palette,
+  SquarePen,
+  Trash2
+} from 'lucide-react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
 import api from '@/api';
@@ -15,10 +21,17 @@ import ConfirmDeleteDialog from '../confirm-delete-dialog';
 import EditColorSheet from './edit-color-sheet';
 import { SearchBar } from '../searchbar';
 import ClientPagination from '../client-pagination';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem
+} from '../ui/pagination';
+import AddColorSheet from './add-color.sheet';
 
 function ColorManagementTable() {
   const t = useTranslations();
   const [currentPage, setCurrentPage] = React.useState(1);
+  const [query, setQuery] = React.useState('');
 
   const [editState, setEditState] = React.useState<DataState<Color>>({
     data: null,
@@ -36,6 +49,10 @@ function ColorManagementTable() {
       return response.data;
     }
   });
+
+  const currentColors = colors.data
+    .filter((c) => c.name.toLowerCase().includes(query.toLowerCase()))
+    .slice((currentPage - 1) * 10, currentPage * 10);
 
   const columns: ColumnDef<Color>[] = [
     {
@@ -91,14 +108,19 @@ function ColorManagementTable() {
         <CardHeader className="flex-row items-center border-b py-4">
           <Palette className="mr-2 size-6" />
           {t('color_management')}
+          <AddColorSheet />
         </CardHeader>
         <CardContent className="p-0">
-          <SearchBar placeholder={t('search')} className="m-2 max-w-64" />
-          <DataTable data={colors.data} columns={columns} searchKey="" />
-          <ClientPagination
+          <SearchBar
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t('search')}
+            className="m-2 max-w-64"
+          />
+          <DataTable data={currentColors} columns={columns} searchKey="" />
+          <TablePagination
             currentPage={currentPage}
-            setPage={setCurrentPage}
-            totalPages={colors.data?.length / 10}
+            setCurrentPage={setCurrentPage}
+            totalPages={Math.ceil(colors.data.length / 10)}
           />
         </CardContent>
       </Card>
@@ -107,3 +129,52 @@ function ColorManagementTable() {
 }
 
 export default ColorManagementTable;
+
+function TablePagination({
+  currentPage,
+  setCurrentPage,
+  totalPages
+}: {
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  totalPages: number;
+}) {
+  return (
+    <Pagination className="border-t p-2">
+      <PaginationContent className="w-full justify-center gap-3">
+        <PaginationItem>
+          <Button
+            variant="outline"
+            className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
+            aria-disabled={currentPage === 1 ? true : undefined}
+            role={currentPage === 1 ? 'link' : undefined}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            <ChevronLeft
+              className="-ms-1 opacity-60"
+              size={16}
+              aria-hidden="true"
+            />
+            Previous
+          </Button>
+        </PaginationItem>
+        <PaginationItem>
+          <Button
+            variant="outline"
+            className="aria-disabled:pointer-events-none aria-disabled:opacity-50"
+            disabled={currentPage === totalPages ? true : false}
+            role={currentPage === totalPages ? 'link' : undefined}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+            <ChevronRight
+              className="-me-1 opacity-60"
+              size={16}
+              aria-hidden="true"
+            />
+          </Button>
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
+}

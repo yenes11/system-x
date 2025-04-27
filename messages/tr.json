@@ -427,5 +427,11 @@
   "collection_info": "Koleksiyon Bilgileri",
   "settings": "Ayarlar",
   "color_management": "Renk Yönetimi",
-  "product_station_address_management": "Ürün İstasyonu Adresi Yönetimi"
+  "product_station_address_management": "Ürün İstasyonu Adresi Yönetimi",
+  "waiting": "Bekliyor",
+  "in_progress": "Devam Ediyor",
+  "prepared": "Hazır",
+  "delivered": "Teslim Edildi",
+  "add_address": "Adres Ekle",
+  "production_station": "Üretim İstasyonu"
 }

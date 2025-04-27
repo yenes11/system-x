@@ -1,6 +1,8 @@
 import { AreaGraph } from '@/components/charts/area-graph';
 import { PieGraph } from '@/components/charts/pie-graph';
 import Component from '@/components/comp-170';
+import StepperOrigin from '@/components/comp-522';
+import OriginStepper from '@/components/comp-525';
 import { CalendarDateRangePicker } from '@/components/date-range-picker';
 import { NestedSelect } from '@/components/nested-select';
 import { RecentSales } from '@/components/recent-sales';
@@ -33,6 +35,7 @@ export default function page() {
             <Button>Downloads</Button>
           </div>
         </div>
+        {/* <StepperOrigin /> */}
 
         {/* <TabsCard />
         <TabsSegmented /> */}

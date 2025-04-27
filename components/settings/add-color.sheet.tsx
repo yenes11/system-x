@@ -19,8 +19,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/api';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { toast } from 'sonner';
 import moment from 'moment';
+import { toast } from 'sonner';
+import { Plus } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string()
@@ -31,32 +32,27 @@ interface Props {
   setState: React.Dispatch<React.SetStateAction<DataState<Color>>>;
 }
 
-function EditColorSheet({ state, setState }: Props) {
+function AddColorSheet() {
   const t = useTranslations();
+  const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: state.data?.name || ''
+      name: ''
     }
   });
 
-  const editColor = useMutation({
-    mutationKey: ['edit-color', state.data?.id],
+  const addColor = useMutation({
+    mutationKey: ['add-settings-color'],
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const response = await api.put('/Colors', {
-        ...values,
-        id: state.data?.id
-      });
+      const response = await api.post('/Colors', values);
       return response;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['colors-settings'] });
-      setState({
-        data: null,
-        open: false
-      });
+      setOpen(false);
       form.reset();
       toast.success(t('item_added'), {
         description: moment().format('DD/MM/YYYY, HH:mm')
@@ -64,27 +60,21 @@ function EditColorSheet({ state, setState }: Props) {
     }
   });
 
-  useEffect(() => {
-    if (!state.open) return;
-    form.reset();
-  }, [state.open]);
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    editColor.mutate(values);
+    addColor.mutate(values);
   };
-
-  if (!state.data) return null;
 
   return (
     <ThemedSheet
-      open={state.open}
-      setOpen={(open: boolean) => {
-        setState((prev) => ({
-          ...prev,
-          open
-        }));
-      }}
-      title={t('edit_color')}
+      open={open}
+      setOpen={(open: boolean) => setOpen(open)}
+      title={t('add_color')}
+      trigger={
+        <Button className="ml-auto" size="sm" variant="secondary">
+          <Plus className="mr-2 size-4" />
+          {t('add_color')}
+        </Button>
+      }
     >
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
@@ -95,21 +85,14 @@ function EditColorSheet({ state, setState }: Props) {
               <FormItem>
                 <FormLabel>{t('name')}</FormLabel>
                 <FormControl>
-                  <Input
-                    onChange={field.onChange}
-                    defaultValue={state.data?.name}
-                  />
+                  <Input placeholder="Blue" onChange={field.onChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button
-            loading={editColor.isPending}
-            className="w-full"
-            type="submit"
-          >
-            {editColor.isPending ? t('submitting') : t('submit')}
+          <Button loading={addColor.isPending} className="w-full" type="submit">
+            {addColor.isPending ? t('submitting') : t('submit')}
           </Button>
         </form>
       </Form>
@@ -117,4 +100,4 @@ function EditColorSheet({ state, setState }: Props) {
   );
 }
 
-export default EditColorSheet;
+export default AddColorSheet;

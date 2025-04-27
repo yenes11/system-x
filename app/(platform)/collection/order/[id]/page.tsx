@@ -2,7 +2,7 @@
 
 import api from '@/api';
 import CollectionColorOrderNotes from '@/components/collection/collection-color-order-notes';
-import DeleteCollectionDialog from '@/components/collection/delete-collection-dialog';
+import CollectionOrderBarcodeStepper from '@/components/collection/collection-order-barcode-stepper';
 import EditCollectionColorOrderSheet from '@/components/collection/edit-collection-color-order';
 import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import ImageZoom from '@/components/image-zoom';
@@ -10,13 +10,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Code from '@/components/ui/code';
 import { Heading } from '@/components/ui/heading';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getCollectionOrderDetails } from '@/lib/api-calls';
 import { CollectionOrderDetails, OrderStatus } from '@/lib/types';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { ShoppingCart, SquarePen, Trash2 } from 'lucide-react';
+import { ShoppingCart, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
 import React, { Fragment } from 'react';
 
 function ManageCollectionOrderPage({ params }: { params: { id: string } }) {
@@ -125,27 +124,33 @@ function ManageCollectionOrderPage({ params }: { params: { id: string } }) {
         </Card>
       </div>
       <Tabs defaultValue="body-size">
-        <TabsList className="mb-2">
-          <TabsTrigger value="body-size">{t('body_size')}</TabsTrigger>
+        <ScrollArea>
+          <TabsList className="mb-2">
+            <TabsTrigger value="body-size">{t('body_size')}</TabsTrigger>
 
-          <TabsTrigger value="fabric">{t('fabric')}</TabsTrigger>
-          <TabsTrigger value="material">{t('material')}</TabsTrigger>
+            <TabsTrigger value="fabric">{t('fabric')}</TabsTrigger>
+            <TabsTrigger value="material">{t('material')}</TabsTrigger>
 
-          <TabsTrigger value="barcode">{t('barcode')}</TabsTrigger>
-          <TabsTrigger value="product-stations">
-            {t('product_stations')}
-          </TabsTrigger>
+            <TabsTrigger value="barcode">{t('barcode')}</TabsTrigger>
+            <TabsTrigger value="product-stations">
+              {t('product_stations')}
+            </TabsTrigger>
 
-          <TabsTrigger value="marker">{t('marker')}</TabsTrigger>
-          <TabsTrigger value="notes">{t('notes')}</TabsTrigger>
+            <TabsTrigger value="marker">{t('marker')}</TabsTrigger>
+            <TabsTrigger value="notes">{t('notes')}</TabsTrigger>
 
-          <TabsTrigger value="cost-report">{t('cost_report')}</TabsTrigger>
-        </TabsList>
+            <TabsTrigger value="cost-report">{t('cost_report')}</TabsTrigger>
+          </TabsList>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
         <TabsContent value="fabric">
           {/* <FabricCarousel data={collectionDetails.fabrics} /> */}
         </TabsContent>
         <TabsContent value="material">
           {/* <MaterialCarousel data={collectionDetails.materials} /> */}
+        </TabsContent>
+        <TabsContent value="barcode">
+          <CollectionOrderBarcodeStepper />
         </TabsContent>
         <TabsContent value="notes">
           <CollectionColorOrderNotes />

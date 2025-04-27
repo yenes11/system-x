@@ -427,5 +427,11 @@
   "collection_info": "Collection Info",
   "settings": "Settings",
   "color_management": "Color Management",
-  "product_station_address_management": "Product Station Address Management"
+  "product_station_address_management": "Product Station Address Management",
+  "waiting": "Waiting",
+  "in_progress": "In Progress",
+  "prepared": "Prepared",
+  "delivered": "Delivered",
+  "add_address": "Add Address",
+  "production_station": "Production Station"
 }

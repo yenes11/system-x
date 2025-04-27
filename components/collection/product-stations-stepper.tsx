@@ -44,14 +44,14 @@ function ProductStationsStepper({ data, editable = true }: Props) {
           {data.length > 0 ? (
             sortedData.map((station, index) => (
               <React.Fragment key={station.id}>
-                <div className="relative flex size-8 items-center justify-center rounded-full bg-blue-500">
-                  <span className="text-white">{station.priority}</span>
-                  <span className="absolute left-10 w-40 @sm:left-1/2 @sm:top-12 @sm:-translate-x-1/2 @sm:text-center">
+                <div className="relative flex size-8 items-center justify-center rounded-full bg-foreground">
+                  <span className="text-background">{station.priority}</span>
+                  <span className="absolute left-10 w-40 text-foreground @sm:left-1/2 @sm:top-10 @sm:-translate-x-1/2 @sm:text-center">
                     {station.name}
                   </span>
                 </div>
                 {index !== sortedData.length - 1 && (
-                  <div className="h-1 flex-1 rounded-full bg-theme-blue-foreground/70"></div>
+                  <div className="h-0.5 flex-1 rounded-full bg-foreground"></div>
                 )}
               </React.Fragment>
             ))

@@ -47,7 +47,9 @@ export default function ConfirmDeleteDialog({
     },
     onSuccess: (res) => {
       router.refresh();
-      queryClient.invalidateQueries(mutationKey as any);
+      queryClient.invalidateQueries({
+        queryKey: mutationKey
+      });
       setState((prev: any) => ({
         ...prev,
         open: false

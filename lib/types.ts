@@ -565,3 +565,18 @@ export interface CollectionOrder {
 export interface Color extends BasicEntity {
   createdDate: string;
 }
+
+export const SizeBarcode = {
+  1: 'Waiting',
+  2: 'InProgress',
+  3: 'Prepared',
+  4: 'Delivered'
+};
+
+export interface ProductStationAddress extends BasicEntity {
+  productionStation: BasicEntity;
+  phone: string;
+  authorizedPersonFullName: string;
+  address: string;
+  billingAddress: string;
+}
