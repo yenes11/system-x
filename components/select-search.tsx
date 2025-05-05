@@ -13,7 +13,6 @@ import {
   CommandItem,
   CommandList
 } from '@/components/ui/command';
-import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
@@ -23,86 +22,26 @@ import { ControllerRenderProps } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { FormControl } from './ui/form';
 
-const items = [
-  {
-    value: 'next.js',
-    label: 'Next.js'
-  },
-  {
-    value: 'sveltekit',
-    label: 'SvelteKit'
-  },
-  {
-    value: 'nuxt.js',
-    label: 'Nuxt.js'
-  },
-  {
-    value: 'remix',
-    label: 'Remix'
-  },
-  {
-    value: 'astro',
-    label: 'Astro'
-  },
-  {
-    value: 'angular',
-    label: 'Angular'
-  },
-  {
-    value: 'vue',
-    label: 'Vue.js'
-  },
-  {
-    value: 'react',
-    label: 'React'
-  },
-  {
-    value: 'ember',
-    label: 'Ember.js'
-  },
-  {
-    value: 'gatsby',
-    label: 'Gatsby'
-  },
-  {
-    value: 'eleventy',
-    label: 'Eleventy'
-  },
-  {
-    value: 'solid',
-    label: 'SolidJS'
-  },
-  {
-    value: 'preact',
-    label: 'Preact'
-  },
-  {
-    value: 'qwik',
-    label: 'Qwik'
-  },
-  {
-    value: 'alpine',
-    label: 'Alpine.js'
-  },
-  {
-    value: 'lit',
-    label: 'Lit'
-  }
-];
-
 type Item = {
   label: string;
   value: string;
+  image?: string;
 };
 
 interface Props {
   items: Item[];
   value: string;
   setValue: (value: string) => void;
+  disabled?: boolean;
   // field: ControllerRenderProps;
 }
 
-export default function SelectSearch({ items, value, setValue }: Props) {
+export default function SelectSearch({
+  items,
+  value,
+  setValue,
+  disabled = false
+}: Props) {
   const id = useId();
   const t = useTranslations();
   const [open, setOpen] = useState<boolean>(false);
@@ -113,6 +52,7 @@ export default function SelectSearch({ items, value, setValue }: Props) {
         <PopoverTrigger asChild>
           <FormControl>
             <Button
+              disabled={disabled}
               id={id}
               variant="outline"
               role="combobox"
@@ -152,6 +92,12 @@ export default function SelectSearch({ items, value, setValue }: Props) {
                       setOpen(false);
                     }}
                   >
+                    {item?.image && (
+                      <img
+                        src={item.image}
+                        className="mr-2 size-14 rounded-sm"
+                      />
+                    )}
                     {item.label}
                     {value === item.value && (
                       <CheckIcon size={16} className="ml-auto" />

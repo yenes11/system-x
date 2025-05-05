@@ -433,5 +433,8 @@
   "prepared": "Prepared",
   "delivered": "Delivered",
   "add_address": "Add Address",
-  "production_station": "Production Station"
+  "production_station": "Production Station",
+  "product_station_addresses": "Product Station Addresses",
+  "edit_status": "Edit Status",
+  "body_size_management": "Body Size Management"
 }

@@ -392,15 +392,28 @@ function CollectionTable({ data }: Props) {
                       </div>
                     </div>
                   </div>
-                  <div className="-mx-4 -mb-4 flex gap-2 bg-muted px-4 py-4">
-                    {row.original.colors.map((color: any) => {
+                  <div className="-mx-4 -mb-4 flex flex-wrap gap-2 bg-muted px-4 py-4">
+                    {row.original.colors.map((color: any, index: number) => {
                       if (color.colorName === 'Taslak') return;
                       return (
                         <Link
                           href={`/collection/manage-color/${color.id}`}
                           key={color.id}
                         >
-                          <Badge className="rounded-md border-theme-teal-foreground/30 bg-theme-teal/15 text-theme-teal-foreground">
+                          <Badge
+                            color={
+                              index % 5 === 0
+                                ? 'blue'
+                                : index % 5 === 1
+                                ? 'amber'
+                                : index % 5 === 2
+                                ? 'green'
+                                : index % 5 === 3
+                                ? 'orange'
+                                : 'violet'
+                            }
+                            // className="rounded-md border-theme-teal-foreground/30 bg-theme-teal/15 text-theme-teal-foreground"
+                          >
                             {color.colorName}
                           </Badge>
                         </Link>

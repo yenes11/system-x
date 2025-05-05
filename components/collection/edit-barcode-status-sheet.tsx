@@ -94,7 +94,7 @@ function EditBarcodeStatusSheet({ state, setState }: Props) {
       setOpen={(open: boolean) => {
         setState(open);
       }}
-      title={t('edit_color')}
+      title={t('edit_status')}
       trigger={
         <Button className="ml-auto" variant="secondary" size="sm">
           <SquarePen className="mr-2 size-4" />
@@ -109,7 +109,7 @@ function EditBarcodeStatusSheet({ state, setState }: Props) {
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('fabric_type')}</FormLabel>
+                <FormLabel>{t('status')}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={state.data?.status.toString()}

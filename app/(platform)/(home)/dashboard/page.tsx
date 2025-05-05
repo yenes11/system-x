@@ -9,6 +9,7 @@ import { RecentSales } from '@/components/recent-sales';
 import TabsCard from '@/components/tabs-card';
 import TabsSegmented from '@/components/tabs-segmented';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -35,8 +36,8 @@ export default function page() {
             <Button>Downloads</Button>
           </div>
         </div>
-        {/* <StepperOrigin /> */}
 
+        {/* <StepperOrigin /> */}
         {/* <TabsCard />
         <TabsSegmented /> */}
         <Tabs defaultValue="overview" className="space-y-4">

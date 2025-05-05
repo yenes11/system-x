@@ -1,28 +1,20 @@
 'use client';
 
 import api from '@/api';
-import { CollectionNote, CollectionOrderDetails } from '@/lib/types';
-import { cn } from '@/lib/utils';
+import { CollectionOrderDetails } from '@/lib/types';
 import {
   useMutation,
-  useQuery,
   useQueryClient,
   useSuspenseQuery
 } from '@tanstack/react-query';
-import { NotebookTabs, Send } from 'lucide-react';
+import { NotebookTabs } from 'lucide-react';
 import moment from 'moment';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslations } from 'use-intl';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import Empty from '../ui/empty';
-import { Textarea } from '../ui/textarea';
-import StepperOrigin from '../comp-522';
-import OriginStepper from '../comp-525';
 import ThemedStepper from '../themed-stepper';
-import EditBarcodeSheet from './edit-barcode-sheet';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import EditBarcodeStatusSheet from './edit-barcode-status-sheet';
 
 function CollectionOrderBarcodeStepper() {

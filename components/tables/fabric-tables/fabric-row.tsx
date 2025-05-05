@@ -1,5 +1,6 @@
 import api from '@/api';
 import FabricColorCard from '@/components/fabric-color/fabric-color-card';
+import { SearchBar } from '@/components/searchbar';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TableCell, TableRow } from '@/components/ui/table';
@@ -7,7 +8,7 @@ import { FabricColor } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
 import { flexRender } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Props {
   row: any;
@@ -18,6 +19,7 @@ interface Props {
 
 function FabricRow({ data, row, expandedRows, toggleRow }: Props) {
   const t = useTranslations();
+  const [searchKey, setSearchKey] = useState('');
 
   const colors = React.useMemo(() => {
     data.map((color: any) => {
@@ -28,8 +30,10 @@ function FabricRow({ data, row, expandedRows, toggleRow }: Props) {
       color.chartData = [ingredients];
       return color;
     });
-    return data;
-  }, [data]);
+    return data.filter(
+      (color) => color.name?.toLowerCase().includes(searchKey)
+    );
+  }, [data, searchKey]);
 
   return (
     <>
@@ -48,17 +52,19 @@ function FabricRow({ data, row, expandedRows, toggleRow }: Props) {
           );
         })}
       </TableRow>
-      {expandedRows.includes(row.original.id) &&
-        (colors.length === 0 ? (
-          <TableCell
-            className="py-8 text-center text-card-foreground/60"
-            colSpan={6}
-          >
-            {t('no_fabrics_found')}
-          </TableCell>
-        ) : (
-          <TableRow>
-            <TableCell className="p-0" colSpan={6}>
+      {expandedRows.includes(row.original.id) && (
+        <TableRow>
+          <TableCell className="p-0" colSpan={6}>
+            <SearchBar
+              onChange={(e) => setSearchKey(e.target.value.toLowerCase())}
+              placeholder={t('search')}
+              className="m-2"
+            />
+            {colors.length === 0 ? (
+              <div className="my-6 flex justify-center text-muted-foreground">
+                {t('no_fabrics_found')}
+              </div>
+            ) : (
               <div className="grid grid-cols-1 divide-x divide-y divide-muted sm:grid-cols-2">
                 {colors?.map((color: any) => (
                   <FabricColorCard
@@ -70,9 +76,10 @@ function FabricRow({ data, row, expandedRows, toggleRow }: Props) {
                   />
                 ))}
               </div>
-            </TableCell>
-          </TableRow>
-        ))}
+            )}
+          </TableCell>
+        </TableRow>
+      )}
     </>
   );
 }

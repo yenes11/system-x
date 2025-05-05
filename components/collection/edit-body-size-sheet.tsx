@@ -1,6 +1,6 @@
 'use client';
 
-import { Color, DataState } from '@/lib/types';
+import { BodySize, Color, DataState } from '@/lib/types';
 import React, { useEffect } from 'react';
 import ThemedSheet from '../themed-sheet';
 import { useTranslations } from 'next-intl';
@@ -23,36 +23,36 @@ import { toast } from 'sonner';
 import moment from 'moment';
 
 const formSchema = z.object({
-  name: z.string()
+  amount: z.number()
 });
 
 interface Props {
-  state: DataState<Color>;
-  setState: React.Dispatch<React.SetStateAction<DataState<Color>>>;
+  state: DataState<BodySize>;
+  setState: React.Dispatch<React.SetStateAction<DataState<BodySize>>>;
 }
 
-function EditColorSheet({ state, setState }: Props) {
+function EditBodySizeSheet({ state, setState }: Props) {
   const t = useTranslations();
   const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: state.data?.name || ''
+      amount: state.data?.amount || 0
     }
   });
 
-  const editColor = useMutation({
-    mutationKey: ['edit-color', state.data?.id],
+  const editSize = useMutation({
+    mutationKey: ['edit-body-size', state.data?.id],
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const response = await api.put('/Colors', {
+      const response = await api.put('/CollectionColorOrderDetails', {
         ...values,
         id: state.data?.id
       });
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['colors-settings'] });
+      queryClient.invalidateQueries({ queryKey: ['body-sizes'] });
       setState({
         data: null,
         open: false
@@ -70,7 +70,7 @@ function EditColorSheet({ state, setState }: Props) {
   }, [state.open]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    editColor.mutate(values);
+    editSize.mutate(values);
   };
 
   if (!state.data) return null;
@@ -84,32 +84,28 @@ function EditColorSheet({ state, setState }: Props) {
           open
         }));
       }}
-      title={t('edit_color')}
+      title={t('edit_body_size')}
     >
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
-            name="name"
+            name="amount"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('name')}</FormLabel>
+                <FormLabel>{t('amount')}</FormLabel>
                 <FormControl>
                   <Input
                     onChange={field.onChange}
-                    defaultValue={state.data?.name}
+                    defaultValue={state.data?.amount}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button
-            loading={editColor.isPending}
-            className="w-full"
-            type="submit"
-          >
-            {editColor.isPending ? t('submitting') : t('submit')}
+          <Button loading={editSize.isPending} className="w-full" type="submit">
+            {editSize.isPending ? t('submitting') : t('submit')}
           </Button>
         </form>
       </Form>
@@ -117,4 +113,4 @@ function EditColorSheet({ state, setState }: Props) {
   );
 }
 
-export default EditColorSheet;
+export default EditBodySizeSheet;

@@ -57,14 +57,13 @@ const getColumns = (
       cell: ({ row }) => {
         return (
           <Badge
-            className={classNames(
-              {
-                'bg-teal-600': row.original.type === 1,
-                'bg-blue-600': row.original.type === 2,
-                'bg-violet-600': row.original.type === 3
-              },
-              'rounded py-0.5 text-xs'
-            )}
+            color={
+              row.original.type === 1
+                ? 'teal'
+                : row.original.type === 2
+                ? 'lime'
+                : 'blue'
+            }
           >
             <Translate message={SupplierType[row.original.type]} />
           </Badge>

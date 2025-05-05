@@ -31,6 +31,8 @@ import {
   SelectValue
 } from '../ui/select';
 import { toast } from '../ui/use-toast';
+import SelectSearch from '../select-search';
+import { Fabric, PaginatedData } from '@/lib/types';
 
 const formSchema = z.object({
   fabric: z.string().uuid(),
@@ -58,7 +60,7 @@ function AddFabricToCollectionSheet() {
 
   const isFabricSelected = !!form.watch('fabric');
 
-  const fabrics = useQuery({
+  const fabrics = useQuery<PaginatedData<Fabric>>({
     queryKey: ['fabrics'],
     queryFn: async () => {
       const res = await api.get(
@@ -130,7 +132,20 @@ function AddFabricToCollectionSheet() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('fabric')}</FormLabel>
-                <Select
+                <SelectSearch
+                  items={
+                    fabrics.data?.items.map((i) => ({
+                      label: i.name,
+                      value: i.id
+                    })) || []
+                  }
+                  value={field.value}
+                  setValue={(value) => {
+                    form.setValue('fabricColorId', '');
+                    form.setValue('fabric', value);
+                  }}
+                />
+                {/* <Select
                   onValueChange={(val) => {
                     field.onChange(val);
                     form.setValue('fabricColorId', '');
@@ -149,7 +164,7 @@ function AddFabricToCollectionSheet() {
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </Select> */}
                 <FormMessage />
               </FormItem>
             )}
@@ -161,7 +176,19 @@ function AddFabricToCollectionSheet() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('color')}</FormLabel>
-                <Select
+                <SelectSearch
+                  disabled={!isFabricSelected}
+                  items={
+                    fabricDetails.data?.colors.map((i: any) => ({
+                      label: i.name,
+                      value: i.id,
+                      image: i.image
+                    })) || []
+                  }
+                  value={field.value}
+                  setValue={(value) => form.setValue('fabricColorId', value)}
+                />
+                {/* <Select
                   key={form.watch('fabric')}
                   disabled={!isFabricSelected}
                   onValueChange={field.onChange}
@@ -190,7 +217,7 @@ function AddFabricToCollectionSheet() {
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </Select> */}
                 <FormMessage />
               </FormItem>
             )}

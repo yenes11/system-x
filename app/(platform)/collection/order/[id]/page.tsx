@@ -1,6 +1,7 @@
 'use client';
 
 import api from '@/api';
+import BodySizeManagementTable from '@/components/collection/body-size-management-table';
 import CollectionColorOrderNotes from '@/components/collection/collection-color-order-notes';
 import CollectionOrderBarcodeStepper from '@/components/collection/collection-order-barcode-stepper';
 import EditCollectionColorOrderSheet from '@/components/collection/edit-collection-color-order';
@@ -32,6 +33,8 @@ function ManageCollectionOrderPage({ params }: { params: { id: string } }) {
       return response.data;
     }
   });
+
+  console.log(details.data, 'ddddddd');
 
   const collection = details.data.collection;
   const order = details.data.order;
@@ -143,6 +146,9 @@ function ManageCollectionOrderPage({ params }: { params: { id: string } }) {
           </TabsList>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
+        <TabsContent value="body-size">
+          <BodySizeManagementTable />
+        </TabsContent>
         <TabsContent value="fabric">
           {/* <FabricCarousel data={collectionDetails.fabrics} /> */}
         </TabsContent>

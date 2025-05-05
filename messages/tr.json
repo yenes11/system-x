@@ -433,5 +433,8 @@
   "prepared": "Hazır",
   "delivered": "Teslim Edildi",
   "add_address": "Adres Ekle",
-  "production_station": "Üretim İstasyonu"
+  "production_station": "Üretim İstasyonu",
+  "product_station_addresses": "Ürün İstasyonu Adresleri",
+  "edit_status": "Durumu Güncelle",
+  "body_size_management": "Beden Yönetimi"
 }

@@ -1,8 +1,10 @@
 import api from '@/api';
 import { getMaterialUrl } from '@/constants/api-constants';
 import { getFabricsWithColors } from '@/lib/api-calls';
+import { useCollectionSlice } from '@/store/collection-slice';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { Plus } from 'lucide-react';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
@@ -11,6 +13,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import ThemedSheet from '../themed-sheet';
+import ThemedTooltip from '../ThemedTooltip';
 import { Button } from '../ui/button';
 import {
   Form,
@@ -20,7 +23,6 @@ import {
   FormLabel,
   FormMessage
 } from '../ui/form';
-import Icon from '../ui/icon';
 import { Input } from '../ui/input';
 import {
   Select,
@@ -29,10 +31,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { Plus } from 'lucide-react';
-import ThemedTooltip from '../ThemedTooltip';
-import { cn } from '@/lib/utils';
-import { useCollectionSlice } from '@/store/collection-slice';
+import SelectSearch from '../select-search';
 
 const formSchema = z.object({
   material: z.string().uuid(),
@@ -144,7 +143,20 @@ function AddMaterialToCollectionSheet() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('material')}</FormLabel>
-                <Select
+                <SelectSearch
+                  items={
+                    materials.data?.items.map((i: any) => ({
+                      label: i.name,
+                      value: i.id
+                    })) || []
+                  }
+                  value={field.value}
+                  setValue={(value) => {
+                    form.setValue('materialColor', '');
+                    form.setValue('material', value);
+                  }}
+                />
+                {/* <Select
                   onValueChange={(val) => {
                     field.onChange(val);
                     form.setValue('materialColor', '');
@@ -163,7 +175,7 @@ function AddMaterialToCollectionSheet() {
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </Select> */}
                 <FormMessage />
               </FormItem>
             )}
@@ -174,7 +186,21 @@ function AddMaterialToCollectionSheet() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('color')}</FormLabel>
-                <Select
+                <SelectSearch
+                  disabled={!isMaterialSelected}
+                  items={
+                    colors?.map((i: any) => ({
+                      label: i.name,
+                      value: i.id
+                    })) || []
+                  }
+                  value={field.value}
+                  setValue={(value) => {
+                    form.setValue('materialColorVariantId', '');
+                    form.setValue('materialColor', value);
+                  }}
+                />
+                {/* <Select
                   disabled={!isMaterialSelected}
                   onValueChange={(val) => {
                     field.onChange(val);
@@ -194,7 +220,7 @@ function AddMaterialToCollectionSheet() {
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </Select> */}
                 <FormMessage />
               </FormItem>
             )}
@@ -205,7 +231,21 @@ function AddMaterialToCollectionSheet() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('variant')}</FormLabel>
-                <Select
+                <SelectSearch
+                  disabled={!isMaterialColorSelected}
+                  items={
+                    selectedColor?.variants?.map((i: any) => ({
+                      label: i.size,
+                      value: i.id,
+                      image: i.image
+                    })) || []
+                  }
+                  value={field.value}
+                  setValue={(value) => {
+                    form.setValue('materialColorVariantId', value);
+                  }}
+                />
+                {/* <Select
                   key={form.watch('materialColorVariantId')}
                   disabled={!isMaterialColorSelected}
                   onValueChange={field.onChange}
@@ -234,7 +274,7 @@ function AddMaterialToCollectionSheet() {
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </Select> */}
                 <FormMessage />
               </FormItem>
             )}

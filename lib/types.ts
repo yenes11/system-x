@@ -336,6 +336,7 @@ export interface CollectionOrderDetails {
     manufacturerCode: string;
     image: string;
     customer: string;
+    colorId?: string;
   };
   order: {
     amount: number;
@@ -579,4 +580,11 @@ export interface ProductStationAddress extends BasicEntity {
   authorizedPersonFullName: string;
   address: string;
   billingAddress: string;
+}
+
+export interface BodySize {
+  id: string;
+  size: string;
+  barcode: string;
+  amount: number;
 }

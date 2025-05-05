@@ -14,43 +14,23 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import {
-  PencilLine,
-  Plus,
-  Server,
-  SquarePen,
-  Trash,
-  Trash2
-} from 'lucide-react';
+import { Plus, SquarePen, Trash2 } from 'lucide-react';
 
+import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import AddFabricColorSheet from '@/components/fabric-color/add-fabric-color-sheet';
 import EditFabricSheet from '@/components/fabric/edit-fabric-sheet';
+import { SearchBar } from '@/components/searchbar';
+import ServerPagination from '@/components/server-pagination';
+import ThemedTooltip from '@/components/ThemedTooltip';
 import { Button } from '@/components/ui/button';
 import Empty from '@/components/ui/empty';
-import { getFabrics } from '@/lib/api-calls';
-import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
-import FabricRow from './fabric-row';
 import { Fabric, FabricWithColors, PaginatedData } from '@/lib/types';
-import ThemedTooltip from '@/components/ThemedTooltip';
-import { useTranslations } from 'next-intl';
-import Icon from '@/components/ui/icon';
-import ServerPagination from '@/components/server-pagination';
-import { SearchBar } from '@/components/searchbar';
-import ThemedSelect from '@/components/themed-select';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useDebouncedCallback } from 'use-debounce';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import ActionsDropdown from '@/components/actions-dropdown';
-import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
+import FabricRow from './fabric-row';
 
 const getColumns = (
   setColorState: any,
